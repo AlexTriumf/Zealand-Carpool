@@ -7,5 +7,6 @@ namespace Zealand_Carpool.Models
 {
     public class Bruger
     {
+
     }
 }
