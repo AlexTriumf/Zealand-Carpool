@@ -5,4 +5,9 @@
     <RootNamespace>Zealand_Carpool</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\AdminPage\" />
+    <Folder Include="Pages\LoginPage\" />
+  </ItemGroup>
+
 </Project>
