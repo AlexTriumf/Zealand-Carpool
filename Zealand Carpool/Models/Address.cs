@@ -12,7 +12,7 @@ namespace Zealand_Carpool.Models
     /// With a ToString method that returns it all
     /// made by Andreas
     /// </summary>
-    public class Addresse
+    public class Address
     {
         [Required, StringLength(255), MinLength(1)]
         public string StreetName { get; set; }
@@ -23,8 +23,8 @@ namespace Zealand_Carpool.Models
         [Required, StringLength(30)]
         public string CityName { get; set; }
 
-        public Addresse() { }
-        public Addresse(string newStreetName, int newStreetNumber, int newPostalcode, string newCityName)
+        public Address() { }
+        public Address(string newStreetName, int newStreetNumber, int newPostalcode, string newCityName)
         {
             StreetName = newStreetName;
             StreetNumber = newStreetNumber;
@@ -41,3 +41,4 @@ namespace Zealand_Carpool.Models
         
     }
 }
+
