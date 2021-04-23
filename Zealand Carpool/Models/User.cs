@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Zealand_Carpool.Models
 {
-    public class Bruger
+    public class User
     {
 
     }

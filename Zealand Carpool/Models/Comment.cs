@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Zealand_Carpool.Models
 {
-    public class Kommentar
+    public class Comment
     {
     }
 }

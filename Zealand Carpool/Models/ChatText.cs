@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Zealand_Carpool.Models
 {
-    public class ChatTekst
+    public class ChatText
     {
     }
 }
