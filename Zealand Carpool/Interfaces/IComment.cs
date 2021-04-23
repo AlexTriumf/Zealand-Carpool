@@ -10,6 +10,7 @@ namespace Zealand_Carpool.Interfaces
     {
         public void AddComment(Comment comment);
         public Comment GetComment(int id);
+        public List<Comment> getComments(Guid UserId);
 
         public void DeleteComment(int id);
     }

@@ -10,7 +10,7 @@ namespace Zealand_Carpool.Models
     {
         public int Id { get; set; }
         public User LinkedUser { get; set; }
-        [Required, MaxLength(500, ErrorMessage = "Beskeden er tom eller også overstiger du 500 tegn ")]
+        [Required, MaxLength(500, ErrorMessage = "Beskeden er tom eller også overstiger du 500 tegn "), MinLength(1)]
         public string Text { get; set; }
 
         public Comment () { }
@@ -24,7 +24,7 @@ namespace Zealand_Carpool.Models
 
         public override string ToString()
         {
-            return $"{nameof(Id)}: {Id}, {nameof(LinkedUser)}: {LinkedUser}, {nameof(Text)}: {Text}";
+            return $"Id: {Id}, LinkedUser: {LinkedUser}, Text: {Text}";
         }
     }
 }

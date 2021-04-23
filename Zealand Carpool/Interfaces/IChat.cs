@@ -9,7 +9,7 @@ namespace Zealand_Carpool.Interfaces
     public interface IChat
     {
         public void AddChat(User userOne, User userTwo);
-        public Chat GetChat(int id);
+        public Chat GetChat(User userOne, User userTwo);
        
     }
 }
