@@ -16,7 +16,7 @@ namespace Zealand_Carpool.Models
         public string Name { get; set; }
         [Required, StringLength(100), MinLength(1)]
         public string Surname { get; set; }
-        public List<Addresse> AddressList { get; set; }
+        public List<Address> AddressList { get; set; }
         [Required, StringLength(255), MinLength(1)]
         public string Email { get; set; }
         [Required]
