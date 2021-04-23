@@ -36,7 +36,7 @@ namespace Zealand_Carpool.Models
         {
             return
                 $"Carpool: {CarpoolId}, AddressFrom: {AddressFrom}, AddressTo: {AddressTo}, " +
-                $"PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {User.Id}, Date: {Date}";
+                $"PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {DriverId.Id.ToString()}, Date: {Date}";
         }
     }
 }
