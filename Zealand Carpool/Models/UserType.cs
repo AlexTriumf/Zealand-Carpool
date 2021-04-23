@@ -7,6 +7,6 @@ namespace Zealand_Carpool.Models
 {
     public enum UserType
     {
-        Bruger, Admin
+        User, Admin
     }
 }

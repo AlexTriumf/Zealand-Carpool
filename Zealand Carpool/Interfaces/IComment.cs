@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Interfaces
 {
-    public class IKommentar
+    public interface IKommentar
     {
+        public void AddComment(Comment comment);
+        public Comment GetComment(int id);
+
+        public void DeleteComment(int id);
     }
 }
