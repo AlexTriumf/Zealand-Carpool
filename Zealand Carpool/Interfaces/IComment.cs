@@ -6,7 +6,7 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Interfaces
 {
-    public interface IKommentar
+    public interface IComment
     {
         public void AddComment(Comment comment);
         public Comment GetComment(int id);
