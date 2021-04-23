@@ -1,0 +1,7 @@
+﻿body {
+}
+
+#Image1 {
+    background-image: url("/img/Background.jpg");
+    padding: 10rem;
+}

@@ -23,6 +23,7 @@ namespace Zealand_Carpool.Models
         public UserType UserType { get; set; }
         [Required, StringLength(20), MinLength(6)]
         public string Phonenumber { get; set; }
+
         public User() { }
         public User(Guid newId, string newName, string newSurname, List<Address> newAddresses, string newEmail,
                 UserType newUserType, string newPhonenumber)
