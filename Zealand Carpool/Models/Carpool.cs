@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Zealand_Carpool.Models
 {
+    /// <summary>
+    /// Written by Malte
+    /// </summary>
     public class Carpool
     {
         public int CarpoolId { get; set;}
@@ -32,7 +35,7 @@ namespace Zealand_Carpool.Models
             Date = date;
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return
                 $"Carpool: {CarpoolId}, AddressFrom: {AddressFrom}, AddressTo: {AddressTo}, " +
