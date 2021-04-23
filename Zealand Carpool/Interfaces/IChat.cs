@@ -8,8 +8,9 @@ namespace Zealand_Carpool.Interfaces
 {
     public interface IChat
     {
+        //Lavet af Aleksandar
         public void AddChat(User userOne, User userTwo);
-        public Chat GetChat(User userOne, User userTwo);
+        public List<ChatText> GetChat(User userOne, User userTwo);
        
     }
 }
