@@ -35,7 +35,8 @@ namespace Zealand_Carpool.Models
         public string ToString()
         {
             return
-                $"Carpool: {CarpoolId}, AddressFrom: {AddressFrom}, AddressTo: {AddressTo}, PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {User.Id}, Date: {Date}";
+                $"Carpool: {CarpoolId}, AddressFrom: {AddressFrom}, AddressTo: {AddressTo}, " +
+                $"PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {User.Id}, Date: {Date}";
         }
     }
 }
