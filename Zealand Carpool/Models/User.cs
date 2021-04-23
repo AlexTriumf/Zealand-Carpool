@@ -24,7 +24,7 @@ namespace Zealand_Carpool.Models
         [Required, StringLength(20), MinLength(6)]
         public string Phonenumber { get; set; }
         public User() { }
-            public User(Guid newId, string newName, string newSurname, List<Addresse> newAddresses, string newEmail,
+            public User(Guid newId, string newName, string newSurname, List<Address> newAddresses, string newEmail,
                 UserType newUserType, string newPhonenumber)
             {
                 Id = newId;
@@ -38,9 +38,9 @@ namespace Zealand_Carpool.Models
             public override string ToString()
             {
                 System.Text.StringBuilder adressesString = new System.Text.StringBuilder();
-                foreach (Addresse addresse in AddressList)
+                foreach (Address address in AddressList)
                 {
-                    adressesString.Append(addresse);
+                    adressesString.Append(address);
                 }
                 return $"User id: {Id}, name: {Name}, surname: {Surname}, addresses: {adressesString.ToString()}, email: {Email}" +
                         $"user Type: {UserType}, phone number: {Phonenumber}";
