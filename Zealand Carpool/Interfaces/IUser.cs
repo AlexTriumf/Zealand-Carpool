@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Zealand_Carpool.Interfaces
 {
-    interface IBruger
+    interface IUser
     {
     }
 }
