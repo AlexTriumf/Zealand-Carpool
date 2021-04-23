@@ -7,6 +7,9 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Interfaces
 {
+    /// <summary>
+    /// Written by Malte
+    /// </summary>
     public interface ICarpool
     {
         public void AddDrive(Carpool carpool);
