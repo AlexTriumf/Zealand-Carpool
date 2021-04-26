@@ -23,10 +23,12 @@ namespace Zealand_Carpool.Models
         public UserType UserType { get; set; }
         [Required, StringLength(20), MinLength(6)]
         public string Phonenumber { get; set; }
+        [Required, StringLength(255), MinLength(8)]
+        public string Password { get; set; }
 
         public User() { }
         public User(Guid newId, string newName, string newSurname, List<Address> newAddresses, string newEmail,
-                UserType newUserType, string newPhonenumber)
+                UserType newUserType, string newPhonenumber, string newPassword)
         {
                 Id = newId;
                 Name = newName;
@@ -35,6 +37,7 @@ namespace Zealand_Carpool.Models
                 Email = newEmail;
                 UserType = newUserType;
                 Phonenumber = newPhonenumber;
+                Password = newPassword;
         }
         public override string ToString()
         {
