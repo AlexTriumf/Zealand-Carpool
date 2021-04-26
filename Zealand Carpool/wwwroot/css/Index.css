@@ -1,0 +1,33 @@
+﻿body {
+}
+
+#Image1 {
+    background-image: url("/img/Background.jpg");
+    background-repeat:no-repeat;
+    background-size:auto;
+    padding: 20rem;
+    width:100%;
+    height:auto;
+}
+
+h2 {
+    font-size: 4rem;
+    font-family: "Times New Roman", Times, serif;
+}
+
+#LogoT {
+    font-family: Andale Mono, monospace;
+    font-size: 5rem;
+}
+
+h6 {
+    
+    font-size: 1rem;
+}
+
+#LogBut {
+    padding-left: 4rem;
+    padding-right: 4rem;
+    
+    font-size: 1.5rem;
+}

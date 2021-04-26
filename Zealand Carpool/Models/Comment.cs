@@ -8,6 +8,7 @@ namespace Zealand_Carpool.Models
 {
     public class Comment
     {
+        //Lavet af Aleksandar
         public int Id { get; set; }
         public User LinkedUser { get; set; }
         [Required, MaxLength(500, ErrorMessage = "Beskeden er tom eller også overstiger du 500 tegn "), MinLength(1)]
