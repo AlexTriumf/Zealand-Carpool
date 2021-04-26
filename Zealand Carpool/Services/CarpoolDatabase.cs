@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Zealand_Carpool.Services
 {
-    public class KørselDatabase
+    public class CarpoolDatabase
     {
     }
 }

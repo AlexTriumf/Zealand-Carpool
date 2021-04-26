@@ -9,4 +9,8 @@
     <Folder Include="Pages\AdminPage\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="bootstrap" Version="4.6.0" />
+  </ItemGroup>
+
 </Project>

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Zealand_Carpool.Services
 {
-    public class KommentarDatabase
+    public class CommentDatabase
     {
     }
 }
