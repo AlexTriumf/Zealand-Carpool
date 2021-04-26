@@ -17,14 +17,14 @@ namespace Zealand_Carpool.Models
         [Required, StringLength(255), MinLength(1)]
         public string StreetName { get; set; }
         [Required, MinLength(1),MaxLength(255)]
-        public int StreetNumber { get; set; }
+        public string StreetNumber { get; set; }
         [Required, MinLength(3),MaxLength(4)]
         public int Postalcode { get; set; }
         [Required, StringLength(30)]
         public string CityName { get; set; }
 
         public Address() { }
-        public Address(string newStreetName, int newStreetNumber, int newPostalcode, string newCityName)
+        public Address(string newStreetName, string newStreetNumber, int newPostalcode, string newCityName)
         {
             StreetName = newStreetName;
             StreetNumber = newStreetNumber;
