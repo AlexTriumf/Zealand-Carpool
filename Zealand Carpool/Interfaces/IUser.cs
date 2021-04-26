@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Zealand_Carpool.Models;
@@ -8,10 +9,11 @@ namespace Zealand_Carpool.Interfaces
 {
     interface IUser
     {
-        bool AddUser(User user);
-        User GetUser(Guid id);
-        User GetUser(string email, string password);
-        bool DeleteUser(Guid id);
-        bool UpdateUser(Guid id, User user);
+        Task<bool> AddUser(User user);
+        Task<User> GetUser(Guid id);
+        Task<User> GetUser(string email, string password);
+        Task<bool> DeleteUser(Guid id);
+        Task<bool> UpdateUser(Guid id, User user);
+        User MakeUser(SqlDataReader sqlreader);
     }
 }
