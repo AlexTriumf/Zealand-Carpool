@@ -13,12 +13,12 @@ namespace Zealand_Carpool.Models
     {
         public int CarpoolId { get; set;}
         [Required, MinLength(1), MaxLength(255)]
-        public string AddressFrom { get; set; }
-        public string AddressTo { get; set; }
+        public string Branch { get; set; }
+        public string HomeAddress { get; set; }
         [Required, Range(1,9) ]
         public int PassengerSeats { get; set; }
         public List<User> PassengerList { get; set; }
-        public User DriverId { get; set; }
+        public Guid DriverId { get; set; }
         public DateTime Date { get; set; }
 
         public Carpool() { }

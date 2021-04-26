@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,12 +13,11 @@ namespace Zealand_Carpool.Interfaces
     /// </summary>
     public interface ICarpool
     {
-        public void AddDrive(Carpool carpool);
-        public Carpool GetCarpool(int id);
-        public bool DeleteCarpool(int id);
-        public void AddPassenger(User user);
-        public bool DeletePassenger(User user);
-
-
+        Task<bool> AddCarpool(Carpool carpool);
+        Task<Carpool> GetCarpool(int idCarpool);
+        Task<bool> DeleteCarpool(int id);
+        Task<bool> AddPassenger(User user);
+        Task<bool> DeletePassenger(User user);
+        Carpool MakeCarpool(SqlDataReader sqlReader);
     }
 }
