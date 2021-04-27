@@ -27,19 +27,19 @@ namespace Zealand_Carpool.Models
             List<User> passengerList, User driver, DateTime date)
         {
             CarpoolId = carpoolId;
-            AddressFrom = addressFrom;
-            AddressTo = addressTo;
+           // AddressFrom = addressFrom;
+           // AddressTo = addressTo;
             PassengerSeats = passengerSeats;
             PassengerList = passengerList;
-            DriverId = driver;
+           // DriverId = driver;
             Date = date;
         }
 
-        public override string ToString()
-        {
-            return
-                $"Carpool: {CarpoolId}, AddressFrom: {AddressFrom}, AddressTo: {AddressTo}, " +
-                $"PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {DriverId.Id.ToString()}, Date: {Date}";
-        }
+        //public override string ToString()
+        //{
+        //    //return
+        //    //    $"Carpool: {CarpoolId}, AddressFrom: {AddressFrom}, AddressTo: {AddressTo}, " +
+        //    //    $"PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {DriverId.Id.ToString()}, Date: {Date}";
+        //}
     }
 }
