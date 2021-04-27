@@ -23,23 +23,23 @@ namespace Zealand_Carpool.Models
 
         public Carpool() { }
 
-        public Carpool(int carpoolId, string addressFrom, string addressTo, int passengerSeats,
-            List<User> passengerList, User driver, DateTime date)
+        public Carpool(int carpoolId, string branch, string homeAddress, int passengerSeats,
+            List<User> passengerList, Guid driverId, DateTime date)
         {
             CarpoolId = carpoolId;
-            AddressFrom = addressFrom;
-            AddressTo = addressTo;
+            Branch = branch;
+            HomeAddress = homeAddress;
             PassengerSeats = passengerSeats;
             PassengerList = passengerList;
-            DriverId = driver;
+            DriverId = driverId;
             Date = date;
         }
 
         public override string ToString()
         {
             return
-                $"Carpool: {CarpoolId}, AddressFrom: {AddressFrom}, AddressTo: {AddressTo}, " +
-                $"PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {DriverId.Id.ToString()}, Date: {Date}";
+                $"Carpool: {CarpoolId}, Branch: {Branch}, HomeAddress: {HomeAddress}, " +
+                $"PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {DriverId}, Date: {Date}";
         }
     }
 }
