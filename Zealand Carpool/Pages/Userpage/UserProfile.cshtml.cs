@@ -25,7 +25,7 @@ namespace Zealand_Carpool.Pages.Userpage
         public void OnGet()
         {
             List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
-            userInterface.GetUser(Guid.Parse(listofClaims[0].Value));
+            LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
 
         }
     }
