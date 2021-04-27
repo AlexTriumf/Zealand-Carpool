@@ -2,3 +2,47 @@
 @model Zealand_Carpool.Pages.LoginPage.LoginModel
 @{
 }
+
+<head>
+    <link rel="stylesheet" href="~/css/Index.css" />
+</head>
+
+<div id="Image1"><div class="text-center"><h2><b>Zealand CarPool</b></h2></div></div>
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Login</h5>
+                <a type="button" class="close" asp-page="Index"></a>
+                <a class="btn alert-danger float-right" type="button" asp-page="/Index">x</a>
+            </div>
+            <div class="modal-body text-center">
+                <form class="form-group" method="post">
+                    <div asp-validation-summary="ModelOnly"></div>
+                    <label class="form-text">Email</label>
+                    <input type="text" class="form-control" asp-for="@Model.user.Email" />
+                    <span asp-validation-for="@Model.user.Email" class="text-danger"></span>
+                    <label class="form-text">Password</label>
+                    <input type="password" class="form-control" asp-for="@Model.user.Password" />
+                    <span asp-validation-for="@Model.user.Password" class="text-danger"></span>   
+                    <br />
+                    <input type="submit" class="btn btn-success" asp-page-handler="Async" style="padding-left:2rem; padding-right:2rem;" value="Login" placeholder="Login" />
+                </form>
+                
+            </div>
+            
+        </div>
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function() {
+            $("#myModal").modal({ backdrop: "static" });
+            $("#myModal").modal("show");
+        });
+    </script>
+}

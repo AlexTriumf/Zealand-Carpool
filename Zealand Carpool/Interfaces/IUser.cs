@@ -7,7 +7,7 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Interfaces
 {
-    interface IUser
+    public interface IUser
     {
         Task<bool> AddUser(User user);
         Task<User> GetUser(Guid id);
