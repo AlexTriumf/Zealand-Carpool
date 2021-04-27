@@ -7,5 +7,6 @@ namespace Zealand_Carpool.Services
 {
     public class ChatDabase
     {
+
     }
 }
