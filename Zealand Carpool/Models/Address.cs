@@ -14,13 +14,13 @@ namespace Zealand_Carpool.Models
     /// </summary>
     public class Address
     {
-        [Required, StringLength(255), MinLength(1)]
+        [Required, StringLength(255, ErrorMessage = "For mange tegn"), MinLength(1, ErrorMessage = "For lidt tegn")]
         public string StreetName { get; set; }
-        [Required, MinLength(1),MaxLength(255)]
+        [Required, MinLength(1, ErrorMessage = "For lidt tegn"),StringLength(255, ErrorMessage = "For mange tegn")]
         public string StreetNumber { get; set; }
         [Required]
         public int Postalcode { get; set; }
-        [Required, StringLength(30)]
+        [Required, StringLength(30, ErrorMessage = "For mange tegn")]
         public string CityName { get; set; }
 
         public Address() { }

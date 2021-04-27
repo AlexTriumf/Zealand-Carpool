@@ -12,11 +12,10 @@ namespace Zealand_Carpool.Pages.LoginPage
     public class CreateUserModel : PageModel
     {
         [BindProperty]
-        public User CreatedUser { get; set; }
+        public User CreateUser { get; set; }
         [BindProperty]
         public Address Address1 { get; set; }
-        [BindProperty]
-        public Address Address2 { get; set; }
+        
 
         public User LoggedInUser { get; set; }
 
@@ -42,12 +41,10 @@ namespace Zealand_Carpool.Pages.LoginPage
             {
                 return Page();
             }
-            userInterface.AddUser(CreatedUser);
-            LoggedInUser.AddressList.Add(Address1);
-            if (Address2 != null)
-            {
-                LoggedInUser.AddressList.Add(Address2);
-            }
+            CreateUser.AddressList = new List<Address>();
+            CreateUser.AddressList.Add(Address1);
+            userInterface.AddUser(CreateUser);
+            
             return RedirectToPage("/LoginPage/Login");
         }
     }

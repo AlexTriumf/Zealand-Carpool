@@ -13,7 +13,7 @@ namespace Zealand_Carpool.Pages.Userpage
     public class UserProfile : PageModel
     {
         public User LoggedInUser { get; set; }
-        
+        public User LoggedInUser2 { get; set; }
         IUser userInterface;
 
         
@@ -29,6 +29,7 @@ namespace Zealand_Carpool.Pages.Userpage
             {
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+                
                 return Page();
             }
             else

@@ -12,23 +12,23 @@
                 <div asp-validation-summary="ModelOnly"></div>
                 <div class="form-group">
                     <label class="form-text">Fornavn</label>
-                    <input asp-for="@Model.CreatedUser.Name" class="form-control" />
-                    <span asp-validation-for="@Model.CreatedUser.Name" class="text-danger"></span>
+                    <input asp-for="@Model.CreateUser.Name" class="form-control" />
+                    <span asp-validation-for="@Model.CreateUser.Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="form-text">Efternavn</label>
-                    <input asp-for="@Model.CreatedUser.Surname" class="form-control" />
-                    <span asp-validation-for="@Model.CreatedUser.Surname" class="text-danger"></span>
+                    <input asp-for="@Model.CreateUser.Surname" class="form-control" />
+                    <span asp-validation-for="@Model.CreateUser.Surname" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="form-text">Telefonnummer</label>
-                    <input asp-for="@Model.CreatedUser.Phonenumber" class="form-control" />
-                    <span asp-validation-for="@Model.CreatedUser.Phonenumber" class="text-danger"></span>
+                    <input asp-for="@Model.CreateUser.Phonenumber" class="form-control" />
+                    <span asp-validation-for="@Model.CreateUser.Phonenumber" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="form-text">Email</label>
-                    <input type="email" asp-for="@Model.CreatedUser.Email" class="form-control" />
-                    <span asp-validation-for="@Model.CreatedUser.Email" class="text-danger"></span>
+                    <input type="email" asp-for="@Model.CreateUser.Email" class="form-control" />
+                    <span asp-validation-for="@Model.CreateUser.Email" class="text-danger"></span>
                 </div>
 
                 <div class="row">
@@ -68,16 +68,16 @@
                 
                     <div class="form-group">
                         <label class="form-text">Password</label>
-                        <input type="password" asp-for="@Model.CreatedUser.Password" class="form-control" />
-                        <span asp-validation-for="@Model.CreatedUser.Password" class="text-danger"></span>
+                        <input type="password" asp-for="@Model.CreateUser.Password" class="form-control" />
+                        <span asp-validation-for="@Model.CreateUser.Password" class="text-danger"></span>
                     </div>
                     @if (Model.LoggedInUser != null && Model.LoggedInUser.UserType == Models.UserType.Admin)
                     {
                         <div class="form-group">
-                            <label class="form-text">Bruger type</label>
-                            <input type="radio" asp-for="@Model.CreatedUser.UserType" value="0" name="Bruger" placeholder="Bruger" class="form-control" />
-                            <input type="radio" asp-for="@Model.CreatedUser.UserType" value="1" placeholder="Admin" name="Admin" class="form-control" />
-                            <span asp-validation-for="@Model.CreatedUser.UserType" class="text-danger"></span>
+                            <label class="form-text">Bruger type:</label>
+                            <input type="radio" asp-for="@Model.CreateUser.UserType" value="0" class="form-control" /> Bruger <br />
+                            <input type="radio" asp-for="@Model.CreateUser.UserType" value="1" class="form-control" /> Admin
+                            <span asp-validation-for="@Model.CreateUser.UserType" class="text-danger"></span>
                         </div>
                     }
                     <div style="padding:1rem;"></div>
