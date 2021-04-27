@@ -12,7 +12,7 @@ namespace Zealand_Carpool.Services
     /// A UserDatebase connection class which implements IUser.
     /// Made by Andreas
     /// </summary>
-    public class UserDatabase : IUser
+    public class UserDatabaseAsync : IUser
     {
         string ConnString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
@@ -22,7 +22,7 @@ namespace Zealand_Carpool.Services
         string createUserToAddress = "insert into AddressList (UserId, StreetName, " +
                             "Streetnr, PostalCode) Values (@id, @streetname, @streetnumber, @PostalCode)";
 
-        string getUser = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,UserTable.Password,AddressList.StreetName,AddressList.Streetnr,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
+        string getUser = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
                                     "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId INNER join PostalCode on AddressList.PostalCode=PostalCode.PostalCode Where UserTable.UserId = @id;";
 
         string getUserFEP = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
@@ -94,15 +94,15 @@ namespace Zealand_Carpool.Services
         {
 
             User user = new User();
-            Task<User> task = new Task<User>(() => {
+            Task<User> task = Task.Run(() => {
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {
                     conn.Open();
                     using (SqlCommand cmd = new SqlCommand(getUser, conn))
                     {
                         User user = new User();
-                        SqlDataReader reader = cmd.ExecuteReader();
                         cmd.Parameters.AddWithValue("@id", id);
+                        SqlDataReader reader = cmd.ExecuteReader();
                         user = MakeUser(reader);
 
                         return user;
@@ -116,7 +116,7 @@ namespace Zealand_Carpool.Services
         public Task<User> GetUser(string email, string password)
         {
             
-            Task<User> task = new Task<User>(() =>
+            Task<User> task = Task.Run(() =>
             {
                 using (SqlConnection conn = new SqlConnection(ConnString))
                 {

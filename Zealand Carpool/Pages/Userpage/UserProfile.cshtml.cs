@@ -16,16 +16,25 @@ namespace Zealand_Carpool.Pages.Userpage
         
         IUser userInterface;
 
+        
         public UserProfile(IUser iuser)
         {
             userInterface = iuser;
         }
 
-        [Authorize]
-        public void OnGet()
+        
+        public IActionResult OnGet()
         {
-            List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
-            LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+            if (User.Identity.IsAuthenticated)
+            {
+                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+                LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+                return Page();
+            }
+            else
+            {
+                return RedirectToPage("/Index");
+            }
 
         }
     }

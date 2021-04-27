@@ -19,7 +19,7 @@ namespace Zealand_Carpool.Models
         public List<Address> AddressList { get; set; }
         [Required, StringLength(255), MinLength(1)]
         public string Email { get; set; }
-        [Required]
+        
         public UserType UserType { get; set; }
         [Required, StringLength(20), MinLength(6)]
         public string Phonenumber { get; set; }

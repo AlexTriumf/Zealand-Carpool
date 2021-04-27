@@ -30,19 +30,19 @@ namespace Zealand_Carpool.Pages.LoginPage
         public async Task<IActionResult> OnPostAsync()
         {
             Task<User> taskUser = UserInterface.GetUser(user.Email, user.Password);
-            taskUser.Wait();
+            
             User loggedInUser = taskUser.Result;
             
-            if (loggedInUser != null)
+            if (loggedInUser != null && loggedInUser.Email == user.Email)
             {
                 var claims = new List<Claim>();
-                claims.Add(new Claim("username", user.Id.ToString()));
+                claims.Add(new Claim("username", loggedInUser.Id.ToString()));
             
                 // Handshake between server and PC identification
                 var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimIdentity);
                 await HttpContext.SignInAsync(claimsPrincipal);
-            return RedirectToPage("/Carpool/Carpools");
+                return RedirectToPage("/Carpool/Carpools");
             }
             return Page();
                 

@@ -10,7 +10,7 @@ using Zealand_Carpool.Services;
 
 namespace Zealand_Carpool.Services
 {
-    public class CarpoolDatabase : ICarpool
+    public class CarpoolDatabase 
     {
         private string createCarpool = "INSERT INTO Carpool (UserId, Branch, PassengerSeats, HomeAddress, Date) " +
                                        "VALUES (@UserId, @Branch, @PassengerSeats, @HomeAddress, @Date)";
@@ -39,22 +39,22 @@ namespace Zealand_Carpool.Services
             return Task.FromResult(task.IsCompletedSuccessfully);
         }
 
-        public Task<Carpool> GetCarpool(int IdCarpool)
+        public void GetCarpool(int IdCarpool)
         {
-            SqlConnection databaseCon = new DatabaseCon().GetConnection();
-            Task task = new Task(() =>
-            {
-                using (SqlCommand cmd = new SqlCommand(getCarpool, databaseCon))
-                {
-                    cmd.Parameters.AddWithValue("@CarpoolId", IdCarpool);
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    Carpool carpool = MakeCarpool(reader);
-                    return carpool;
-                }
-            });
-            databaseCon.Close();
-            //Sidder fast her :( 26/04/2021
-            return carpool;
+            //SqlConnection databaseCon = new DatabaseCon().GetConnection();
+            //Task task = new Task(() =>
+            //{
+            //    using (SqlCommand cmd = new SqlCommand(getCarpool, databaseCon))
+            //    {
+            //        cmd.Parameters.AddWithValue("@CarpoolId", IdCarpool);
+            //        SqlDataReader reader = cmd.ExecuteReader();
+            //        Carpool carpool = MakeCarpool(reader);
+            //        return carpool;
+            //    }
+            //});
+            //databaseCon.Close();
+            ////Sidder fast her :( 26/04/2021
+            
         }
 
         public Task<bool> DeleteCarpool(int id)

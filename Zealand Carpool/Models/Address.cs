@@ -18,7 +18,7 @@ namespace Zealand_Carpool.Models
         public string StreetName { get; set; }
         [Required, MinLength(1),MaxLength(255)]
         public string StreetNumber { get; set; }
-        [Required, MinLength(3),MaxLength(4)]
+        [Required]
         public int Postalcode { get; set; }
         [Required, StringLength(30)]
         public string CityName { get; set; }
