@@ -11,11 +11,11 @@ namespace Zealand_Carpool.Models
     /// </summary>
     public class Carpool
     {
-        public int CarpoolId { get; set;}
+        public int CarpoolId { get; set; }
         [Required, MinLength(1), MaxLength(255)]
         public string Branch { get; set; }
         public string HomeAddress { get; set; }
-        [Required, Range(1,9) ]
+        [Required, Range(1, 9)]
         public int PassengerSeats { get; set; }
         public List<User> PassengerList { get; set; }
         public Guid DriverId { get; set; }
@@ -23,23 +23,23 @@ namespace Zealand_Carpool.Models
 
         public Carpool() { }
 
-        public Carpool(int carpoolId, string addressFrom, string addressTo, int passengerSeats,
-            List<User> passengerList, User driver, DateTime date)
+        public Carpool(int carpoolId, string branch, string homeAddress, int passengerSeats,
+            List<User> passengerList, Guid driverId, DateTime date)
         {
             CarpoolId = carpoolId;
-            AddressFrom = addressFrom;
-            AddressTo = addressTo;
+            Branch = branch;
+            HomeAddress = homeAddress;
             PassengerSeats = passengerSeats;
             PassengerList = passengerList;
-            DriverId = driver;
+            DriverId = driverId;
             Date = date;
         }
 
         public override string ToString()
         {
             return
-                $"Carpool: {CarpoolId}, AddressFrom: {AddressFrom}, AddressTo: {AddressTo}, " +
-                $"PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {DriverId.Id.ToString()}, Date: {Date}";
+                $"Carpool: {CarpoolId}, Branch: {Branch}, HomeAddress: {HomeAddress}, " +
+                $"PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {DriverId}, Date: {Date}";
         }
     }
 }
