@@ -41,7 +41,7 @@ namespace Zealand_Carpool.Services
 
         public Task<Carpool> GetCarpool(int IdCarpool)
         {
-            SqlConnection databaseCon = new DatabaseCon().GetConnection();
+            /*SqlConnection databaseCon = new DatabaseCon().GetConnection();
             Task task = new Task(() =>
             {
                 using (SqlCommand cmd = new SqlCommand(getCarpool, databaseCon))
@@ -54,7 +54,8 @@ namespace Zealand_Carpool.Services
             });
             databaseCon.Close();
             //Sidder fast her :( 26/04/2021
-            return carpool;
+            return carpool;*/
+            throw new NotImplementedException();
         }
 
         public Task<bool> DeleteCarpool(int id)
