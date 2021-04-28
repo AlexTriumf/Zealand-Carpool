@@ -24,21 +24,39 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Link</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </li>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Login
+                                </a><div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                    <a class="dropdown-item" asp-page="/LoginPage/Login">Login</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-page="/LoginPage/CreateUser">Opret bruger</a>
+
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Bruger
+                                </a><div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                    <a class="dropdown-item" asp-page="/Userpage/UserProfile">Bruger profil</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-page="/LoginPage/Logout">Logud</a>
+
+                                </div>
+                            </li>
+                        }
+
                         <li>
                             <div style="padding-left:1.5rem;"></div>
                         </li>
-                        
+
                     </ul>
                     
                 </div>
