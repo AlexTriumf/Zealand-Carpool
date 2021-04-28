@@ -41,20 +41,22 @@ namespace Zealand_Carpool.Services
 
         public void GetCarpool(int IdCarpool)
         {
-            //SqlConnection databaseCon = new DatabaseCon().GetConnection();
-            //Task task = new Task(() =>
-            //{
-            //    using (SqlCommand cmd = new SqlCommand(getCarpool, databaseCon))
-            //    {
-            //        cmd.Parameters.AddWithValue("@CarpoolId", IdCarpool);
-            //        SqlDataReader reader = cmd.ExecuteReader();
-            //        Carpool carpool = MakeCarpool(reader);
-            //        return carpool;
-            //    }
-            //});
-            //databaseCon.Close();
-            ////Sidder fast her :( 26/04/2021
-            
+            /*SqlConnection databaseCon = new DatabaseCon().GetConnection();
+            Task task = new Task(() =>
+            {
+                using (SqlCommand cmd = new SqlCommand(getCarpool, databaseCon))
+                {
+                    cmd.Parameters.AddWithValue("@CarpoolId", IdCarpool);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    Carpool carpool = MakeCarpool(reader);
+                    return carpool;
+                }
+            });
+            databaseCon.Close();
+            //Sidder fast her :( 26/04/2021
+            return carpool;*/
+            throw new NotImplementedException();
+
         }
 
         public Task<bool> DeleteCarpool(int id)
