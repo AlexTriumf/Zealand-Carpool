@@ -2,8 +2,48 @@
 @model Zealand_Carpool.Pages.Userpage.AddressModel
 @{
 }
+<form>
+    <div class="row">
+        <h6>Adresse 1:</h6>
+        <div class="col">
+            <div class="form-group">
+                <label class="form-text">Vejnavn</label>
+                <input asp-for="@Model.Address1.StreetName" class="form-control" />
+                <span asp-validation-for="@Model.Address1.StreetName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label class="form-text">Vejnummer</label>
+                <input asp-for="@Model.Address1.StreetNumber" class="form-control" />
+                <span asp-validation-for="@Model.Address1.StreetNumber" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <label class="form-text">Postnummer</label>
+                <input asp-for="@Model.Address1.Postalcode" class="form-control" />
+                <span asp-validation-for="@Model.Address1.Postalcode" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label class="form-text">By</label>
+                <input asp-for="@Model.Address1.CityName" class="form-control" />
+                <span asp-validation-for="@Model.Address1.CityName" class="text-danger"></span>
+            </div>
 
+        </div>
+    </div>
+    <div class="form-group">
 
+        <input type="submit" class="btn btn-success float-right" value="Opret bruger" asp-page-handler="Async" style="padding:1rem;" />
+    </div>
+</form>
+@Model.latitude.results[0].address_component[0].long_name
+@Model.latitude.results[0].address_component[0].short_name
 
 <html>
 <head runat="server">
