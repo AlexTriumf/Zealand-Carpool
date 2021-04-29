@@ -5,13 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Zealand_Carpool.Models;
+using Zealand_Carpool.Services;
 
 namespace Zealand_Carpool.Pages.CarpoolPage
 {
     public class OfferCarpoolModel : PageModel
     {
-        private Carpool carpool = new Carpool();
+        [BindProperty]
+        public Carpool Carpool { get; set; }
 
+        private CarpoolDatabase CarpoolDatabase { get; set; }
+        public void OnPost()
+        {
+            CarpoolDatabase.AddCarpool(Carpool);
+        }
 
         public void OnGet()
         {
