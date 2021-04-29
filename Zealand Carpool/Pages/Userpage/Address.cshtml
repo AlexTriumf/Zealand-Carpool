@@ -1,9 +1,29 @@
 ﻿@page
+@using Zealand_Carpool.Models.Json
+@using System.Globalization
 @model Zealand_Carpool.Pages.Userpage.AddressModel
 @{
 }
 
+<div class="container">
+    Hej @Model.LoggedInUser.Name @Model.LoggedInUser.Surname
 
+    <br />
+
+    @foreach (Models.Address address in Model.LoggedInUser.AddressList)
+    {
+        <p>adresse: @address.StreetName @address.StreetNumber , @address.CityName @address.Postalcode </p>
+    }
+
+    Tjekker lige:
+    LAT: @Model.LoggedInUser.AddressList[0].Latitude.ToString(new CultureInfo("en-US"))
+    LNG: @Model.LoggedInUser.AddressList[0].Longtitude.ToString(new CultureInfo("en-US"))
+
+    DK LAT: @Model.LoggedInUser.AddressList[0].Latitude
+    DK LNG: @Model.LoggedInUser.AddressList[0].Longtitude
+
+
+</div>
 
 <html>
 <head runat="server">
@@ -25,7 +45,8 @@
 
     <script>
         function InitializeMap() {
-            var latlng = new google.maps.LatLng(55.6307194, 12.0786884);
+
+            var latlng = new google.maps.LatLng(@Model.LoggedInUser.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @Model.LoggedInUser.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")));
 
             var myOptions = {
                 zoom: 8,

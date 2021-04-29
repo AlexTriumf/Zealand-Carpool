@@ -68,7 +68,7 @@ namespace Zealand_Carpool.Services
                     Geo geoData = JsonConvert.DeserializeObject<Geo>(content);
 
                     user.AddressList[0].Latitude = double.Parse(geoData.results[0].geometry.location.lat, new CultureInfo("en-UK"));
-                    user.AddressList[0].Longtitude = double.Parse(geoData.results[0].geometry.location.lat, new CultureInfo("en-UK"));
+                    user.AddressList[0].Longtitude = double.Parse(geoData.results[0].geometry.location.lng, new CultureInfo("en-UK"));
                     using (SqlCommand cmd = new SqlCommand(_createUserToAddress, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", user.Id);
