@@ -8,17 +8,10 @@ using Zealand_Carpool.Models;
 using Zealand_Carpool.Pages.LoginPage;
 using Zealand_Carpool.Services;
 
-namespace Zealand_Carpool.Services
-{
-<<<<<<< Updated upstream
-    public class CarpoolDatabase 
-=======
-
     /// <summary>
     /// Written by Malte
     /// </summary>
     public class CarpoolDatabase : ICarpool
->>>>>>> Stashed changes
     {
         private string _connString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
@@ -50,12 +43,10 @@ namespace Zealand_Carpool.Services
             return false;
         }
 
-<<<<<<< Updated upstream
-        public void GetCarpool(int IdCarpool)
-=======
+
         private string getCarpool = "SELECT * FROM Carpool WHERE CarpoolId = @CarpoolId";
         public Carpool GetCarpool(int IdCarpool)
->>>>>>> Stashed changes
+
         {
             using (SqlConnection conn = new SqlConnection(_connString))
             {
@@ -73,17 +64,9 @@ namespace Zealand_Carpool.Services
                     }
                     throw new KeyNotFoundException("The carpool was not found in the database");
                 }
-<<<<<<< Updated upstream
-            });
-            databaseCon.Close();
-            //Sidder fast her :( 26/04/2021
-            return carpool;*/
-            throw new NotImplementedException();
-
-=======
             }
->>>>>>> Stashed changes
         }
+    
 
         /*private string postalCode = "SELECT * FROM Carpool WHERE "
         public List<Carpool> GetAllCarpoolsByPostalCode(int postalCode)
@@ -200,4 +183,3 @@ namespace Zealand_Carpool.Services
             return carpool;
         }
     }
-}
