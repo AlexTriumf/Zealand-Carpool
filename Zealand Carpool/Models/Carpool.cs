@@ -11,11 +11,11 @@ namespace Zealand_Carpool.Models
     /// </summary>
     public class Carpool
     {
-        public int CarpoolId { get; set;}
+        public int CarpoolId { get; set; }
         [Required, MinLength(1), MaxLength(255)]
         public string Branch { get; set; }
         public string HomeAddress { get; set; }
-        [Required, Range(1,9) ]
+        [Required, Range(1, 9)]
         public int PassengerSeats { get; set; }
         public List<User> PassengerList { get; set; }
         public Guid DriverId { get; set; }

@@ -13,19 +13,29 @@ namespace Zealand_Carpool.Pages.Userpage
     public class UserProfile : PageModel
     {
         public User LoggedInUser { get; set; }
-        
+        public User LoggedInUser2 { get; set; }
         IUser userInterface;
 
+        
         public UserProfile(IUser iuser)
         {
             userInterface = iuser;
         }
 
-        [Authorize]
-        public void OnGet()
+        
+        public IActionResult OnGet()
         {
-            List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
-            userInterface.GetUser(Guid.Parse(listofClaims[0].Value));
+            if (User.Identity.IsAuthenticated)
+            {
+                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+                LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+                
+                return Page();
+            }
+            else
+            {
+                return RedirectToPage("/Index");
+            }
 
         }
     }
