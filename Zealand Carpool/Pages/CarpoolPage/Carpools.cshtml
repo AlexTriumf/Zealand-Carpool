@@ -1,0 +1,31 @@
+﻿@page
+@model Zealand_Carpool.Pages.CarpoolPage.CarpoolsModel
+@{
+}
+<div class="container">
+    <form class="form-inline">
+        <div class="form-group mb-2">
+            <label for="Søg:" class="sr-only">Søg</label>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label class="sr-only">Søg</label>
+            <input type="text" class="form-control" placeholder="Input her en Adresse, ex. ">
+        </div>
+        <button type="submit" class="btn btn-outline-light mb-2">Søg</button>
+    </form>
+
+    <div class="card-deck ">
+        @foreach (Models.Carpool carpool in AllCarpools)
+        {
+        <div class="card">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+            </div>
+        </div>
+        }
+        
+    </div>
+</div>
