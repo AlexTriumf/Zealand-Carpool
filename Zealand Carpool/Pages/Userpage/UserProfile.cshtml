@@ -13,8 +13,10 @@
     @foreach (Models.Address address in Model.LoggedInUser.AddressList)
     {
         <p>adresse: @address.StreetName @address.StreetNumber , @address.CityName @address.Postalcode</p>
+        <p>@address.Longtitude og @address.Latitude</p>
     }
 
+   
    
 </div>
 

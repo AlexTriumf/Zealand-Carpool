@@ -90,7 +90,7 @@ namespace Zealand_Carpool.Services
         public Task<bool> DeleteUser(Guid id)
         {
 
-            Task task = new Task(() => {
+            Task<bool> task = Task.Run(() => {
                 using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
@@ -98,17 +98,20 @@ namespace Zealand_Carpool.Services
                     {
                         cmd.Parameters.AddWithValue("@ID", id);
 
-                        cmd.ExecuteNonQuery();
+                        int rows = cmd.ExecuteNonQuery();
+                        if (rows > 0) return true;
                     }
+                    
                 }
+                return false;
+                
             });
             
-            return Task.FromResult(task.IsCompletedSuccessfully);
+            return task;
         }
 
         public Task<User> GetUser(Guid id)
         {
-            
             User user = new User();
             Task<User> task = Task.Run(() => {
                 using (SqlConnection conn = new SqlConnection(_connString))
