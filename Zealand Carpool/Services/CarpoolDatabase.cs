@@ -8,23 +8,22 @@ using Zealand_Carpool.Models;
 using Zealand_Carpool.Pages.LoginPage;
 using Zealand_Carpool.Services;
 
-namespace Zealand_Carpool.Services
-{
-    public class CarpoolDatabase 
+    /// <summary>
+    /// Written by Malte
+    /// </summary>
+    public class CarpoolDatabase : ICarpool
     {
-        private string createCarpool = "INSERT INTO Carpool (UserId, Branch, PassengerSeats, HomeAddress, Date) " +
+        private string _connString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+
+        private string addCarpool = "INSERT INTO Carpool (UserId, Branch, PassengerSeats, HomeAddress, Date) " +
                                        "VALUES (@UserId, @Branch, @PassengerSeats, @HomeAddress, @Date)";
-
-        private string getCarpool = "SELECT * FROM Carpool WHERE CarpoolId = @CarpoolId";
-
-        private string deleteUser = "DELETE FROM Carpool WHERE CarpoolId = @ID";
-
-        public Task<bool> AddCarpool(Carpool carpool)
+        public bool AddCarpool(Carpool carpool)
         {
-            SqlConnection databaseCon = new DatabaseCon().GetConnection();
-            Task task = new Task(() =>
+            using (SqlConnection conn = new SqlConnection(_connString))
             {
-                using (SqlCommand cmd = new SqlCommand(createCarpool, databaseCon))
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(addCarpool, conn))
                 {
                     cmd.Parameters.AddWithValue("@UserId", carpool.DriverId);
                     cmd.Parameters.AddWithValue("@Branch", carpool.Branch);
@@ -32,46 +31,144 @@ namespace Zealand_Carpool.Services
                     cmd.Parameters.AddWithValue("@HomeAddress", carpool.HomeAddress);
                     cmd.Parameters.AddWithValue("@Date", carpool.Date);
 
-                    cmd.ExecuteNonQuery();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    conn.Close();
+                    if (rowsAffected == 1)
+                    {
+                        return true;
+                    }
                 }
-            });
-            databaseCon.Close();
-            return Task.FromResult(task.IsCompletedSuccessfully);
+            }
+
+            return false;
         }
 
-        public void GetCarpool(int IdCarpool)
+
+        private string getCarpool = "SELECT * FROM Carpool WHERE CarpoolId = @CarpoolId";
+        public Carpool GetCarpool(int IdCarpool)
+
         {
-            /*SqlConnection databaseCon = new DatabaseCon().GetConnection();
-            Task task = new Task(() =>
+            using (SqlConnection conn = new SqlConnection(_connString))
             {
-                using (SqlCommand cmd = new SqlCommand(getCarpool, databaseCon))
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(getCarpool, conn))
                 {
                     cmd.Parameters.AddWithValue("@CarpoolId", IdCarpool);
                     SqlDataReader reader = cmd.ExecuteReader();
                     Carpool carpool = MakeCarpool(reader);
-                    return carpool;
+                    conn.Close();
+                    if (carpool != null)
+                    {
+                        return carpool;
+                    }
+                    throw new KeyNotFoundException("The carpool was not found in the database");
                 }
-            });
-            databaseCon.Close();
-            //Sidder fast her :( 26/04/2021
-            return carpool;*/
-            throw new NotImplementedException();
+            }
+        }
+    
 
+        /*private string postalCode = "SELECT * FROM Carpool WHERE "
+        public List<Carpool> GetAllCarpoolsByPostalCode(int postalCode)
+        {
+        }*/
+
+        private string deleteCarpool = "DELETE FROM Carpool WHERE CarpoolId = @CarpoolId";
+        public bool DeleteCarpool(int carpoolId)
+        {
+            using (SqlConnection conn = new SqlConnection(_connString))
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(deleteCarpool, conn))
+                {
+                    cmd.Parameters.AddWithValue("@CarpoolId", carpoolId);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    conn.Close();
+                    if (rowsAffected == 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
-        public Task<bool> DeleteCarpool(int id)
+        private string updateCarpool = "UPDATE Carpool SET Branch = @Branch, PassengerSeats = @PassengerSeats," +
+                                       " HomeAddress = @HomeAddress, Date = @Date WHERE CarpoolId = @CarpoolId";
+        public bool UpdateCarpool(Carpool carpool)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(_connString))
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(updateCarpool, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Branch", carpool.Branch);
+                    cmd.Parameters.AddWithValue("@PassengerSeats", carpool.PassengerSeats);
+                    cmd.Parameters.AddWithValue("@HomeAddress", carpool.HomeAddress);
+                    cmd.Parameters.AddWithValue("@Date", carpool.Date);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    conn.Close();
+                    if (rowsAffected == 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
-        public Task<bool> AddPassenger(User user)
+        private string addPassenger = "INSERT INTO Passengers(CarpoolId, UserId) VALUES (@CarpoolId, @UserId)";
+        public bool AddPassenger(User user, Carpool carpool)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(_connString))
+            {
+                conn.Open();
+
+                using(SqlCommand cmd = new SqlCommand(addPassenger, conn))
+                {
+                    cmd.Parameters.AddWithValue("@CarppolId", carpool.CarpoolId);
+                    cmd.Parameters.AddWithValue("@UserId", user.Id);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    conn.Close();
+                    if (rowsAffected == 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
-        public Task<bool> DeletePassenger(User user)
+        private string deletePassenger = "DELETE FROM Passengers WHERE CarpoolId = @CarpoolId, UserId = @UserId"; 
+        public bool DeletePassenger(User user, Carpool carpool)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = new SqlConnection(_connString))
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = new SqlCommand(deletePassenger, conn))
+                {
+                    cmd.Parameters.AddWithValue("@CarpoolId", carpool.CarpoolId);
+                    cmd.Parameters.AddWithValue("@UserId", user.Id);
+
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    conn.Close();
+                    if (rowsAffected == 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public Carpool MakeCarpool(SqlDataReader sqlReader)
@@ -86,4 +183,3 @@ namespace Zealand_Carpool.Services
             return carpool;
         }
     }
-}
