@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Zealand_Carpool.Pages.LoginPage
+namespace Zealand_Carpool.Pages.CarpoolPage
 {
-    public class ChangePasswordModel : PageModel
+    public class CarpoolsModel : PageModel
     {
+
+        public List<Models.Carpool> AllCarpools { get; set; }
         public void OnGet()
         {
         }

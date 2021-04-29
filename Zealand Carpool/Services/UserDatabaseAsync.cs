@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Zealand_Carpool.Interfaces;
 using Zealand_Carpool.Models;
+using Zealand_Carpool.Models.Json;
 
 namespace Zealand_Carpool.Services
 {
@@ -14,35 +18,37 @@ namespace Zealand_Carpool.Services
     /// </summary>
     public class UserDatabaseAsync : IUser
     {
-        string ConnString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        string _connString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
-        string createUser = "insert into UserTable (Name, Surname, " +
+        string _createUser = "insert into UserTable (Name, Surname, " +
                             "Email, Phonenumber, UserType, Password) Values (@Name, @Surname, @Email, @Phonenumber, @UserType, @Password)";
 
-        string createUserToAddress = "insert into AddressList (UserId, StreetName, " +
-                            "Streetnr, PostalCode) Values (@id, @streetname, @streetnumber, @PostalCode)";
+        string _createUserToAddress = "insert into AddressList (UserId, StreetName, " +
+                            "Streetnr, PostalCode, Latitude, Longtitude) Values (@id, @streetname, @streetnumber, @PostalCode, @lat, @long)";
 
-        string getUser = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
+        string _getUser = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude,AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
                                     "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId INNER join PostalCode on AddressList.PostalCode=PostalCode.PostalCode Where UserTable.UserId = @id;";
 
-        string getUserById = "SELECT * From UserTable WHERE UserTable.Email = @email and UserTable.Password = @password";
+        string _getUserById = "SELECT * From UserTable WHERE UserTable.Email = @email and UserTable.Password = @password";
 
-        string getUserFEP = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
+        string _getUserFEP = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude,AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
                                     "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId INNER join PostalCode on AddressList.PostalCode=PostalCode.PostalCode " +
                                     " WHERE UserTable.Email = @email and UserTable.Password = @password";
 
-        string deleteUser = "delete from UserTable where UserId = @ID";
+        string _deleteUser = "delete from UserTable where UserId = @ID";
 
-        string updateUser = "Update UserTable set Name=@name, Surname=@surname, Email=@email, Phonenumber=@phonenumber, UserType=usertype, Password=@password where UserId = @id";
+        string _updateUser = "Update UserTable set Name=@name, Surname=@surname, Email=@email, Phonenumber=@phonenumber, UserType=usertype, Password=@password where UserId = @id";
+
+        string _updateUserAddress = "Update AddressList set StreetName=@streetname, Streetnr=@streetnr, PostalCode=@postalcode, Latitude=@lat, Longtitude=@long where UserId = @id";
 
         public Task<bool> AddUser(User user)
         {
 
-            Task task = Task.Run(() => {
-                using (SqlConnection conn = new SqlConnection(ConnString))
+            Task task = Task.Run(async () => {
+                using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(createUser, conn))
+                    using (SqlCommand cmd = new SqlCommand(_createUser, conn))
                     {
 
                         cmd.Parameters.AddWithValue("@Name", user.Name);
@@ -57,12 +63,20 @@ namespace Zealand_Carpool.Services
                     Task<User> task1 = GetUserID(user.Email, user.Password);
                     task1.Wait();
                     user.Id = task1.Result.Id;
-                    using (SqlCommand cmd = new SqlCommand(createUserToAddress, conn))
+                    using var client = new HttpClient();
+                    var content = await client.GetStringAsync("https://maps.googleapis.com/maps/api/geocode/json?address=" + user.AddressList[0].StreetName + "+" + user.AddressList[0].StreetNumber + "+" + user.AddressList[0].Postalcode + "&key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho");
+                    Geo geoData = JsonConvert.DeserializeObject<Geo>(content);
+
+                    user.AddressList[0].Latitude = double.Parse(geoData.results[0].geometry.location.lat, new CultureInfo("en-UK"));
+                    user.AddressList[0].Longtitude = double.Parse(geoData.results[0].geometry.location.lat, new CultureInfo("en-UK"));
+                    using (SqlCommand cmd = new SqlCommand(_createUserToAddress, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", user.Id);
                         cmd.Parameters.AddWithValue("@streetname", user.AddressList[0].StreetName);
                         cmd.Parameters.AddWithValue("@streetnumber", user.AddressList[0].StreetNumber);
                         cmd.Parameters.AddWithValue("@PostalCode", user.AddressList[0].Postalcode);
+                        cmd.Parameters.AddWithValue("@lat", user.AddressList[0].Latitude);
+                        cmd.Parameters.AddWithValue("@long", user.AddressList[0].Longtitude);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -77,10 +91,10 @@ namespace Zealand_Carpool.Services
         {
 
             Task task = new Task(() => {
-                using (SqlConnection conn = new SqlConnection(ConnString))
+                using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(deleteUser, conn))
+                    using (SqlCommand cmd = new SqlCommand(_deleteUser, conn))
                     {
                         cmd.Parameters.AddWithValue("@ID", id);
 
@@ -97,10 +111,10 @@ namespace Zealand_Carpool.Services
             
             User user = new User();
             Task<User> task = Task.Run(() => {
-                using (SqlConnection conn = new SqlConnection(ConnString))
+                using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(getUser, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getUser, conn))
                     {
                         User user = new User();
                         cmd.Parameters.AddWithValue("@id", id);
@@ -119,10 +133,10 @@ namespace Zealand_Carpool.Services
         {
             Task<User> task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(ConnString))
+                using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(getUserById, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getUserById, conn))
                     {
 
                         cmd.Parameters.AddWithValue("@email", email);
@@ -146,10 +160,10 @@ namespace Zealand_Carpool.Services
             
             Task<User> task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(ConnString))
+                using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(getUserFEP, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getUserFEP, conn))
                     {
                         
                         cmd.Parameters.AddWithValue("@email", email);
@@ -181,8 +195,10 @@ namespace Zealand_Carpool.Services
                 {
                 address.StreetName = sqlReader.GetString(6);
                 address.StreetNumber = sqlReader.GetString(7);
-                address.CityName = sqlReader.GetString(8);
-                address.Postalcode = sqlReader.GetInt32(9);
+                address.Latitude = sqlReader.GetDouble(8);
+                address.Longtitude = sqlReader.GetDouble(9);
+                address.CityName = sqlReader.GetString(10);
+                address.Postalcode = sqlReader.GetInt32(11);
                 user.AddressList.Add(address);
                 }
             }
@@ -191,12 +207,12 @@ namespace Zealand_Carpool.Services
 
         public Task<bool> UpdateUser(Guid id, User user)
         {
-            Task task = new Task(() =>
+            Task task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(ConnString))
+                using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(updateUser, conn))
+                    using (SqlCommand cmd = new SqlCommand(_updateUser, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", id);
                         cmd.Parameters.AddWithValue("@name", user.Name);
@@ -208,6 +224,17 @@ namespace Zealand_Carpool.Services
 
                         cmd.ExecuteNonQuery();
 
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand(_updateUserAddress, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", user.Id);
+                        cmd.Parameters.AddWithValue("@streetname", user.AddressList[0].StreetName);
+                        cmd.Parameters.AddWithValue("@streetnr", user.AddressList[0].StreetNumber);
+                        cmd.Parameters.AddWithValue("@postalcode", user.AddressList[0].Postalcode);
+                        cmd.Parameters.AddWithValue("@lat", user.AddressList[0].Latitude);
+                        cmd.Parameters.AddWithValue("@long", user.AddressList[0].Longtitude);
+                        cmd.ExecuteNonQuery();
                     }
                 }
             });

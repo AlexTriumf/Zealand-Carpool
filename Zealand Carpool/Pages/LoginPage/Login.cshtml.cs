@@ -14,13 +14,14 @@ namespace Zealand_Carpool.Pages.LoginPage
 {
     public class LoginModel : PageModel
     {
-        IUser UserInterface;
+        IUser _userInterface;
         [BindProperty]
         public User user { get; set; }
+        public bool WrongCredintials { get; set; }
 
         public LoginModel(IUser iUser)
         {
-            UserInterface = iUser;
+            _userInterface = iUser;
         }
         public void OnGet()
         {
@@ -29,7 +30,11 @@ namespace Zealand_Carpool.Pages.LoginPage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            Task<User> taskUser = UserInterface.GetUser(user.Email, user.Password);
+            if (user.Email is null && user.Password is null)
+            {
+                return Page();
+            }
+            Task<User> taskUser = _userInterface.GetUser(user.Email, user.Password);
             
             User loggedInUser = taskUser.Result;
             
@@ -44,6 +49,7 @@ namespace Zealand_Carpool.Pages.LoginPage
                 await HttpContext.SignInAsync(claimsPrincipal);
                 return RedirectToPage("/Carpool/Carpools");
             }
+            WrongCredintials = true;
             return Page();
                 
 

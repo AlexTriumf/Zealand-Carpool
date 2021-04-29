@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace Zealand_Carpool.Models.Json
 {
-    public class geo
+    public class Geo
     {
+        public List<Location> results { get; set; }
     }
 }

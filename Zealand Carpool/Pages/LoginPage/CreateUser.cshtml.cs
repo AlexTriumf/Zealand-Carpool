@@ -19,11 +19,11 @@ namespace Zealand_Carpool.Pages.LoginPage
 
         public User LoggedInUser { get; set; }
 
-        IUser userInterface;
+        IUser _userInterface;
 
         public CreateUserModel(IUser iuser)
         {
-            userInterface = iuser;
+            _userInterface = iuser;
         }
 
         public void OnGet()
@@ -31,7 +31,7 @@ namespace Zealand_Carpool.Pages.LoginPage
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
-                LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+                LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
             }
         }
 
@@ -43,7 +43,7 @@ namespace Zealand_Carpool.Pages.LoginPage
             }
             CreateUser.AddressList = new List<Address>();
             CreateUser.AddressList.Add(Address1);
-            userInterface.AddUser(CreateUser);
+            _userInterface.AddUser(CreateUser);
             
             return RedirectToPage("/LoginPage/Login");
         }
