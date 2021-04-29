@@ -1,22 +1,9 @@
 ﻿@page
 @model Zealand_Carpool.Pages.Userpage.UserProfile
-@{ 
+@{
 }
-<div class="container">
-    Hej @Model.LoggedInUser.Name @Model.LoggedInUser.Surname
 
-    <br />
-    <p>ID: @Model.LoggedInUser.Id</p>
-    <p>Email: @Model.LoggedInUser.Email</p>
-    <p>Telefonnummer: @Model.LoggedInUser.Phonenumber</p>
-    <p>bruger type: @Model.LoggedInUser.UserType.ToString()</p>
-    @foreach (Models.Address address in Model.LoggedInUser.AddressList)
-    {
-        <p>adresse: @address.StreetName @address.StreetNumber , @address.CityName @address.Postalcode</p>
-    }
+Hej navn 
 
-   
-</div>
-
-
-
+<br />
+@Model.LoggedInUser.Name
