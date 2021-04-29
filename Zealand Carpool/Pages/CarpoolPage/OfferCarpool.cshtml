@@ -1,9 +1,52 @@
 ﻿@page
 @model Zealand_Carpool.Pages.CarpoolPage.OfferCarpoolModel
 @{
-    <div class="container">
-        <div class="">
 
-        </div>
-    </div>
 }
+<head>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        div.a {
+            margin: 50px;
+            border-radius: 25px;
+            border: 2px solid black;
+            background: white;
+            padding-top: 30px;
+            padding-bottom: 70px;
+            padding-left: 100px;
+            padding-right: 100px;
+            width: 80%;
+            height: 80%;
+        }
+        input {
+            width: 150px;
+        }
+        body {
+            background-image: url("/img/Background.jpg");
+            background-repeat: repeat-x
+        }
+    </style>
+</head>
+
+<div class="a">
+    <h2 style="text-align: center">Tilbyd sammenkørsel</h2><br /><br />
+    <form method="post">
+        <label for="goFrom">Kører fra </label><br />
+        <select id="goFrom" name="goFrom">
+            <option value="tempValue">Hjemmeadresse</option>
+            <option value="tempValue">Zealand Roskilde</option>
+        </select><br /><br />
+        <label for="goTo">Kører til </label><br />
+        <select id="goTo" name="goTo">
+            <option value="tempValue">Zealand Roskilde</option>
+            <option value="tempValue">Hjemmeadresse</option>
+        </select><br /><br />
+        <label for="seats">Pladser</label><br />
+        <input type="number" id="seats" name="seats" /><br /><br />
+        <label for="date">Dato</label><br />
+        <input type="date" id="date" name="fname" /><br /><br />
+        <label for="time">Afkørselstidspunkt</label><br />
+        <input type="time" id="time" name="time" />
+        <input style="float: right" type="submit" value="Opret samkørsel"/>
+    </form>
+</div>
