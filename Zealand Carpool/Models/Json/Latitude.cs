@@ -7,5 +7,7 @@ namespace Zealand_Carpool.Models.Json
 {
     public class Latitude
     {
+        public string lat { get; set; }
+        public string lng { get; set; }
     }
 }

@@ -18,6 +18,10 @@
                 <a class="btn alert-danger float-right" type="button" asp-page="/Index">x</a>
             </div>
             <div class="modal-body text-center">
+                @if (Model.WrongCredintials)
+                {
+                    <p class="text-danger">Wrong Email or Password</p>
+                }
                 <form class="form-group" method="post">
                     <div asp-validation-summary="ModelOnly"></div>
                     <label class="form-text">Email</label>

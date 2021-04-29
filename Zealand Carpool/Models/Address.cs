@@ -23,8 +23,8 @@ namespace Zealand_Carpool.Models
         [Required, StringLength(30, ErrorMessage = "For mange tegn")]
         public string CityName { get; set; }
 
-        public float Latitude { get; set; }
-        public float Longtitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longtitude { get; set; }
 
         public Address() { }
         public Address(string newStreetName, string newStreetNumber, int newPostalcode, string newCityName)
