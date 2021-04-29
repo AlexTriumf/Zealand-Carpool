@@ -35,16 +35,6 @@ namespace Zealand_Carpool.Models
             Date = date;
         }
 
-        public void AddPassenger(User user)
-        {
-            PassengerList.Add(user);
-        }
-
-        public bool RemovePassenger(User user)
-        {
-            return PassengerList.Remove(user);
-        }
-
         public override string ToString()
         {
             return

@@ -13,14 +13,11 @@ namespace Zealand_Carpool.Interfaces
     /// </summary>
     public interface ICarpool
     {
-        bool AddCarpool(Carpool carpool);
-        Carpool GetCarpool(int idCarpool);
-        //TODO List<Carpool> GetAllCarpoolsByPostalCode(int postalCode);
-        bool DeleteCarpool(int id);
-        bool UpdateCarpool(Carpool carpool);
-        bool AddPassenger(User user, Carpool carpool);
-        bool DeletePassenger(User user, Carpool carpool);
-        
+        Task<bool> AddCarpool(Carpool carpool);
+        Task<Carpool> GetCarpool(int idCarpool);
+        Task<bool> DeleteCarpool(int id);
+        Task<bool> AddPassenger(User user);
+        Task<bool> DeletePassenger(User user);
         Carpool MakeCarpool(SqlDataReader sqlReader);
     }
 }
