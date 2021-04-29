@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Zealand_Carpool.Models;
@@ -14,5 +15,6 @@ namespace Zealand_Carpool.Interfaces
         public List<Comment> getComments(Guid UserId);
 
         public void DeleteComment(int id);
+        Comment MakeComment(SqlDataReader sqlReader);
     }
 }

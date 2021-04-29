@@ -12,6 +12,7 @@ namespace Zealand_Carpool.Interfaces
         Task<bool> AddUser(User user);
         Task<User> GetUser(Guid id);
         Task<User> GetUser(string email, string password);
+        Task<User> GetUserID(string email, string password);
         Task<bool> DeleteUser(Guid id);
         Task<bool> UpdateUser(Guid id, User user);
         User MakeUser(SqlDataReader sqlreader);
