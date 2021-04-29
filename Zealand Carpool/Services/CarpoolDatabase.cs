@@ -8,9 +8,11 @@ using Zealand_Carpool.Models;
 using Zealand_Carpool.Pages.LoginPage;
 using Zealand_Carpool.Services;
 
-    /// <summary>
-    /// Written by Malte
-    /// </summary>
+/// <summary>
+/// Written by Malte
+/// </summary>
+namespace Zealand_Carpool.Services
+{
     public class CarpoolDatabase : ICarpool
     {
         private string _connString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
@@ -66,7 +68,7 @@ using Zealand_Carpool.Services;
                 }
             }
         }
-    
+
 
         /*private string postalCode = "SELECT * FROM Carpool WHERE "
         public List<Carpool> GetAllCarpoolsByPostalCode(int postalCode)
@@ -130,7 +132,7 @@ using Zealand_Carpool.Services;
             {
                 conn.Open();
 
-                using(SqlCommand cmd = new SqlCommand(addPassenger, conn))
+                using (SqlCommand cmd = new SqlCommand(addPassenger, conn))
                 {
                     cmd.Parameters.AddWithValue("@CarppolId", carpool.CarpoolId);
                     cmd.Parameters.AddWithValue("@UserId", user.Id);
@@ -147,7 +149,7 @@ using Zealand_Carpool.Services;
             return false;
         }
 
-        private string deletePassenger = "DELETE FROM Passengers WHERE CarpoolId = @CarpoolId, UserId = @UserId"; 
+        private string deletePassenger = "DELETE FROM Passengers WHERE CarpoolId = @CarpoolId, UserId = @UserId";
         public bool DeletePassenger(User user, Carpool carpool)
         {
             using (SqlConnection conn = new SqlConnection(_connString))
@@ -183,3 +185,4 @@ using Zealand_Carpool.Services;
             return carpool;
         }
     }
+}
