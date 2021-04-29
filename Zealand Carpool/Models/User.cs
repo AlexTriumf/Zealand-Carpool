@@ -12,19 +12,18 @@ namespace Zealand_Carpool.Models
     public class User
     {
         public Guid Id { get; set; }
-        [Required, StringLength(100,ErrorMessage ="For mange tegn"), MinLength(1, ErrorMessage = "For lidt tegn")]
+        [Required, StringLength(100), MinLength(1)]
         public string Name { get; set; }
-        [Required, StringLength(100, ErrorMessage = "For mange tegn"), MinLength(1, ErrorMessage = "For lidt tegn")]
+        [Required, StringLength(100), MinLength(1)]
         public string Surname { get; set; }
-       
         public List<Address> AddressList { get; set; }
-       [Required, StringLength(255, ErrorMessage = "For mange tegn"), MinLength(1, ErrorMessage = "For lidt tegn")]
+        [Required, StringLength(255), MinLength(1)]
         public string Email { get; set; }
-        
+        [Required]
         public UserType UserType { get; set; }
-        [Required, StringLength(20, ErrorMessage = "For mange tegn"), MinLength(6, ErrorMessage = "For lidt tegn")]
+        [Required, StringLength(20), MinLength(6)]
         public string Phonenumber { get; set; }
-        [Required, StringLength(255, ErrorMessage = "For mange tegn"), MinLength(8, ErrorMessage = "For lidt tegn")]
+        [Required, StringLength(255), MinLength(8)]
         public string Password { get; set; }
 
         public User() { }

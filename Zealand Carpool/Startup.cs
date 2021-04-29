@@ -28,7 +28,7 @@ namespace Zealand_Carpool
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
                 options.LoginPath = "/LoginPage/Login";});
-            services.AddSingleton<Interfaces.IUser, Services.UserDatabaseAsync>();
+            services.AddSingleton<Interfaces.IUser, Services.UserDatabase>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

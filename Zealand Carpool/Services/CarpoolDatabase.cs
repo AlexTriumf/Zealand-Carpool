@@ -10,7 +10,7 @@ using Zealand_Carpool.Services;
 
 namespace Zealand_Carpool.Services
 {
-    public class CarpoolDatabase 
+    public class CarpoolDatabase : ICarpool
     {
         private string createCarpool = "INSERT INTO Carpool (UserId, Branch, PassengerSeats, HomeAddress, Date) " +
                                        "VALUES (@UserId, @Branch, @PassengerSeats, @HomeAddress, @Date)";
@@ -39,7 +39,7 @@ namespace Zealand_Carpool.Services
             return Task.FromResult(task.IsCompletedSuccessfully);
         }
 
-        public void GetCarpool(int IdCarpool)
+        public Task<Carpool> GetCarpool(int IdCarpool)
         {
             /*SqlConnection databaseCon = new DatabaseCon().GetConnection();
             Task task = new Task(() =>
@@ -56,7 +56,6 @@ namespace Zealand_Carpool.Services
             //Sidder fast her :( 26/04/2021
             return carpool;*/
             throw new NotImplementedException();
-
         }
 
         public Task<bool> DeleteCarpool(int id)
