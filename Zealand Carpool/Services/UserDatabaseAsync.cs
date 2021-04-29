@@ -1,10 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Zealand_Carpool.Interfaces;
 using Zealand_Carpool.Models;
+using Zealand_Carpool.Models.Json;
 
 namespace Zealand_Carpool.Services
 {
@@ -22,12 +26,12 @@ namespace Zealand_Carpool.Services
         string _createUserToAddress = "insert into AddressList (UserId, StreetName, " +
                             "Streetnr, PostalCode, Latitude, Longtitude) Values (@id, @streetname, @streetnumber, @PostalCode, @lat, @long)";
 
-        string _getUser = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
+        string _getUser = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude,AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
                                     "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId INNER join PostalCode on AddressList.PostalCode=PostalCode.PostalCode Where UserTable.UserId = @id;";
 
         string _getUserById = "SELECT * From UserTable WHERE UserTable.Email = @email and UserTable.Password = @password";
 
-        string _getUserFEP = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
+        string _getUserFEP = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude,AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
                                     "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId INNER join PostalCode on AddressList.PostalCode=PostalCode.PostalCode " +
                                     " WHERE UserTable.Email = @email and UserTable.Password = @password";
 
@@ -35,11 +39,12 @@ namespace Zealand_Carpool.Services
 
         string _updateUser = "Update UserTable set Name=@name, Surname=@surname, Email=@email, Phonenumber=@phonenumber, UserType=usertype, Password=@password where UserId = @id";
 
-        string _updateUserAddress = "Update AddressList set StreetName=@streetname, Streetnr=@streetnr, PostalCode=@postalcode where UserId = @id";
+        string _updateUserAddress = "Update AddressList set StreetName=@streetname, Streetnr=@streetnr, PostalCode=@postalcode, Latitude=@lat, Longtitude=@long where UserId = @id";
+
         public Task<bool> AddUser(User user)
         {
 
-            Task task = Task.Run(() => {
+            Task task = Task.Run(async () => {
                 using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
@@ -58,13 +63,20 @@ namespace Zealand_Carpool.Services
                     Task<User> task1 = GetUserID(user.Email, user.Password);
                     task1.Wait();
                     user.Id = task1.Result.Id;
+                    using var client = new HttpClient();
+                    var content = await client.GetStringAsync("https://maps.googleapis.com/maps/api/geocode/json?address=" + user.AddressList[0].StreetName + "+" + user.AddressList[0].StreetNumber + "+" + user.AddressList[0].Postalcode + "&key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho");
+                    Geo geoData = JsonConvert.DeserializeObject<Geo>(content);
+
+                    user.AddressList[0].Latitude = double.Parse(geoData.results[0].geometry.location.lat, new CultureInfo("en-UK"));
+                    user.AddressList[0].Longtitude = double.Parse(geoData.results[0].geometry.location.lat, new CultureInfo("en-UK"));
                     using (SqlCommand cmd = new SqlCommand(_createUserToAddress, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", user.Id);
                         cmd.Parameters.AddWithValue("@streetname", user.AddressList[0].StreetName);
                         cmd.Parameters.AddWithValue("@streetnumber", user.AddressList[0].StreetNumber);
                         cmd.Parameters.AddWithValue("@PostalCode", user.AddressList[0].Postalcode);
-                        cmd.Parameters.AddWithValue("@PostalCode", user.AddressList[0].);
+                        cmd.Parameters.AddWithValue("@lat", user.AddressList[0].Latitude);
+                        cmd.Parameters.AddWithValue("@long", user.AddressList[0].Longtitude);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -183,8 +195,10 @@ namespace Zealand_Carpool.Services
                 {
                 address.StreetName = sqlReader.GetString(6);
                 address.StreetNumber = sqlReader.GetString(7);
-                address.CityName = sqlReader.GetString(8);
-                address.Postalcode = sqlReader.GetInt32(9);
+                address.Latitude = sqlReader.GetDouble(8);
+                address.Longtitude = sqlReader.GetDouble(9);
+                address.CityName = sqlReader.GetString(10);
+                address.Postalcode = sqlReader.GetInt32(11);
                 user.AddressList.Add(address);
                 }
             }
@@ -218,6 +232,8 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@streetname", user.AddressList[0].StreetName);
                         cmd.Parameters.AddWithValue("@streetnr", user.AddressList[0].StreetNumber);
                         cmd.Parameters.AddWithValue("@postalcode", user.AddressList[0].Postalcode);
+                        cmd.Parameters.AddWithValue("@lat", user.AddressList[0].Latitude);
+                        cmd.Parameters.AddWithValue("@long", user.AddressList[0].Longtitude);
                         cmd.ExecuteNonQuery();
                     }
                 }

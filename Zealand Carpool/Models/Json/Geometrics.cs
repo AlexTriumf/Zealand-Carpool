@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace Zealand_Carpool.Models.Json
 {
-    public class geometrics
+    public class Geometrics
     {
+        public Latitude location { get; set; }
     }
 }
