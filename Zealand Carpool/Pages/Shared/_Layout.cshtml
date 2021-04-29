@@ -21,12 +21,10 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link k" asp-area="" asp-page="/Userpage/Address">Address</a>
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
+                        
                         @if (!User.Identity.IsAuthenticated)
                         {
+                           
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Login
@@ -41,6 +39,10 @@
                         }
                         else
                         {
+                            <li class="nav-item">
+                                <a class="nav-link k" asp-area="" asp-page="/Userpage/Address">Min Adresse</a>
+                                
+                            </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Bruger
