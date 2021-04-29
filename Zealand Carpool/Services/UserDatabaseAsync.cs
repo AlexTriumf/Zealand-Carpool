@@ -68,7 +68,7 @@ namespace Zealand_Carpool.Services
                     Geo geoData = JsonConvert.DeserializeObject<Geo>(content);
 
                     user.AddressList[0].Latitude = double.Parse(geoData.results[0].geometry.location.lat, new CultureInfo("en-UK"));
-                    user.AddressList[0].Longtitude = double.Parse(geoData.results[0].geometry.location.lat, new CultureInfo("en-UK"));
+                    user.AddressList[0].Longtitude = double.Parse(geoData.results[0].geometry.location.lng, new CultureInfo("en-UK"));
                     using (SqlCommand cmd = new SqlCommand(_createUserToAddress, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", user.Id);
@@ -90,7 +90,7 @@ namespace Zealand_Carpool.Services
         public Task<bool> DeleteUser(Guid id)
         {
 
-            Task task = new Task(() => {
+            Task<bool> task = Task.Run(() => {
                 using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
@@ -98,17 +98,20 @@ namespace Zealand_Carpool.Services
                     {
                         cmd.Parameters.AddWithValue("@ID", id);
 
-                        cmd.ExecuteNonQuery();
+                        int rows = cmd.ExecuteNonQuery();
+                        if (rows > 0) return true;
                     }
+                    
                 }
+                return false;
+                
             });
             
-            return Task.FromResult(task.IsCompletedSuccessfully);
+            return task;
         }
 
         public Task<User> GetUser(Guid id)
         {
-            
             User user = new User();
             Task<User> task = Task.Run(() => {
                 using (SqlConnection conn = new SqlConnection(_connString))
