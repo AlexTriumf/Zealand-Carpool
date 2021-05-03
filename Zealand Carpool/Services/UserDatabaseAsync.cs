@@ -41,6 +41,8 @@ namespace Zealand_Carpool.Services
 
         string _updateUserAddress = "Update AddressList set StreetName=@streetname, Streetnr=@streetnr, PostalCode=@postalcode, Latitude=@lat, Longtitude=@long where UserId = @id";
 
+        string _getAllUsers = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude,AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
+                                    "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId INNER join PostalCode on AddressList.PostalCode=PostalCode.PostalCode;";
         public Task<bool> AddUser(User user)
         {
 
@@ -247,6 +249,30 @@ namespace Zealand_Carpool.Services
                 }
             });
             return Task.FromResult(task.IsCompletedSuccessfully);
+        }
+
+        public Task<Dictionary<Guid,User>> GetAllUsers()
+        {
+            Task<Dictionary<Guid, User>> task = Task.Run(() =>
+            {
+                Dictionary<Guid, User> dicOfUsers = new Dictionary<Guid, User>();
+                using (SqlConnection conn = new SqlConnection(_connString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(_getAllUsers, conn))
+                    {
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                        User user = MakeUser(reader);
+                            dicOfUsers.Add(user.Id, user);
+                        }
+                        return dicOfUsers;
+                    }
+                }
+            });
+
+            return task;
         }
     }
 }

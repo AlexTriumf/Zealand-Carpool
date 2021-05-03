@@ -2,3 +2,18 @@
 @model Zealand_Carpool.Pages.CarpoolPage.RequestCarpoolingModel
 @{
 }
+<div class="container">
+    <div class="text-center">
+        <h3>Kør med @Model.Carpool.Driver.Name @Model.Carpool.Driver.Surname</h3>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>Der bliver kørt fra adreese: @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber, @Model.Carpool.Driver.AddressList[0].CityName @Model.Carpool.Driver.AddressList[0].Postalcode</p>
+            <p>Til Afdellingen i @Model.Carpool.Branch.BranchName, @Model.Carpool.Branch.BranchPostalCode</p>
+            <p>Til Dato: @Model.Carpool.</p>
+        </div>
+        <div class="col">
+            (maps)
+        </div>
+    </div>
+</div>
