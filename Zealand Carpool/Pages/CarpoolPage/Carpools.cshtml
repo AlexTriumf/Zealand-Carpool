@@ -1,43 +1,88 @@
 ﻿@page
+@{@using System.Globalization
 @model Zealand_Carpool.Pages.CarpoolPage.CarpoolsModel
-@{
 }
-<div class="container"> 
-   
-   <div class="text-center">
-    <form method="post" class="row">
+<head runat="server">
+    <title>Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
 
-    <div class="col-auto">
-        <label>Søg</label>
-    </div>
-    <div class="col">
+        #map {
+            height: 200px;
+            /*            width: 400px;
+            margin-left: 60%*/;
+            margin: auto;
+        }
+    </style>
+</head>
+<div class="container">
 
-        <input type="text" asp-for="@Model.Search" class="form-control" placeholder="Søg i Afdeling eller Adresse (skal udfyldes)">
-        
+    <div class="text-center">
+        <form method="post" class="row">
+
+            <div class="col-auto">
+                <label>Søg</label>
+            </div>
+            <div class="col">
+
+                <input type="text" asp-for="@Model.Search" class="form-control" placeholder="Søg i Afdeling eller Adresse (skal udfyldes)">
+
+            </div>
+            <div class="col">
+                <input asp-for="@Model.Date" class="form-control" />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">Søg</button>
+            </div>
+
+        </form>
     </div>
-    <div class="col">
-        <input asp-for="@Model.Date" class="form-control" />
-    </div>
-        <div class="col-auto">
-            <button type="submit" class="btn btn-primary mb-3">Søg</button>
-        </div>
-    
-</form>
-   </div>
 
     @foreach (Models.Carpool carpool in Model.AllCarpools)
     {
-    <div class="card-columns" style="column-count:2;">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Adresse fra: @carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber Til: @carpool.Branch.BranchName</h5>
-                (kort)
-                <p class="card-text">Dato for kørsel: @carpool.Date.ToString()</p>
-                <button type="submit" asp-page="/CarpoolPage/RequestCarpooling" asp-route="@carpool.CarpoolId" class="btn btn-light">Kør med!</button>
+        <div class="card-columns" style="column-count:2;">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-text" id="map"></div>
+                    <h5 class="card-title">Adresse fra: @carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber Til: @carpool.Branch.BranchName</h5>
+
+                    <script>
+                        function InitializeMap() {
+
+                            var latlng = new google.maps.LatLng(@carpool.Driver.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @carpool.Driver.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")));
+
+                            var myOptions = {
+                                zoom: 12,
+                                center: latlng,
+                                mapTypeId: google.maps.MapTypeId.ROADMAP
+                            };
+
+                            var map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+                            new google.maps.Marker({
+                                position: latlng,
+                                map,
+                                title: "Zealand Roskilde",
+                            });
+
+                        }
+                    </script>
+
+
+                    <p class="card-text">Dato for kørsel: @carpool.Date.ToString()</p>
+                    <button type="submit" asp-page="/CarpoolPage/RequestCarpooling" class="btn btn-light">Kør med!</button>
+                </div>
             </div>
+
+
         </div>
-        
-        
-    </div>
     }
 </div>
+
+<body>
+
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho&callback=InitializeMap" async defer></script>
+</body>

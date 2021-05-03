@@ -10,10 +10,16 @@
         <div class="col">
             <p>Der bliver kørt fra adreese: @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber, @Model.Carpool.Driver.AddressList[0].CityName @Model.Carpool.Driver.AddressList[0].Postalcode</p>
             <p>Til Afdellingen i @Model.Carpool.Branch.BranchName, @Model.Carpool.Branch.BranchPostalCode</p>
-            <p>Til Dato: @Model.Carpool.</p>
+            <p>Til Dato & tidspunkt: @Model.Carpool.Date.ToString()</p>
+            <button type="submit" asp-page-handler="RequestCarpool" asp-route="@Model.Carpool.CarpoolId" class="btn btn-primary mb-3">Ansøg om plads</button>
+            <button type="submit" class="btn btn-primary mb-3">Kontakt Chauffør</button>
         </div>
         <div class="col">
             (maps)
+            @if (Model.LoggedInUser.Id == Model.Carpool.Driver.Id)
+            {
+                <button type="submit" asp-page-handler="DeleteCarpool" asp-route="@Model.Carpool.CarpoolId" class="btn btn-danger">Slet Carpool</button>
+            }
         </div>
     </div>
 </div>
