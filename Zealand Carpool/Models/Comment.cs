@@ -17,9 +17,8 @@ namespace Zealand_Carpool.Models
 
         public Comment () { }
 
-        public Comment(int newId, User newUserPostID, User newUserID, string newText)
+        public Comment(User newUserPostID, User newUserID, string newText)
         {
-            Id = newId;
             UserPostID = newUserPostID;
             UserID = newUserID;
             Text = newText;
