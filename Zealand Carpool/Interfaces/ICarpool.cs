@@ -9,17 +9,20 @@ using Zealand_Carpool.Models;
 namespace Zealand_Carpool.Interfaces
 {
     /// <summary>
-    /// Written by Malte
+    /// Written by Andreas
     /// </summary>
     public interface ICarpool
     {
-        bool AddCarpool(Carpool carpool);
-        Carpool GetCarpool(int idCarpool);
-        //TODO List<Carpool> GetAllCarpoolsByPostalCode(int postalCode);
-        bool DeleteCarpool(int id);
-        bool UpdateCarpool(Carpool carpool);
-        bool AddPassenger(User user, Carpool carpool);
-        bool DeletePassenger(User user, Carpool carpool);
+        Task<bool> AddCarpool(Carpool carpool);
+        Task<List<Branch>> GetBranches();
+
+        Task<Carpool> GetCarpool(int idCarpool);
+        Task<List<Carpool>> GetAllCarpools(DateTime date,string search);
+        Task<List<Carpool>> GetAllCarpools(DateTime date);
+        Task<bool> DeleteCarpool(int id);
+        Task<bool> UpdateCarpool(Carpool carpool);
+        Task<bool> AddPassenger(User user, Carpool carpool);
+        Task<bool> DeletePassenger(User user, Carpool carpool);
         
         Carpool MakeCarpool(SqlDataReader sqlReader);
     }

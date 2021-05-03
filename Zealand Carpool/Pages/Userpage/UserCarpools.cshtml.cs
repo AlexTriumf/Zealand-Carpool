@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
-    public class OfferCarpoolModel : PageModel
+    public class UserCarpoolsModel : PageModel
     {
         public void OnGet()
         {
