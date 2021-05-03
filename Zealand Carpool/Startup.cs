@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Zealand_Carpool.Hub;
 using Zealand_Carpool.Services;
 
 namespace Zealand_Carpool
@@ -30,7 +31,8 @@ namespace Zealand_Carpool
             {
                 options.LoginPath = "/LoginPage/Login";
             });
-
+            services.AddSignalR();
+            //.AddAzureSignalR();
             services.AddSingleton<Interfaces.IUser, Services.UserDatabaseAsync>();
             services.AddSingleton<Interfaces.ICarpool, Services.CarpoolDatabase>();
         }
@@ -60,6 +62,7 @@ namespace Zealand_Carpool
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapHub<Chat>("/chat");
             });
         }
     }
