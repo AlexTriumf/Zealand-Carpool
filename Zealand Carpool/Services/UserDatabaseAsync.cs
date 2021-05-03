@@ -210,7 +210,7 @@ namespace Zealand_Carpool.Services
 
         public Task<bool> UpdateUser(Guid id, User user)
         {
-            Task task = Task.Run(() =>
+            Task task = Task.Run(async () =>
             {
                 using (SqlConnection conn = new SqlConnection(_connString))
                 {
@@ -228,7 +228,12 @@ namespace Zealand_Carpool.Services
                         cmd.ExecuteNonQuery();
 
                     }
+                    using var client = new HttpClient();
+                    var content = await client.GetStringAsync("https://maps.googleapis.com/maps/api/geocode/json?address=" + user.AddressList[0].StreetName + "+" + user.AddressList[0].StreetNumber + "+" + user.AddressList[0].Postalcode + "&key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho");
+                    Geo geoData = JsonConvert.DeserializeObject<Geo>(content);
 
+                    user.AddressList[0].Latitude = double.Parse(geoData.results[0].geometry.location.lat, new CultureInfo("en-UK"));
+                    user.AddressList[0].Longtitude = double.Parse(geoData.results[0].geometry.location.lng, new CultureInfo("en-UK"));
                     using (SqlCommand cmd = new SqlCommand(_updateUserAddress, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", user.Id);

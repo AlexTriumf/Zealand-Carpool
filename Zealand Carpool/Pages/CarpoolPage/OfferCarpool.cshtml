@@ -3,50 +3,39 @@
 @{
 
 }
-<head>
-    <link rel="stylesheet" href="~/css/site.css" />
-    <style>
-        div.a {
-            margin: 50px;
-            border-radius: 25px;
-            border: 2px solid black;
-            background: white;
-            padding-top: 30px;
-            padding-bottom: 70px;
-            padding-left: 100px;
-            padding-right: 100px;
-            width: 80%;
-            height: 80%;
-        }
-        input {
-            width: 150px;
-        }
-        body {
-            background-image: url("/img/Background.jpg");
-            background-repeat: repeat-x
-        }
-    </style>
-</head>
+<div class="container">
+    <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-6">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly"></div>
+                    <label class="custom-control-label">Kørsel fra @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber</label>
+                <br />
+                    <div class="form-group">
+                        <label class="custom-control-label">Til afdeling</label><br />
+                        <select name="BranchId" asp-for="@Model.BranchId" asp-items="@Model.Branches">
+                        </select>
+                        
+                    </div><br />
+                <div class="form-group">
+                    <label class="custom-control-label">Dato & Tidpunkt</label>
+                    <input asp-for="@Model.Carpool.Date" class="form-control" />
+                    <span asp-validation-for="@Model.Carpool.Date" class="text-danger"></span>
+                </div> <br>
+                <div class="form-group">
+                    <label class="custom-control-label">Antal passager</label>
+                    <input asp-for="@Model.Carpool.PassengerSeats" class="form-control" />
+                    <span asp-validation-for="@Model.Carpool.PassengerSeats" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="@Model.Carpool.Driver.Id" class="form-control" />
+                    <input type="submit" class="btn btn-success float-right" value="Opret Carpool" style="padding:1rem;" />
+                </div>
+            </form>
+        </div>
+        <div class="col">
 
-<div class="a">
-    <h2 style="text-align: center">Tilbyd sammenkørsel</h2><br /><br />
-    <form method="post">
-        <label for="goFrom">Kører fra </label><br />
-        <select id="goFrom" name="goFrom">
-            <option value="tempValue">Hjemmeadresse</option>
-            <option value="tempValue">Zealand Roskilde</option>
-        </select><br /><br />
-        <label for="goTo">Kører til </label><br />
-        <select id="goTo" name="goTo">
-            <option value="tempValue">Zealand Roskilde</option>
-            <option value="tempValue">Hjemmeadresse</option>
-        </select><br /><br />
-        <label for="seats">Pladser</label><br />
-        <input type="number" id="seats" name="seats" /><br /><br />
-        <label for="date">Dato</label><br />
-        <input type="date" id="date" name="fname" /><br /><br />
-        <label for="time">Afkørselstidspunkt</label><br />
-        <input type="time" id="time" name="time" />
-        <input style="float: right" type="submit" value="Opret samkørsel"/>
-    </form>
+        </div>
+    </div>
 </div>

@@ -34,7 +34,7 @@ namespace Zealand_Carpool.Pages.Userpage
                     ChatTexts = _ichatter.GetChat(LoggedInUser.Id, Guid.Parse(userId)).Result;
                 } else
                 {
-                    _ichatter.AddChat()
+                    
                 }
                 return Page();
             }
