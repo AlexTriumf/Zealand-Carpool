@@ -1,0 +1,30 @@
+﻿@page
+@model Zealand_Carpool.Pages.Userpage.UserChatSignalRModel
+@{
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-2">Message</div>
+        <div class="col-4"><input type="text" id="txtmessage" /></div>
+    </div>
+    <div class="row"> </div>
+    <div class="row">
+        <div class="col-6">
+            <input type="button" id="sendBtn" value="Send" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <ul id="ulmessages"></ul>
+    </div>
+</div>
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
