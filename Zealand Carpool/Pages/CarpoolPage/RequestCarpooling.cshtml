@@ -1,7 +1,18 @@
 ﻿@page
+@using System.Globalization
 @model Zealand_Carpool.Pages.CarpoolPage.RequestCarpoolingModel
 @{
 }
+<head runat="server">
+    <title>Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        #map {
+            height: 400px;
+        }
+    </style>
+</head>
 <div class="container">
     <div class="text-center">
         <h3>Kør med @Model.Carpool.Driver.Name @Model.Carpool.Driver.Surname</h3>
@@ -9,11 +20,44 @@
     <div class="row">
         <div class="col">
             <p>Der bliver kørt fra adreese: @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber, @Model.Carpool.Driver.AddressList[0].CityName @Model.Carpool.Driver.AddressList[0].Postalcode</p>
-            <p>Til Afdellingen i @Model.Carpool.Branch.BranchName, @Model.Carpool.Branch.BranchPostalCode</p>
-            <p>Til Dato: @Model.Carpool.</p>
+            <p>Til Afdellingen i @Model.Carpool.Branch.BranchName</p>
+            <p>Til Dato & tidspunkt: @Model.Carpool.Date.ToString()</p>
+
+            <button type="submit" class="btn btn-primary mb-3">Ansøg om plads</button>
+            <button type="submit" class="btn btn-primary mb-3">Kontakt Chauffør</button>
         </div>
         <div class="col">
-            (maps)
+
+            <div id="map"></div>
+
+            <script>
+        function InitializeMap() {
+
+            var latlng = new google.maps.LatLng(@Model.Carpool.Driver.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @Model.Carpool.Driver.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")));
+
+            var myOptions = {
+                zoom: 13,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            var map = new google.maps.Map(document.getElementById("map"), myOptions);
+            
+            new google.maps.Marker({
+                position: latlng,
+                map,
+                title: "Zealand Roskilde",
+            });
+
+        }
+            </script>
+
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho&callback=InitializeMap" async defer></script>
+
+            @if (Model.LoggedInUser.Id == Model.Carpool.Driver.Id)
+            {
+                <button type="submit" class="btn btn-primary mb-3">Slet Carpool</button>
+            }
         </div>
     </div>
 </div>

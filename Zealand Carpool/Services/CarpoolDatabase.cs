@@ -41,15 +41,6 @@ namespace Zealand_Carpool.Services
                         "inner join Branch on Carpool.Branch = Branch.BranchId " +
                         "where datediff(day, date, @theDate) < 1;";
 
-        private string _getAllCarpoolsSearch = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
-                        "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
-                        "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
-                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName FROM UserTable " +
-                        "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
-                        "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
-                        "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
-                        "inner join Branch on Carpool.Branch = Branch.BranchId " +
-                        "where datediff(day, date, @theDate) < 1";
 
         // lav add-get-del passager gør ligesom tweetr med likes
         //lav exeption til user og dette

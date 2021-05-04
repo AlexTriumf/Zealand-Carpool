@@ -264,11 +264,11 @@ namespace Zealand_Carpool.Services
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
-                        User user = MakeUser(reader);
+                            User user = MakeUser(reader);
                             dicOfUsers.Add(user.Id, user);
                         }
-                        return dicOfUsers;
                     }
+                        return dicOfUsers;
                 }
             });
 

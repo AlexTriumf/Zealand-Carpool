@@ -12,17 +12,42 @@ namespace Zealand_Carpool.Pages.CarpoolPage
     public class RequestCarpoolingModel : PageModel
     {
         public Carpool Carpool { get; set; }
-
+        public User LoggedInUser {get;set;}
         ICarpool _carpoolInterface;
-
-        public RequestCarpoolingModel (ICarpool icarpool)
+        IUser _userInterface;
+        public RequestCarpoolingModel (ICarpool icarpool, IUser iuser)
         {
             _carpoolInterface = icarpool;
+            _userInterface = iuser;
         }
 
-        public void OnGet(int carpoolID)
+        public IActionResult OnGet(int id)
         {
-            Carpool = _carpoolInterface.GetCarpool(carpoolID).Result;
+            if (User.Identity.IsAuthenticated)
+            {
+                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+                LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+                Carpool = _carpoolInterface.GetCarpool(id).Result;
+
+                return Page();
+            }
+            else
+            {
+                return RedirectToPage("/Index");
+            }
         }
+
+        public IActionResult OnPostRequestCarpool(int CarpoolId)
+        {
+
+            return Page();
+        }
+
+        public IActionResult OnPostDeleteCarpool(int CarpoolId)
+        {
+
+            return Page();
+        }
+
     }
 }
