@@ -188,8 +188,8 @@ namespace Zealand_Carpool.Services
             User user = new User();
             Address address = new Address();
             user.AddressList = new List<Address>();
-            while (sqlReader.Read())
-            {
+            sqlReader.Read();
+            
                 user.Id = sqlReader.GetGuid(0);
                 user.Name = sqlReader.GetString(1);
                 user.Surname = sqlReader.GetString(2);
@@ -206,7 +206,7 @@ namespace Zealand_Carpool.Services
                 address.Postalcode = sqlReader.GetInt32(11);
                 user.AddressList.Add(address);
                 }
-            }
+            
             return user;
         }
 
@@ -266,9 +266,11 @@ namespace Zealand_Carpool.Services
                         {
                             User user = MakeUser(reader);
                             dicOfUsers.Add(user.Id, user);
+
                         }
-                    }
                         return dicOfUsers;
+                        
+                    }
                 }
             });
 
