@@ -2,31 +2,42 @@
 @model Zealand_Carpool.Pages.CarpoolPage.CarpoolsModel
 @{
 }
-<div class="container">
-    <form class="form-inline">
-        <div class="form-group mb-2">
-            <label for="Søg:" class="sr-only">Søg</label>
-        </div>
-        <div class="form-group mx-sm-3 mb-2">
-            <label class="sr-only">Søg</label>
-            <input type="text" class="form-control" placeholder="Input her et Postnummer eller en afdeling, ex. ">
+<div class="container"> 
+   
+   <div class="text-center">
+    <form method="post" class="row">
 
-        </div>
-        <button type="submit" class="btn btn-outline-light mb-2">Søg</button>
-    </form>
+    <div class="col-auto">
+        <label>Søg</label>
+    </div>
+    <div class="col">
 
-    <div class="card-deck ">
+        <input type="text" asp-for="@Model.Search" class="form-control" placeholder="Søg i Afdeling eller Adresse (skal udfyldes)">
         
+    </div>
+    <div class="col">
+        <input asp-for="@Model.Date" class="form-control" />
+    </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Søg</button>
+        </div>
+    
+</form>
+   </div>
+
+    @foreach (Models.Carpool carpool in Model.AllCarpools)
+    {
+    <div class="card-columns" style="column-count:2;">
         <div class="card">
-           
             <div class="card-body">
-                <h5 class="card-title">Adresse fra: (Adresse) Til: (branch navn)</h5>
+                <h5 class="card-title">Adresse fra: @carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber Til: @carpool.Branch.BranchName</h5>
                 (kort)
-                <p class="card-text"></p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <p class="card-text">Dato for kørsel: @carpool.Date.ToString()</p>
+                <button type="submit" asp-page="/CarpoolPage/RequestCarpooling" asp-route="@carpool.CarpoolId" class="btn btn-light">Kør med!</button>
             </div>
         </div>
         
         
     </div>
+    }
 </div>

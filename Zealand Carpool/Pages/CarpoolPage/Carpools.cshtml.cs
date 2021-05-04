@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Zealand_Carpool.Interfaces;
+using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.CarpoolPage
 {
     public class CarpoolsModel : PageModel
     {
         
-        public List<Models.Carpool> AllCarpools { get; set; }
+        public List<Carpool> AllCarpools { get; set; }
         [BindProperty]
         public DateTime Date { get; set; }
         [BindProperty]
@@ -27,8 +28,23 @@ namespace Zealand_Carpool.Pages.CarpoolPage
 
         public void OnGet()
         {
-            _carpoolInterface.GetAllCarpools(Date);
+            Date = DateTime.Today;
 
+            AllCarpools = _carpoolInterface.GetAllCarpools(Date).Result;
+        }
+
+        public IActionResult OnPost() 
+        {
+            if (!String.IsNullOrWhiteSpace(Search))
+            {
+            AllCarpools =  _carpoolInterface.GetAllCarpools(Date,Search.ToLower()).Result;
+
+            }
+            else 
+            {
+                AllCarpools = new List<Carpool>();
+            }
+            return Page();
         }
 
     }

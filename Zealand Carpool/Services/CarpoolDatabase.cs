@@ -21,17 +21,36 @@ namespace Zealand_Carpool.Services
                                        "VALUES (@UserId, @Branch, @PassengerSeats, @Date)";
         private string _getBranches = "SELECT * FROM Branch";
 
-        private string _getCarpool = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber," +
-                        "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
-                        "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
-                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName FROM UserTable" +
-                        "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId" +
-                        "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode" +
-                        "Inner join Carpool on UserTable.UserId = Carpool.UserId" +
-                        "inner join Branch on Carpool.Branch = Branch.BranchId" +
+        private string _getCarpool = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber, " +
+                        "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude, " +
+                        "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId, " +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName FROM UserTable " +
+                        "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
+                        "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
+                        "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
+                        "inner join Branch on Carpool.Branch = Branch.BranchId " +
                         "WHERE Carpool.CarpoolId = @carpoolId";
 
-        private string _getAllCarpools = "SELECT * From Carpool where datediff(day, date, @theSearch) < 1;";
+        private string _getAllCarpools = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
+                        "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
+                        "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName FROM UserTable " +
+                        "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
+                        "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
+                        "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
+                        "inner join Branch on Carpool.Branch = Branch.BranchId " +
+                        "where datediff(day, date, @theDate) < 1;";
+
+        private string _getAllCarpoolsSearch = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
+                        "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
+                        "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName FROM UserTable " +
+                        "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
+                        "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
+                        "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
+                        "inner join Branch on Carpool.Branch = Branch.BranchId " +
+                        "where datediff(day, date, @theDate) < 1";
+
         // lav add-get-del passager gør ligesom tweetr med likes
         //lav exeption til user og dette
 
@@ -270,8 +289,30 @@ namespace Zealand_Carpool.Services
 
         public Task<List<Carpool>> GetAllCarpools(DateTime date, string search)
         {
-            throw new NotImplementedException();
+            Task<List<Carpool>> task = Task.Run(() =>
+            {
+               
+                List<Carpool> carpools = GetAllCarpools(date).Result;
+                List<Carpool> carpoolsResult = new List<Carpool>();
+                foreach (Carpool carpool in carpools)
+                {
+                    if (search.Contains(carpool.Driver.AddressList[0].StreetName.ToLower()))
+                    {
+                        carpoolsResult.Add(carpool);
+                    }
+                    if (search.Contains(carpool.Driver.AddressList[0].CityName.ToLower()))
+                    {
+                        carpoolsResult.Add(carpool);
+                    }
+                    if (search.Contains(carpool.Branch.BranchName.ToLower()))
+                    {
+                        carpoolsResult.Add(carpool);
+                    }
+                }
+                return carpoolsResult;
+            }); return task;
         }
+    
 
         public Task<List<Carpool>> GetAllCarpools(DateTime date)
         {
@@ -285,7 +326,7 @@ namespace Zealand_Carpool.Services
 
                     using (SqlCommand cmd = new SqlCommand(_getAllCarpools, conn))
                     {
-                        cmd.Parameters.AddWithValue("@theSearch", date);
+                        cmd.Parameters.AddWithValue("@theDate", date);
                         SqlDataReader reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
