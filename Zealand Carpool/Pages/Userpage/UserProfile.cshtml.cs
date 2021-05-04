@@ -13,17 +13,20 @@ namespace Zealand_Carpool.Pages.Userpage
 {
     public class UserProfile : PageModel
     {
+        [BindProperty]
         public Comment Comment { get; set; }
-        private CommentDatabase CDB;
+
+        private IComment commentInterface;
+        [BindProperty]
         public User LoggedInUser { get; set; }
         public User LoggedInUser2 { get; set; }
         IUser userInterface;
         public List<Comment> UserComments { get; set; }
 
-        public UserProfile(IUser iuser)
+        public UserProfile(IUser iuser, IComment icomment)
         {
             userInterface = iuser;
-            CDB = new CommentDatabase();
+            commentInterface = icomment;
 
         }
 
@@ -34,7 +37,7 @@ namespace Zealand_Carpool.Pages.Userpage
             {
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-                UserComments = CDB.getComments(LoggedInUser.Id);
+                UserComments = commentInterface.getComments(LoggedInUser.Id);
                 return Page();
             }
             else
@@ -49,7 +52,7 @@ namespace Zealand_Carpool.Pages.Userpage
                 Comment.UserID = LoggedInUser;
                 Comment.UserPostID = LoggedInUser;
 
-                CDB.AddComment(Comment);
+                commentInterface.AddComment(Comment);
             return RedirectToPage("UserProfile");
         }
     }

@@ -29,8 +29,8 @@
 <div class="comment">
     <form method="post">
         <label asp-for="@Model.Comment.Text">@Model.LoggedInUser.Name</label>
-        <input asp-for="@Model.Comment.Text">
-        </input>
+        <input asp-for="@Model.Comment.Text"/>
+        
         <br/>
         <input type="submit" value="Kommentér"/>
     </form>
