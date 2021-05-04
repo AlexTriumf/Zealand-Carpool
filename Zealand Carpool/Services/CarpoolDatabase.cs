@@ -41,7 +41,12 @@ namespace Zealand_Carpool.Services
                         "inner join Branch on Carpool.Branch = Branch.BranchId " +
                         "where datediff(day, date, @theDate) < 1;";
 
+        private string _deletePassenger = "DELETE FROM Passengers WHERE CarpoolId = @CarpoolId, UserId = @UserId";
 
+        private string deleteCarpool = "DELETE FROM Carpool WHERE CarpoolId = @CarpoolId";
+        private string _addPassenger = "INSERT INTO Passengers(CarpoolId, UserId,Request) VALUES (@CarpoolId, @UserId, @request)";
+        private string _getPassengers = "";
+        
         // lav add-get-del passager gør ligesom tweetr med likes
         //lav exeption til user og dette
 
@@ -133,7 +138,6 @@ namespace Zealand_Carpool.Services
 
         
 
-        private string deleteCarpool = "DELETE FROM Carpool WHERE CarpoolId = @CarpoolId";
         public Task<bool> DeleteCarpool(int carpoolId)
         {
             Task<bool> task = Task.Run(() =>
@@ -160,38 +164,8 @@ namespace Zealand_Carpool.Services
             return task;
         }
 
-        private string updateCarpool = "UPDATE Carpool SET Branch = @Branch, PassengerSeats = @PassengerSeats," +
-                                       " HomeAddress = @HomeAddress, Date = @Date WHERE CarpoolId = @CarpoolId";
-        public Task<bool> UpdateCarpool(Carpool carpool)
-        {
-            Task<bool> task = Task.Run(() =>
-            {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
+        
 
-                    using (SqlCommand cmd = new SqlCommand(updateCarpool, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@Branch", carpool.Branch);
-                        cmd.Parameters.AddWithValue("@PassengerSeats", carpool.PassengerSeats);
-
-                        cmd.Parameters.AddWithValue("@Date", carpool.Date);
-
-                        int rowsAffected = cmd.ExecuteNonQuery();
-                        conn.Close();
-                        if (rowsAffected == 1)
-                        {
-                            return true;
-                        }
-                        return false;
-                    }
-                }
-            });
-
-            return task;
-        }
-
-        private string addPassenger = "INSERT INTO Passengers(CarpoolId, UserId,Request) VALUES (@CarpoolId, @UserId, @request)";
         public Task<bool> AddPassenger(User user, Carpool carpool)
         {
             Task<bool> task = Task.Run(() =>
@@ -200,7 +174,7 @@ namespace Zealand_Carpool.Services
                 {
                     conn.Open();
 
-                    using (SqlCommand cmd = new SqlCommand(addPassenger, conn))
+                    using (SqlCommand cmd = new SqlCommand(_addPassenger, conn))
                     {
                         cmd.Parameters.AddWithValue("@CarppolId", carpool.CarpoolId);
                         cmd.Parameters.AddWithValue("@UserId", user.Id);
@@ -220,7 +194,6 @@ namespace Zealand_Carpool.Services
             return task;
         }
 
-        private string deletePassenger = "DELETE FROM Passengers WHERE CarpoolId = @CarpoolId, UserId = @UserId";
         public Task<bool> DeletePassenger(User user, Carpool carpool)
         {
             Task<bool> task = Task.Run(() =>
@@ -229,7 +202,7 @@ namespace Zealand_Carpool.Services
                 {
                     conn.Open();
 
-                    using (SqlCommand cmd = new SqlCommand(deletePassenger, conn))
+                    using (SqlCommand cmd = new SqlCommand(_deletePassenger, conn))
                     {
                         cmd.Parameters.AddWithValue("@CarpoolId", carpool.CarpoolId);
                         cmd.Parameters.AddWithValue("@UserId", user.Id);
@@ -245,6 +218,28 @@ namespace Zealand_Carpool.Services
                 }
             });
 
+            return task;
+        }
+
+        public Task<List<User>> GetPassengers ()
+        {
+            Task<List<User>> task = Task.Run(() =>
+            {
+                using (SqlConnection conn = new SqlConnection(_connString))
+                {
+                    conn.Open();
+                    List<User> listOfUsers = new List<User>();
+
+                    using (SqlCommand cmd = new SqlCommand(_getPassengers, conn))
+                    {
+
+
+                        return listOfUsers;
+                        
+                        
+                    }
+                }
+            });
             return task;
         }
 

@@ -124,6 +124,7 @@ namespace Zealand_Carpool.Services
                         User user = new User();
                         cmd.Parameters.AddWithValue("@id", id);
                         SqlDataReader reader = cmd.ExecuteReader();
+                        reader.Read();
                         user = MakeUser(reader);
 
                         return user;
@@ -174,6 +175,7 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@email", email);
                         cmd.Parameters.AddWithValue("@password", password);
                         SqlDataReader reader = cmd.ExecuteReader();
+                        reader.Read();
                         User user = MakeUser(reader);
                         return user;
                     }
@@ -188,7 +190,7 @@ namespace Zealand_Carpool.Services
             User user = new User();
             Address address = new Address();
             user.AddressList = new List<Address>();
-            sqlReader.Read();
+            
             
                 user.Id = sqlReader.GetGuid(0);
                 user.Name = sqlReader.GetString(1);
