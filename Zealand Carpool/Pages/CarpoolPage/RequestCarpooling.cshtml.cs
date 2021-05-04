@@ -21,13 +21,13 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             _userInterface = iuser;
         }
 
-        public IActionResult OnGet(int carpoolID)
+        public IActionResult OnGet(int id)
         {
             if (User.Identity.IsAuthenticated)
             {
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-                Carpool = _carpoolInterface.GetCarpool(carpoolID).Result;
+                Carpool = _carpoolInterface.GetCarpool(id).Result;
 
                 return Page();
             }

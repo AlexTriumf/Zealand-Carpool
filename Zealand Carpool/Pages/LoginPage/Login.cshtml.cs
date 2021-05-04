@@ -47,7 +47,7 @@ namespace Zealand_Carpool.Pages.LoginPage
                 var claimIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimIdentity);
                 await HttpContext.SignInAsync(claimsPrincipal);
-                return RedirectToPage("/index");
+                return RedirectToPage("/Index");
             }
             WrongCredintials = true;
             return Page();

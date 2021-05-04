@@ -47,31 +47,9 @@
                     <div class="card-text" id="map"></div>
                     <h5 class="card-title">Adresse fra: @carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber Til: @carpool.Branch.BranchName</h5>
 
-                    <script>
-                        function InitializeMap() {
-
-                            var latlng = new google.maps.LatLng(@carpool.Driver.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @carpool.Driver.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")));
-
-                            var myOptions = {
-                                zoom: 12,
-                                center: latlng,
-                                mapTypeId: google.maps.MapTypeId.ROADMAP
-                            };
-
-                            var map = new google.maps.Map(document.getElementById("map"), myOptions);
-
-                            new google.maps.Marker({
-                                position: latlng,
-                                map,
-                                title: "Zealand Roskilde",
-                            });
-
-                        }
-                    </script>
-
-
+                    
                     <p class="card-text">Dato for kørsel: @carpool.Date.ToString()</p>
-                    <button type="submit" asp-page="/CarpoolPage/RequestCarpooling" class="btn btn-light">Kør med!</button>
+                    <a class="btn btn-light float-right" type="button" asp-page="/CarpoolPage/RequestCarPooling" asp-route-id="@carpool.CarpoolId">Kør med</a>
                 </div>
             </div>
 
@@ -80,9 +58,3 @@
     }
 </div>
 
-<body>
-
-
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho&callback=InitializeMap" async defer></script>
-</body>
