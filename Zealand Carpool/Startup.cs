@@ -35,6 +35,7 @@ namespace Zealand_Carpool
             //.AddAzureSignalR();
             services.AddSingleton<Interfaces.IUser, Services.UserDatabaseAsync>();
             services.AddSingleton<Interfaces.ICarpool, Services.CarpoolDatabase>();
+            services.AddSingleton<Interfaces.IChat, Services.ChatDabase>();
         }
     
 
