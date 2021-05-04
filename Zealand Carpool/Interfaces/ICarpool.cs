@@ -20,7 +20,7 @@ namespace Zealand_Carpool.Interfaces
         Task<List<Carpool>> GetAllCarpools(DateTime date,string search);
         Task<List<Carpool>> GetAllCarpools(DateTime date);
         Task<bool> DeleteCarpool(int id);
-        Task<bool> UpdateCarpool(Carpool carpool);
+        Task<List<User>> GetPassengers();
         Task<bool> AddPassenger(User user, Carpool carpool);
         Task<bool> DeletePassenger(User user, Carpool carpool);
         
