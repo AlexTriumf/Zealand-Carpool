@@ -191,7 +191,7 @@ namespace Zealand_Carpool.Services
             return task;
         }
 
-        private string addPassenger = "INSERT INTO Passengers(CarpoolId, UserId) VALUES (@CarpoolId, @UserId)";
+        private string addPassenger = "INSERT INTO Passengers(CarpoolId, UserId,Request) VALUES (@CarpoolId, @UserId, @request)";
         public Task<bool> AddPassenger(User user, Carpool carpool)
         {
             Task<bool> task = Task.Run(() =>
@@ -204,6 +204,7 @@ namespace Zealand_Carpool.Services
                     {
                         cmd.Parameters.AddWithValue("@CarppolId", carpool.CarpoolId);
                         cmd.Parameters.AddWithValue("@UserId", user.Id);
+                        cmd.Parameters.AddWithValue("@request", 0);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         conn.Close();
