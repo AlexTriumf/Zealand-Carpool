@@ -9,17 +9,22 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
-    public class UserChatModel : PageModel
+    public class UserChatWindowModel : PageModel
     {
-        [BindProperty]
-        public Chat chat { get; set; }
-        public User LoggedInUser {get;set;}
+        public User LoggedInUser { get; set; }
         public User User2 { get; set; }
         public List<ChatText> ChatTexts { get; set; }
+        public Dictionary<Guid, User> AllUsers { get; set; }
+        [BindProperty]
+        public DateTime Date { get; set; }
 
         IChat _ichatter;
-        public UserChatModel(IChat ichat)
+
+        IUser _userInterface;
+
+        public UserChatWindowModel(IUser iuser, IChat ichat)
         {
+            _userInterface = iuser;
             _ichatter = ichat;
         }
 
@@ -28,36 +33,30 @@ namespace Zealand_Carpool.Pages.Userpage
 
             if (User.Identity.IsAuthenticated)
             {
-                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
-                LoggedInUser = new Services.UserDatabaseAsync().GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-                
+            List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList(); 
+            LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 if (_ichatter.HasAChat(LoggedInUser.Id, Guid.Parse(Id)).Result)
                 {
                     ChatTexts = _ichatter.GetChat(LoggedInUser.Id, Guid.Parse(Id)).Result;
-                } else
+                }
+                else
                 {
-
-                    _ichatter.AddChat( LoggedInUser.Id, Guid.Parse(Id));
+                    _ichatter.AddChat(LoggedInUser.Id, Guid.Parse(Id));
+                    ChatTexts = _ichatter.GetChat(LoggedInUser.Id, Guid.Parse(Id)).Result;
 
                 }
                 return Page();
+                
             }
             else
             {
                 return RedirectToPage("/Index");
             }
-          
 
-            }
-
-        public IActionResult OnPost()
-        {
-            chat.UserOne = LoggedInUser;
-            chat.UserTwo = User2;
-            
-            return Page();
         }
 
-            
     }
+            
+        
+    
 }

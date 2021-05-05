@@ -1,10 +1,7 @@
-﻿@page
-@using Zealand_Carpool.Models
-@model Zealand_Carpool.Pages.Userpage.UserChatSignalRModel
+﻿@page "{id}"
+@model Zealand_Carpool.Pages.Userpage.UserChatWindowModel
 @{
 }
-
-    
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -16,56 +13,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="~/css/Chat.css" />
 </head>
 <body>
 
-    <div class="messaging">
-        <div class="inbox_msg">
-            <div class="inbox_people">
-                <div class="headind_srch">
-                    <div class="recent_heading">
-                        <h4>Chat</h4>
-                    </div>
-                    
-                </div>
-            
-                <div class="inbox_chat scroll">
-                    <div class="chat_list active_chat">
-                        @foreach (Models.User user in Model.AllUsers.Values)
-                        {
-                            
-                        <div class="chat_people">
-                            <div class="chat_img"> <img src="/img/user-profile.png" alt="sunil"> </div>
-                            <div class="chat_ib">
-                                <h5>@user.Name <span class="chat_date">@DateTime.Now</span></h5>
-                                <p>
-                                    Adresse:
-                                    <br />
-                                    @user.AddressList[0].StreetName @user.AddressList[0].StreetNumber
-                                    <br>
-                                    @user.AddressList[0].CityName
-                                    <br>
-                                    @user.AddressList[0].Postalcode
-                                </p>
-                            </div>
-                            <form>
-                            <a asp-page="./Userpage/UserChatWindow" asp-route-Id="@user.Id">view</a>
-                            </form>
-                            <button id="myModalBtn" class="btn" hidden data-toggle="modal" data-target="#myModal"><i class="btn alert-primary"></i></button>
-                            <a class="btn bg-success" id="LogBut" type="button" asp-page="">Chat</a>
-                        </div>
-                        }
-                    </div>
-                </div>
+    
+<div class="container">
+    <div class="text-center">
+        <h4>Du skriver til @Model.User2.Name @Model.User2.Surname</h4>
+    </div>
+    <br />
+    @foreach (Models.ChatText chatTexts in Model.ChatTexts)
+    {
+        <div class="media">
+            <div class="media-body">
+                <h5 class="mt-0">@chatTexts.user.Name @chatTexts.user.Surname</h5>
+                @chatTexts.message
             </div>
+        </div>
+    }
+
+</div>
             <div class="mesgs">
                 <div class="msg_history">
-                   
+                    
                         <div class="incoming_msg">
                             <div class="incoming_msg_img"> <img src="/img/user-profile.png" alt="sunil"> </div>
+                            
                             <div class="received_msg">
                                 <div class="received_withd_msg">
                                     <p>
@@ -118,14 +94,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+       
 
 </body>
-
-
-
-
-
-
-
