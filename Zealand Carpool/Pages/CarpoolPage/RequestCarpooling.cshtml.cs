@@ -11,8 +11,12 @@ namespace Zealand_Carpool.Pages.CarpoolPage
 {
     public class RequestCarpoolingModel : PageModel
     {
+        [BindProperty]
         public Carpool Carpool { get; set; }
+        [BindProperty]
         public User LoggedInUser {get;set;}
+
+        public bool HasSent { get; set; }
         ICarpool _carpoolInterface;
         IUser _userInterface;
         public RequestCarpoolingModel (ICarpool icarpool, IUser iuser)
@@ -28,7 +32,11 @@ namespace Zealand_Carpool.Pages.CarpoolPage
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 Carpool = _carpoolInterface.GetCarpool(id).Result;
-
+                Dictionary<Guid,Passenger> passengers = _carpoolInterface.GetPassengers(Carpool).Result;
+                if (passengers.ContainsKey(LoggedInUser.Id)) {
+                    HasSent = true;
+                }
+                
                 return Page();
             }
             else
@@ -37,16 +45,17 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             }
         }
 
-        public IActionResult OnPostRequestCarpool(int CarpoolId)
+        public IActionResult OnPostRequestCarpool()
         {
-
-            return Page();
+            
+            _carpoolInterface.AddPassenger(LoggedInUser,Carpool);
+            return RedirectToPage("/CarpoolPage/RequestCarpooling", Carpool.CarpoolId);
         }
 
-        public IActionResult OnPostDeleteCarpool(int CarpoolId)
+        public IActionResult OnPostDeleteCarpool()
         {
 
-            return Page();
+            return RedirectToPage("Index");
         }
 
     }

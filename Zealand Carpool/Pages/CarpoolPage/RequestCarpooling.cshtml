@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id}"
 @using System.Globalization
 @model Zealand_Carpool.Pages.CarpoolPage.RequestCarpoolingModel
 @{
@@ -22,10 +22,18 @@
             <p>Der bliver kørt fra adreese: @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber, @Model.Carpool.Driver.AddressList[0].CityName @Model.Carpool.Driver.AddressList[0].Postalcode</p>
             <p>Til Afdellingen i @Model.Carpool.Branch.BranchName</p>
             <p>Til Dato & tidspunkt: @Model.Carpool.Date.ToString()</p>
-
+            <form asp-page-handler="RequestCarpool" >
+                <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
+                <input type="hidden" asp-for="@Model.LoggedInUser.Id" />
+                @if (!Model.HasSent) { 
             <button type="submit" class="btn btn-primary mb-3">Ansøg om plads</button>
+                }
             <button type="submit" class="btn btn-primary mb-3">Kontakt Chauffør</button>
+
+            </form>
         </div>
+
+
         <div class="col">
 
             <div id="map"></div>

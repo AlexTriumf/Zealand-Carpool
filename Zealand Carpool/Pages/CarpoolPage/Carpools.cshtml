@@ -9,9 +9,9 @@
     <style>
 
         #map {
-            height: 200px;
+            height: 150px;
             /*            width: 400px;
-            margin-left: 60%*/;
+            margin-left: 60%*/
             margin: auto;
         }
     </style>
@@ -39,22 +39,52 @@
         </form>
     </div>
 
-    @foreach (Models.Carpool carpool in Model.AllCarpools)
+    @foreach (Models.Carpool carpool in Model.AllCarpools.Values)
     {
-        <div class="card-columns" style="column-count:2;">
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-text" id="map"></div>
-                    <h5 class="card-title">Adresse fra: @carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber Til: @carpool.Branch.BranchName</h5>
+        <div class="shadow p-3 mb-5 bg-white rounde">
+            <div class="row">
+                <div class="col">
+                    <h3>Kør med @carpool.Driver.Name @carpool.Driver.Surname</h3>
+                    <div id="map"></div>
+                </div>
+                <div class="col">
+                    <p>Adresse: @carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber, @carpool.Driver.AddressList[0].CityName @carpool.Driver.AddressList[0].Postalcode</p>
+                    <p>Til Afdellingen i @carpool.Branch.BranchName</p>
+                    <p>Til Dato & tidspunkt: @carpool.Date.ToString()</p>
 
-                    
-                    <p class="card-text">Dato for kørsel: @carpool.Date.ToString()</p>
-                    <a class="btn btn-light float-right" type="button" asp-page="/CarpoolPage/RequestCarPooling" asp-route-id="@carpool.CarpoolId">Kør med</a>
+                </div>
+
+
+                <div class="col">
+                    <a class="btn btn-info" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.CarpoolId">Kør med!</a>
                 </div>
             </div>
-
-
+            <br />
         </div>
+
+                    <script>
+        function InitializeMap() {
+
+            var latlng = new google.maps.LatLng(@carpool.Driver.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @carpool.Driver.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")));
+
+            var myOptions = {
+                zoom: 12,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            var map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+            new google.maps.Marker({
+                position: latlng,
+                map,
+                title: "Zealand Roskilde",
+            });
+
+        }
+                    </script>
+
+                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho&callback=InitializeMap" async defer></script>
     }
 </div>
 

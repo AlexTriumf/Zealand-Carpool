@@ -12,7 +12,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
     public class CarpoolsModel : PageModel
     {
         
-        public List<Carpool> AllCarpools { get; set; }
+        public Dictionary<int,Carpool> AllCarpools { get; set; }
         [BindProperty]
         public DateTime Date { get; set; }
         [BindProperty]
@@ -31,18 +31,26 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             Date = DateTime.Today;
 
             AllCarpools = _carpoolInterface.GetAllCarpools(Date).Result;
+            foreach (Carpool carpool1 in AllCarpools.Values)
+            {
+                if (carpool1.PassengerSeats == carpool1.Passengerlist.Count)
+                {
+                    AllCarpools.Remove(carpool1.CarpoolId);
+                }
+            }
+
         }
 
         public IActionResult OnPost() 
         {
             if (!String.IsNullOrWhiteSpace(Search))
             {
-            AllCarpools =  _carpoolInterface.GetAllCarpools(Date,Search.ToLower()).Result;
+                AllCarpools = _carpoolInterface.GetAllCarpools(Date, Search.ToLower()).Result;
 
             }
             else 
             {
-                AllCarpools = new List<Carpool>();
+                AllCarpools = new Dictionary<int, Carpool>();
             }
             return Page();
         }

@@ -39,16 +39,18 @@ namespace Zealand_Carpool.Services
                         "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
                         "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
                         "inner join Branch on Carpool.Branch = Branch.BranchId " +
-                        "where datediff(day, date, @theDate) < 1;";
+                        "WHERE Carpool.Date > @theDate";
 
         private string _deletePassenger = "DELETE FROM Passengers WHERE CarpoolId = @CarpoolId, UserId = @UserId";
 
         private string deleteCarpool = "DELETE FROM Carpool WHERE CarpoolId = @CarpoolId";
-        private string _addPassenger = "INSERT INTO Passengers(CarpoolId, UserId,Request) VALUES (@CarpoolId, @UserId, @request)";
-        private string _getPassengers = "";
-        
+        private string _addPassenger = "INSERT INTO Passengers(CarpoolId, UserId, Request) VALUES (@CarpoolId, @UserId, @request)";
+        private string _getPassengers = "SELECT * FROM Passengers WHERE CarpoolId = @carpoolId";
+        private string _getAllPassengers = "SELECT Passengers.CarpoolId, Passengers.UserId, Passengers.Request FROM Passengers INNER JOIN Carpool on Carpool.CarpoolId = Passengers.CarpoolId WHERE Carpool.Date > @theDate";
         // lav add-get-del passager gør ligesom tweetr med likes
         //lav exeption til user og dette
+        //skal hente alle carpools som en user har lavet nu[Done], skal hente alle carpools en user er med i [Done]
+        //imorgen: den der har lavet en carpool accept
 
         public Task<bool> AddCarpool(Carpool carpool)
         {
@@ -129,7 +131,24 @@ namespace Zealand_Carpool.Services
                             throw new KeyNotFoundException("The carpool was not found in the database");
                         }
                         carpool = MakeCarpool(reader);
-                        conn.Close();
+                        cmd.Dispose();
+                        reader.Close();
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand(_getPassengers, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@carpoolId", carpool.CarpoolId);
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Passenger passenger = new Passenger();
+                            passenger.Carpool = new Carpool();
+                            passenger.Carpool.CarpoolId = reader.GetInt32(0);
+                            passenger.User = new User();
+                            passenger.User.Id = reader.GetGuid(1);
+                            passenger.IsAccepted = reader.GetBoolean(2);
+                            carpool.Passengerlist.Add(passenger.User.Id,passenger);
+                        }
                     }
                 } return carpool;
             }); return task;
@@ -176,12 +195,12 @@ namespace Zealand_Carpool.Services
 
                     using (SqlCommand cmd = new SqlCommand(_addPassenger, conn))
                     {
-                        cmd.Parameters.AddWithValue("@CarppolId", carpool.CarpoolId);
+                        cmd.Parameters.AddWithValue("@CarpoolId", carpool.CarpoolId);
                         cmd.Parameters.AddWithValue("@UserId", user.Id);
                         cmd.Parameters.AddWithValue("@request", 0);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
-                        conn.Close();
+                        
                         if (rowsAffected == 1)
                         {
                             return true;
@@ -221,20 +240,30 @@ namespace Zealand_Carpool.Services
             return task;
         }
 
-        public Task<List<User>> GetPassengers ()
+        public Task<Dictionary<Guid,Passenger>> GetPassengers (Carpool carpool)
         {
-            Task<List<User>> task = Task.Run(() =>
+            Task<Dictionary<Guid,Passenger>> task = Task.Run(() =>
             {
                 using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
-                    List<User> listOfUsers = new List<User>();
+                    Dictionary<Guid,Passenger> listOfpassenger = new Dictionary<Guid, Passenger>();
 
                     using (SqlCommand cmd = new SqlCommand(_getPassengers, conn))
                     {
-
-
-                        return listOfUsers;
+                        cmd.Parameters.AddWithValue("@carpoolId", carpool.CarpoolId);
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Passenger passenger = new Passenger();
+                            passenger.Carpool = new Carpool();
+                            passenger.Carpool.CarpoolId = reader.GetInt32(0);
+                            passenger.User = new User();
+                            passenger.User.Id = reader.GetGuid(1);
+                            passenger.IsAccepted = reader.GetBoolean(2);
+                            listOfpassenger.Add(passenger.User.Id,passenger);
+                        }
+                        return listOfpassenger;
                         
                         
                     }
@@ -243,6 +272,7 @@ namespace Zealand_Carpool.Services
             return task;
         }
 
+        
         public Carpool MakeCarpool(SqlDataReader sqlReader)
         {
             Carpool carpool1 = new Carpool();
@@ -271,29 +301,42 @@ namespace Zealand_Carpool.Services
             carpool1.PassengerSeats = sqlReader.GetInt32(13);
             carpool1.Date = sqlReader.GetDateTime(14);
             carpool1.Branch.BranchName = sqlReader.GetString(15);
+            carpool1.Passengerlist = new Dictionary<Guid, Passenger>();
             return carpool1;
         }
 
-        public Task<List<Carpool>> GetAllCarpools(DateTime date, string search)
+        public Task<Dictionary<int,Carpool>> GetAllCarpools(DateTime date, string search)
         {
-            Task<List<Carpool>> task = Task.Run(() =>
+            Task<Dictionary<int,Carpool>> task = Task.Run(() =>
             {
                
-                List<Carpool> carpools = GetAllCarpools(date).Result;
-                List<Carpool> carpoolsResult = new List<Carpool>();
-                foreach (Carpool carpool in carpools)
+                Dictionary<int,Carpool> carpools = GetAllCarpools(date).Result;
+                Dictionary<int,Carpool> carpoolsResult = new Dictionary<int, Carpool>();
+                foreach (Carpool carpool in carpools.Values)
                 {
-                    if (search.Contains(carpool.Driver.AddressList[0].StreetName.ToLower()))
+                    if (search.StartsWith(carpool.Driver.AddressList[0].StreetName.ToLower()))
                     {
-                        carpoolsResult.Add(carpool);
+                        carpoolsResult.Add(carpool.CarpoolId,carpool);
                     }
-                    if (search.Contains(carpool.Driver.AddressList[0].CityName.ToLower()))
+                    else if (search.Contains(carpool.Driver.AddressList[0].StreetName.ToLower()))
                     {
-                        carpoolsResult.Add(carpool);
+                        carpoolsResult.Add(carpool.CarpoolId, carpool);
                     }
-                    if (search.Contains(carpool.Branch.BranchName.ToLower()))
+                    else if (search.Contains(carpool.Driver.AddressList[0].CityName.ToLower()))
                     {
-                        carpoolsResult.Add(carpool);
+                        carpoolsResult.Add(carpool.CarpoolId, carpool);
+                    }
+                    else if (search.StartsWith(carpool.Driver.AddressList[0].CityName.ToLower()))
+                    {
+                        carpoolsResult.Add(carpool.CarpoolId, carpool);
+                    }
+                    else if (search.Contains(carpool.Branch.BranchName.ToLower()))
+                    {
+                        carpoolsResult.Add(carpool.CarpoolId, carpool);
+                    }
+                    else if (search.StartsWith(carpool.Branch.BranchName.ToLower()))
+                    {
+                        carpoolsResult.Add(carpool.CarpoolId, carpool);
                     }
                 }
                 return carpoolsResult;
@@ -301,12 +344,12 @@ namespace Zealand_Carpool.Services
         }
     
 
-        public Task<List<Carpool>> GetAllCarpools(DateTime date)
+        public Task<Dictionary<int,Carpool>> GetAllCarpools(DateTime date)
         {
-            Task<List<Carpool>> task = Task.Run(() =>
+            Task<Dictionary<int,Carpool>> task = Task.Run(() =>
             {
                 Carpool carpool = new Carpool();
-                List<Carpool> carpools = new List<Carpool>();
+                Dictionary<int,Carpool> carpools = new Dictionary<int, Carpool>();
                 using (SqlConnection conn = new SqlConnection(_connString))
                 {
                     conn.Open();
@@ -322,12 +365,35 @@ namespace Zealand_Carpool.Services
                                 throw new KeyNotFoundException("The carpool was not found in the database");
                             }
                             carpool = MakeCarpool(reader);
-                            carpools.Add(carpool);
+                            carpools.Add(carpool.CarpoolId,carpool);
                         }
+                        cmd.Dispose();
+                        reader.Close();
+
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand(_getAllPassengers, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@theDate", date);
+                        SqlDataReader reader = cmd.ExecuteReader();
                         
-                        conn.Close();
+                        while (reader.Read())
+                        {
+                            Passenger passenger = new Passenger();
+                            passenger.Carpool = new Carpool();
+                            passenger.Carpool.CarpoolId = reader.GetInt32(0);
+                            passenger.User = new User();
+                            passenger.User.Id = reader.GetGuid(1);
+                            passenger.IsAccepted = reader.GetBoolean(2);
+                            if (carpools.ContainsKey(passenger.Carpool.CarpoolId))
+                            {
+                                carpools[passenger.Carpool.CarpoolId].Passengerlist.Add(passenger.User.Id,passenger);
+                            }
+                        }
                     }
                 }
+                
+                
                 return carpools;
             }); return task;
         }
