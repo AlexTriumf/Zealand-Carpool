@@ -15,10 +15,33 @@
         <p>adresse: @address.StreetName @address.StreetNumber , @address.CityName @address.Postalcode</p>
         <p>@address.Longtitude og @address.Latitude</p>
     }
-
-   
-   
 </div>
-
-
-
+<style>
+    div.comment {
+        margin: 20px;
+        border-radius: 5px;
+        border: 3px lightgray;
+        background: whitesmoke;
+        padding: 10px;
+        width: 250px;
+    }
+</style>
+<div class="comment">
+    <form method="post">
+        <label asp-for="@Model.Comment.Text">@Model.LoggedInUser.Name</label>
+        <input asp-for="@Model.Comment.Text"/>
+        
+        <br/>
+        <input type="submit" value="Kommentér"/>
+    </form>
+</div>
+<div class="container">
+    @foreach (var comment in Model.UserComments)
+    {
+        <br />
+        <div class="comment">
+            <p>@comment.UserPostID</p>
+            <p>@comment.Text</p>
+        </div>
+    }
+</div>
