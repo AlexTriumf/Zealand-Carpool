@@ -18,29 +18,30 @@
 </div>
 <style>
     div.comment {
-        margin: 20px;
+        margin: 10px;
         border-radius: 5px;
-        border: 3px lightgray;
+        border: 5px lightgray;
         background: whitesmoke;
         padding: 10px;
         width: 250px;
     }
 </style>
-<div class="comment">
-    <form method="post">
-        <label asp-for="@Model.Comment.Text">@Model.LoggedInUser.Name</label>
-        <input asp-for="@Model.Comment.Text"/>
-        
-        <br/>
-        <input type="submit" value="Kommentér"/>
-    </form>
+<div class="container">
+    <div class="comment">
+        <div class="form-group">
+            <label for="ctxt">@Model.LoggedInUser.Name @Model.LoggedInUser.Surname</label>
+            <input asp-for="@Model.Comment.Text" id="ctxt"/>
+            <input type="hidden" asp-for="@Model.LoggedInUser.Id" />
+            <br />
+            <button type="submit" class="btn btn-primary">Kommentér</button>
+        </div>
+    </div>
 </div>
 <div class="container">
     @foreach (var comment in Model.UserComments)
     {
-        <br />
         <div class="comment">
-            <p>@comment.UserPostID</p>
+            <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@comment.UserPostID">@comment.UserPostID.Name @comment.UserPostID.Surname</a>
             <p>@comment.Text</p>
         </div>
     }
