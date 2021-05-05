@@ -31,37 +31,32 @@ namespace Zealand_Carpool.Pages.Userpage
 
         public void OnGet()
         {
-            
 
             if (User.Identity.IsAuthenticated)
             {
-                
                 AllUsers = _userInterface.GetAllUsers().Result;
+                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+                LoggedInUser = new Services.UserDatabaseAsync().GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+                
+                //    if (_ichatter.HasAChat(LoggedInUser.Id, Guid.Parse(userId)).Result)
+                //    {
+                //        ChatTexts = _ichatter.GetChat(LoggedInUser.Id, Guid.Parse(userId)).Result;
+                //    }
+                //    else
+                //    {
+
+                //    }
+                //    return Page();
+                //}
+                //else
+                //{
+                //    return RedirectToPage("/Index");
+                //}
+
             }
-
-            List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
-
-
-
-            //if (User.Identity.IsAuthenticated)
-            //{
-            //    LoggedInUser = new Services.UserDatabaseAsync().GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-
-            //    if (_ichatter.HasAChat(LoggedInUser.Id, Guid.Parse(userId)).Result)
-            //    {
-            //        ChatTexts = _ichatter.GetChat(LoggedInUser.Id, Guid.Parse(userId)).Result;
-            //    }
-            //    else
-            //    {
-
-            //    }
-            //    return Page();
-            //}
-            //else
-            //{
-            //    return RedirectToPage("/Index");
-            //}
-
+        //public IActionResult OnPost()
+        //{
+        //    return Page();
         }
     }
 }

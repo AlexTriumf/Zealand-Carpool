@@ -31,8 +31,7 @@ namespace Zealand_Carpool
             {
                 options.LoginPath = "/LoginPage/Login";
             });
-            services.AddSignalR();
-            //.AddAzureSignalR();
+            
             services.AddSingleton<Interfaces.IUser, Services.UserDatabaseAsync>();
             services.AddSingleton<Interfaces.ICarpool, Services.CarpoolDatabase>();
             services.AddSingleton<Interfaces.IChat, Services.ChatDabase>();
@@ -63,7 +62,6 @@ namespace Zealand_Carpool
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
-                endpoints.MapHub<Chat>("/chat");
             });
         }
     }
