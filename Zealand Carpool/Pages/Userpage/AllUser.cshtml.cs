@@ -10,7 +10,7 @@ namespace Zealand_Carpool.Pages.Userpage
 {
     public class AllUserModel : PageModel
     {
-        [BindProperty]
+        [BindProperty(SupportsGet = true)]
         public string UserInput { get; set; }
         public List<User> ListOfUsers { get; set; }
 
@@ -20,15 +20,15 @@ namespace Zealand_Carpool.Pages.Userpage
         {
             userInterface = iuser;
         }
-        public IActionResult OnGet(string name)
+        public IActionResult OnGet()
         {
             if (User.Identity.IsAuthenticated)
             {
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-                if (name != null)
+                if (!string.IsNullOrEmpty(UserInput))
                 {
-                   ListOfUsers = userInterface.SearchUsers(name); 
+                   ListOfUsers = userInterface.SearchUsers(UserInput); 
                 }
                 
                 return Page();

@@ -1,13 +1,12 @@
-﻿@page "{id?}"
+﻿@page 
 @model Zealand_Carpool.Pages.Userpage.AllUserModel
 @{
 }
 
 <div class="container">
     <div class="form-group">
-        <input asp-for="@Model.UserInput" placeholder="Søg på et navn.." class="form-group"/>
-        <button type="submit" asp-page="/Userpage/AllUser" asp-route-id="@Model.UserInput" class="btn-primary">Søg
-        </button>
+        <input type="text" asp-for="UserInput" placeholder="Søg på et navn.." class="form-group"/>
+        <input type="submit" class="btn-primary" value="Søg"/>
     </div>
     @if(Model.ListOfUsers != null) 
     { 
