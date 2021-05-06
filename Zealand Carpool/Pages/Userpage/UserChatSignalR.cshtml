@@ -31,8 +31,7 @@
                     </div>
                     
                 </div>
-                {
-                }
+           
             
                 <div class="inbox_chat scroll">
                     <div class="chat_list active_chat">
@@ -53,7 +52,7 @@
                                     @user.AddressList[0].Postalcode
                                 </p>
                             </div>
-                            
+                            <a asp-page="/Userpage/UserChatWindow" asp-route-Id="@user.Id"> @user.Id @user.Name</a>
                             <button id="myModalBtn" class="btn" hidden data-toggle="modal" data-target="#myModal"><i class="btn alert-primary"></i></button>
                             <a class="btn bg-success" id="LogBut" type="button" asp-page="">Chat</a>
                         </div>

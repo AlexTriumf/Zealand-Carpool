@@ -11,6 +11,8 @@ namespace Zealand_Carpool.Pages.Userpage
 {
     public class UserChatWindowModel : PageModel
     {
+        [BindProperty]
+        public Chat chat { get; set; }
         public User LoggedInUser { get; set; }
         public User User2 { get; set; }
         public List<ChatText> ChatTexts { get; set; }
@@ -33,28 +35,26 @@ namespace Zealand_Carpool.Pages.Userpage
 
             if (User.Identity.IsAuthenticated)
             {
-            List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList(); 
-            LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-                if (_ichatter.HasAChat(LoggedInUser.Id, Guid.Parse(Id)).Result)
-                {
-                    ChatTexts = _ichatter.GetChat(LoggedInUser.Id, Guid.Parse(Id)).Result;
-                }
-                else
-                {
-                    _ichatter.AddChat(LoggedInUser.Id, Guid.Parse(Id));
-                    ChatTexts = _ichatter.GetChat(LoggedInUser.Id, Guid.Parse(Id)).Result;
+                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+                LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+                User2 = _userInterface.GetUser(Guid.Parse(Id)).Result;
 
+                //if (_ichatter.HasAChat(LoggedInUser.Id, User2.Id).IsCompletedSuccessfully)
+                //{
+                //    ChatTexts = _ichatter.GetChat(LoggedInUser.Id, User2.Id).Result;
+                //}
+                //else
+                //{
+                //    _ichatter.AddChat(LoggedInUser.Id, User2.Id);
+                //    ChatTexts = _ichatter.GetChat(LoggedInUser.Id, User2.Id).Result;
+                    
                 }
+
                 return Page();
-                
-            }
-            else
-            {
-                return RedirectToPage("/Index");
             }
 
+            //return Page();
         }
-
     }
             
         

@@ -47,8 +47,8 @@ namespace Zealand_Carpool.Services
                     conn.Open();
                     using (SqlCommand cmd = new SqlCommand(_getChat, conn))
                     {
-                        cmd.Parameters.AddWithValue("@userone", userOne);
-                        cmd.Parameters.AddWithValue("@usertwo", userTwo);
+                        cmd.Parameters.AddWithValue("@idone", userOne);
+                        cmd.Parameters.AddWithValue("@idtwo", userTwo);
                         SqlDataReader reader = cmd.ExecuteReader();
                         Chat chat = MakeChat(reader);
 

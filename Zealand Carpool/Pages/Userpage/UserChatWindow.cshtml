@@ -1,4 +1,4 @@
-﻿@page "{id}"
+﻿@page "{Id}"
 @model Zealand_Carpool.Pages.Userpage.UserChatWindowModel
 @{
 }
@@ -18,7 +18,22 @@
     <link rel="stylesheet" href="~/css/Chat.css" />
 </head>
 <body>
+<div class="container">
+    <div class="text-center">
+        <h4>Du skriver til @Model.User2.Name @Model.User2.Surname</h4>
+    </div>
+    <br />
+    @foreach (Models.ChatText chatTexts in Model.ChatTexts)
+    {
+        <div class="media">
+            <div class="media-body">
+                <h5 class="mt-0">@chatTexts.user.Name @chatTexts.user.Surname</h5>
+                @chatTexts.message
+            </div>
+        </div>
+    }
 
+</div>
 
 
             <div class="mesgs">

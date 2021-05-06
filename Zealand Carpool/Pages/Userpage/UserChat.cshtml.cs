@@ -37,7 +37,8 @@ namespace Zealand_Carpool.Pages.Userpage
                 } else
                 {
 
-                    _ichatter.AddChat( LoggedInUser.Id, Guid.Parse(Id));
+                  _ichatter.AddChat( LoggedInUser.Id, Guid.Parse(Id));
+                  ChatTexts = _ichatter.GetChat(LoggedInUser.Id, Guid.Parse(Id)).Result;
 
                 }
                 return Page();

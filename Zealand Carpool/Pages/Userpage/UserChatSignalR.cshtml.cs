@@ -14,6 +14,9 @@ namespace Zealand_Carpool.Pages.Userpage
 {
     public class UserChatSignalRModel : PageModel
     {
+        [BindProperty]
+        public Chat chat { get; set; }
+        [BindProperty]
         public User LoggedInUser { get; set; }
         public User User2 { get; set; }
         public List<ChatText> ChatTexts { get; set; }
@@ -31,7 +34,7 @@ namespace Zealand_Carpool.Pages.Userpage
             _ichatter = ichat;
         }
 
-        public IActionResult OnGet()
+        public void OnGet()
         {
 
             if (User.Identity.IsAuthenticated)
@@ -40,22 +43,13 @@ namespace Zealand_Carpool.Pages.Userpage
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = new Services.UserDatabaseAsync().GetUser(Guid.Parse(listofClaims[0].Value)).Result;
             }
-            return RedirectToPage("/Index");
+            
             }
         
         public IActionResult OnPost()
         {
-            if (_ichatter.HasAChat(LoggedInUser.Id, User2.Id).Result)
-            {
-                ChatTexts = _ichatter.GetChat(LoggedInUser.Id, User2.Id).Result;
-            }
-            else
-            {
-                new Services.ChatDabase().AddChat(LoggedInUser.Id, User2.Id);
+            return Page();
 
-            }
-
-            return RedirectToPage("/Index");
         }
     }
 }
