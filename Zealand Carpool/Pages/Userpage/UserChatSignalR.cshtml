@@ -31,10 +31,12 @@
                     </div>
                     
                 </div>
+                {
+                }
             
                 <div class="inbox_chat scroll">
                     <div class="chat_list active_chat">
-                        @foreach (Models.User user in Model.AllUsers.Values)
+                        @foreach (Models.User user in Model.AllUsers.Values.Where(u => u.Id != Model.LoggedInUser.Id))
                         {
                             
                         <div class="chat_people">
@@ -51,9 +53,7 @@
                                     @user.AddressList[0].Postalcode
                                 </p>
                             </div>
-                            <form>
-                            <a asp-page="./Userpage/UserChatWindow" asp-route-Id="@user.Id">view</a>
-                            </form>
+                            
                             <button id="myModalBtn" class="btn" hidden data-toggle="modal" data-target="#myModal"><i class="btn alert-primary"></i></button>
                             <a class="btn bg-success" id="LogBut" type="button" asp-page="">Chat</a>
                         </div>
@@ -69,7 +69,7 @@
                             <div class="received_msg">
                                 <div class="received_withd_msg">
                                     <p>
-                                        Hej
+                                        
                                     </p>
                                     <span class="time_date"> 11:01 AM | June 9</span>
                                 </div>

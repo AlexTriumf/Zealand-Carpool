@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -29,7 +31,7 @@ namespace Zealand_Carpool.Pages.Userpage
             _ichatter = ichat;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
 
             if (User.Identity.IsAuthenticated)
@@ -37,26 +39,23 @@ namespace Zealand_Carpool.Pages.Userpage
                 AllUsers = _userInterface.GetAllUsers().Result;
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = new Services.UserDatabaseAsync().GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-                
-                //    if (_ichatter.HasAChat(LoggedInUser.Id, Guid.Parse(userId)).Result)
-                //    {
-                //        ChatTexts = _ichatter.GetChat(LoggedInUser.Id, Guid.Parse(userId)).Result;
-                //    }
-                //    else
-                //    {
-
-                //    }
-                //    return Page();
-                //}
-                //else
-                //{
-                //    return RedirectToPage("/Index");
-                //}
+            }
+            return RedirectToPage("/Index");
+            }
+        
+        public IActionResult OnPost()
+        {
+            if (_ichatter.HasAChat(LoggedInUser.Id, User2.Id).Result)
+            {
+                ChatTexts = _ichatter.GetChat(LoggedInUser.Id, User2.Id).Result;
+            }
+            else
+            {
+                new Services.ChatDabase().AddChat(LoggedInUser.Id, User2.Id);
 
             }
-        //public IActionResult OnPost()
-        //{
-        //    return Page();
+
+            return RedirectToPage("/Index");
         }
     }
 }

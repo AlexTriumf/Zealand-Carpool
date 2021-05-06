@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Zealand_Carpool.Hub;
 using Zealand_Carpool.Services;
 
 namespace Zealand_Carpool
