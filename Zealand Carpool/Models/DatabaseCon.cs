@@ -12,11 +12,9 @@ namespace Zealand_Carpool.Models
         
         public SqlConnection GetConnection()
         {
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
+            SqlConnection conn = new SqlConnection(ConnString);
                 conn.Open();
                 return conn;
-            }
         }   
 
     }

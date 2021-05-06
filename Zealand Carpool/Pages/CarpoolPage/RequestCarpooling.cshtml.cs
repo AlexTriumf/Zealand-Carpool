@@ -15,6 +15,8 @@ namespace Zealand_Carpool.Pages.CarpoolPage
         public Carpool Carpool { get; set; }
         [BindProperty]
         public User LoggedInUser {get;set;}
+        [BindProperty]
+        public List<Passenger> Passengers { get; set; }
 
         public bool HasSent { get; set; }
         ICarpool _carpoolInterface;
@@ -36,6 +38,12 @@ namespace Zealand_Carpool.Pages.CarpoolPage
                 if (passengers.ContainsKey(LoggedInUser.Id)) {
                     HasSent = true;
                 }
+                if (LoggedInUser.Id == Carpool.Driver.Id && Carpool.Passengerlist.Count>0)
+                {
+                    foreach (Passenger passenger in Carpool.Passengerlist.Values) {
+                        passenger.User = _userInterface.GetUser(passenger.User.Id).Result;
+                    }
+                }
                 
                 return Page();
             }
@@ -54,8 +62,20 @@ namespace Zealand_Carpool.Pages.CarpoolPage
 
         public IActionResult OnPostDeleteCarpool()
         {
+            _carpoolInterface.DeleteCarpool(Carpool.CarpoolId);
+            return RedirectToPage("/CarpoolPage/Carpools");
+        }
 
-            return RedirectToPage("Index");
+        public IActionResult OnPostUpdate()
+        {
+            //_carpoolInterface.UpdatePassenger();
+            return RedirectToPage("/CarpoolPage/Carpools");
+        }
+
+        public IActionResult OnPostDeletePas()
+        {
+            _carpoolInterface.DeletePassenger(LoggedInUser, Carpool);
+            return RedirectToPage("/CarpoolPage/Carpools");
         }
 
     }

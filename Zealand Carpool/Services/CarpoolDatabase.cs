@@ -41,16 +41,28 @@ namespace Zealand_Carpool.Services
                         "inner join Branch on Carpool.Branch = Branch.BranchId " +
                         "WHERE Carpool.Date > @theDate";
 
-        private string _deletePassenger = "DELETE FROM Passengers WHERE CarpoolId = @CarpoolId, UserId = @UserId";
+        private string _getAllCarpoolsSearch = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
+                        "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
+                        "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName FROM UserTable " +
+                        "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
+                        "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
+                        "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
+                        "inner join Branch on Carpool.Branch = Branch.BranchId " +
+                        "WHERE Carpool.Date > @theDate and Branch.BranchName Like @Search OR AddressList.StreetName Like @Search OR PostalCode.City Like @Search";
+
+        private string _deletePassenger = "DELETE FROM Passengers WHERE CarpoolId = @CarpoolId and UserId = @UserId";
 
         private string deleteCarpool = "DELETE FROM Carpool WHERE CarpoolId = @CarpoolId";
         private string _addPassenger = "INSERT INTO Passengers(CarpoolId, UserId, Request) VALUES (@CarpoolId, @UserId, @request)";
         private string _getPassengers = "SELECT * FROM Passengers WHERE CarpoolId = @carpoolId";
+        private string _updatePassenger = "UPDATE Passengers SET Request = @request WHERE CarpoolId = @carpoolId and UserId = @userid";
         private string _getAllPassengers = "SELECT Passengers.CarpoolId, Passengers.UserId, Passengers.Request FROM Passengers INNER JOIN Carpool on Carpool.CarpoolId = Passengers.CarpoolId WHERE Carpool.Date > @theDate";
         // lav add-get-del passager gør ligesom tweetr med likes
         //lav exeption til user og dette
         //skal hente alle carpools som en user har lavet nu[Done], skal hente alle carpools en user er med i [Done]
-        //imorgen: den der har lavet en carpool accept
+        // den der har lavet en carpool accept, delete carpool/passager [Done]
+        // userhistory mangler layout links, Detaljer på carpool
 
         public Task<bool> AddCarpool(Carpool carpool)
         {
@@ -97,7 +109,7 @@ namespace Zealand_Carpool.Services
                     {
                         if (!reader.HasRows)
                         {
-                            throw new KeyNotFoundException("The Branches was not found in the database");
+                            throw new InvalidOperationException("Der blev ikke returneret nogle rækker fra SQL kaldet");
                         }
                         Branch branch = new Branch();
                         branch.BranchId = reader.GetInt32(0);
@@ -128,7 +140,7 @@ namespace Zealand_Carpool.Services
                         reader.Read();
                         if (!reader.HasRows)
                         {
-                            throw new KeyNotFoundException("The carpool was not found in the database");
+                            throw new InvalidOperationException("Der blev ikke returneret nogle rækker fra SQL kaldet");
                         }
                         carpool = MakeCarpool(reader);
                         cmd.Dispose();
@@ -174,8 +186,11 @@ namespace Zealand_Carpool.Services
                         if (rowsAffected == 1)
                         {
                             return true;
-                        }
+                        } else
+                        {
                         return false;
+                        throw new InvalidOperationException("Der blev ikke returneret nogle rækker fra SQL kaldet");
+                        }
                     }
                 }
             });
@@ -231,8 +246,11 @@ namespace Zealand_Carpool.Services
                         if (rowsAffected == 1)
                         {
                             return true;
+                        } else
+                        {
+                            return false;
+                            throw new InvalidOperationException("Der blev ikke returneret nogle rækker fra SQL kaldet");
                         }
-                        return false;
                     }
                 }
             });
@@ -253,6 +271,10 @@ namespace Zealand_Carpool.Services
                     {
                         cmd.Parameters.AddWithValue("@carpoolId", carpool.CarpoolId);
                         SqlDataReader reader = cmd.ExecuteReader();
+                        if (!reader.HasRows)
+                        {
+                            throw new InvalidOperationException("Der blev ikke returneret nogle rækker fra SQL kaldet");
+                        }
                         while (reader.Read())
                         {
                             Passenger passenger = new Passenger();
@@ -269,6 +291,34 @@ namespace Zealand_Carpool.Services
                     }
                 }
             });
+            return task;
+        }
+
+        public Task<bool> UpdatePassenger(Passenger passenger, int carpoolId)
+        {
+            Task<bool> task = Task.Run(() =>
+            {
+                using (SqlConnection conn = new SqlConnection(_connString))
+                {
+                    conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand(_addPassenger, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@CarpoolId", carpoolId);
+                        cmd.Parameters.AddWithValue("@UserId", passenger.User.Id);
+                        cmd.Parameters.AddWithValue("@request", passenger.IsAccepted);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+
+                        if (rowsAffected == 1)
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+            });
+
             return task;
         }
 
@@ -307,40 +357,61 @@ namespace Zealand_Carpool.Services
 
         public Task<Dictionary<int,Carpool>> GetAllCarpools(DateTime date, string search)
         {
-            Task<Dictionary<int,Carpool>> task = Task.Run(() =>
+            Task<Dictionary<int, Carpool>> task = Task.Run(() =>
             {
-               
-                Dictionary<int,Carpool> carpools = GetAllCarpools(date).Result;
-                Dictionary<int,Carpool> carpoolsResult = new Dictionary<int, Carpool>();
-                foreach (Carpool carpool in carpools.Values)
+                Carpool carpool = new Carpool();
+                Dictionary<int, Carpool> carpools = new Dictionary<int, Carpool>();
+                using (SqlConnection conn = new SqlConnection(_connString))
                 {
-                    if (search.StartsWith(carpool.Driver.AddressList[0].StreetName.ToLower()))
+                    conn.Open();
+
+                    using (SqlCommand cmd = new SqlCommand(_getAllCarpoolsSearch, conn))
                     {
-                        carpoolsResult.Add(carpool.CarpoolId,carpool);
+                        cmd.Parameters.AddWithValue("@theDate", date);
+                        cmd.Parameters.AddWithValue("@Search", search);
+                        SqlDataReader reader = cmd.ExecuteReader();
+                            if (!reader.HasRows)
+                            {
+                                throw new InvalidOperationException("Der blev ikke returneret nogle rækker fra SQL kaldet");
+                            }
+                        while (reader.Read())
+                        {
+                            carpool = MakeCarpool(reader);
+                            carpools.Add(carpool.CarpoolId, carpool);
+                        }
+                        cmd.Dispose();
+                        reader.Close();
+
                     }
-                    else if (search.Contains(carpool.Driver.AddressList[0].StreetName.ToLower()))
+
+                    using (SqlCommand cmd = new SqlCommand(_getAllPassengers, conn))
                     {
-                        carpoolsResult.Add(carpool.CarpoolId, carpool);
-                    }
-                    else if (search.Contains(carpool.Driver.AddressList[0].CityName.ToLower()))
-                    {
-                        carpoolsResult.Add(carpool.CarpoolId, carpool);
-                    }
-                    else if (search.StartsWith(carpool.Driver.AddressList[0].CityName.ToLower()))
-                    {
-                        carpoolsResult.Add(carpool.CarpoolId, carpool);
-                    }
-                    else if (search.Contains(carpool.Branch.BranchName.ToLower()))
-                    {
-                        carpoolsResult.Add(carpool.CarpoolId, carpool);
-                    }
-                    else if (search.StartsWith(carpool.Branch.BranchName.ToLower()))
-                    {
-                        carpoolsResult.Add(carpool.CarpoolId, carpool);
+                        cmd.Parameters.AddWithValue("@theDate", date);
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        if (!reader.HasRows)
+                        {
+                            throw new InvalidOperationException("Der blev ikke returneret nogle rækker fra SQL kaldet");
+                        }
+                        while (reader.Read())
+                        {
+                            Passenger passenger = new Passenger();
+                            passenger.Carpool = new Carpool();
+                            passenger.Carpool.CarpoolId = reader.GetInt32(0);
+                            passenger.User = new User();
+                            passenger.User.Id = reader.GetGuid(1);
+                            passenger.IsAccepted = reader.GetBoolean(2);
+                            if (carpools.ContainsKey(passenger.Carpool.CarpoolId))
+                            {
+                                carpools[passenger.Carpool.CarpoolId].Passengerlist.Add(passenger.User.Id, passenger);
+                            }
+                        }
                     }
                 }
-                return carpoolsResult;
+
+
+                return carpools;
             }); return task;
+            
         }
     
 
@@ -358,12 +429,12 @@ namespace Zealand_Carpool.Services
                     {
                         cmd.Parameters.AddWithValue("@theDate", date);
                         SqlDataReader reader = cmd.ExecuteReader();
+                        if (!reader.HasRows)
+                        {
+                            throw new InvalidOperationException("Der blev ikke returneret nogle rækker fra SQL kaldet");
+                        }
                         while (reader.Read())
                         {
-                            if (!reader.HasRows)
-                            {
-                                throw new KeyNotFoundException("The carpool was not found in the database");
-                            }
                             carpool = MakeCarpool(reader);
                             carpools.Add(carpool.CarpoolId,carpool);
                         }
@@ -376,7 +447,10 @@ namespace Zealand_Carpool.Services
                     {
                         cmd.Parameters.AddWithValue("@theDate", date);
                         SqlDataReader reader = cmd.ExecuteReader();
-                        
+                        if (!reader.HasRows)
+                        {
+                            throw new InvalidOperationException("Der blev ikke returneret nogle rækker fra SQL kaldet");
+                        }
                         while (reader.Read())
                         {
                             Passenger passenger = new Passenger();

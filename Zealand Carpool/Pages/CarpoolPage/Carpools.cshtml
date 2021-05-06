@@ -37,7 +37,7 @@
             </div>
 
         </form>
-    </div>
+    </div> <br />
 
     @foreach (Models.Carpool carpool in Model.AllCarpools.Values)
     {
@@ -45,7 +45,7 @@
             <div class="row">
                 <div class="col">
                     <h3>Kør med @carpool.Driver.Name @carpool.Driver.Surname</h3>
-                    <div id="map"></div>
+                    
                 </div>
                 <div class="col">
                     <p>Adresse: @carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber, @carpool.Driver.AddressList[0].CityName @carpool.Driver.AddressList[0].Postalcode</p>
@@ -62,29 +62,7 @@
             <br />
         </div>
 
-                    <script>
-        function InitializeMap() {
-
-            var latlng = new google.maps.LatLng(@carpool.Driver.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @carpool.Driver.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")));
-
-            var myOptions = {
-                zoom: 12,
-                center: latlng,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-
-            var map = new google.maps.Map(document.getElementById("map"), myOptions);
-
-            new google.maps.Marker({
-                position: latlng,
-                map,
-                title: "Zealand Roskilde",
-            });
-
-        }
-                    </script>
-
-                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho&callback=InitializeMap" async defer></script>
+        
     }
 </div>
 

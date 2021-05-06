@@ -24,7 +24,9 @@ namespace Zealand_Carpool.Interfaces
         
         Task<bool> AddPassenger(User user, Carpool carpool);
         Task<bool> DeletePassenger(User user, Carpool carpool);
-        
+        Task<bool> UpdatePassenger(Passenger passenger, int carpoolId);
+
+
         Carpool MakeCarpool(SqlDataReader sqlReader);
     }
 }
