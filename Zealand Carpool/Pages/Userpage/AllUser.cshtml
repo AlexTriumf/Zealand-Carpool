@@ -1,15 +1,16 @@
-﻿@page "{id:string?}"
+﻿@page "{id?}"
 @model Zealand_Carpool.Pages.Userpage.AllUserModel
 @{
 }
 
 <div class="container">
-    <form>
-        <input type="text" placeholder="Søg på et navn.." name="search"/>
-        <button type="submit">
-            <a asp-page="/Userpage/AllUser" asp-route-id="search">Søg</a>
+    <div class="form-group">
+        <input asp-for="@Model.UserInput" placeholder="Søg på et navn.." class="form-group"/>
+        <button type="submit" asp-page="/Userpage/AllUser" asp-route-id="@Model.UserInput" class="btn-primary">Søg
         </button>
-    </form>
+    </div>
+    @if(Model.ListOfUsers != null) 
+    { 
     @foreach (var user in Model.ListOfUsers)
     {
         <div class="card" style="width: 300px">
@@ -22,5 +23,7 @@
                 </h4>
             </div>
         </div>
+    }
+
     }
 </div>
