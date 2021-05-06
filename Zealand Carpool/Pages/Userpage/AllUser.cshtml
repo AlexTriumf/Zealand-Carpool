@@ -1,4 +1,26 @@
-﻿@page
+﻿@page "{id:string?}"
 @model Zealand_Carpool.Pages.Userpage.AllUserModel
 @{
 }
+
+<div class="container">
+    <form>
+        <input type="text" placeholder="Søg på et navn.." name="search"/>
+        <button type="submit">
+            <a asp-page="/Userpage/AllUser" asp-route-id="search">Søg</a>
+        </button>
+    </form>
+    @foreach (var user in Model.ListOfUsers)
+    {
+        <div class="card" style="width: 300px">
+            <img class="card-img-top" src="img/img_avatar1.png" alt="Card image"/>
+            <div class="card-body">
+                <h4 class="card-title">
+                    <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@user.Id">
+                        @user.Name @user.Surname
+                    </a>
+                </h4>
+            </div>
+        </div>
+    }
+</div>
