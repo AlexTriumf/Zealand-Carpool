@@ -34,7 +34,7 @@
         @foreach (var comment in Model.UserComments)
         {
             <div class="comment">
-                <a asp-page="VisitUsersProfile" asp-route-id="@comment.UserPostID">@comment.UserPostID.Name @comment.UserPostID.Surname</a>
+                <a asp-page="VisitUsersProfile" asp-route-id="@comment.UserPostID.Id">@comment.UserPostID.Name @comment.UserPostID.Surname</a>
                 <p>@comment.Text</p>
             </div>
         }
