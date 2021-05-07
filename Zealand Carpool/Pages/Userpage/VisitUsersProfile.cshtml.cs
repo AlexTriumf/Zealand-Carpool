@@ -11,6 +11,9 @@ namespace Zealand_Carpool.Pages.Userpage
 {
     public class VisitUsersProfileModel : PageModel
     {
+        /// <summary>
+        /// Written by Malte
+        /// </summary>
         private IComment commentInterface;
         private IUser userInterface;
         [BindProperty]
@@ -25,13 +28,13 @@ namespace Zealand_Carpool.Pages.Userpage
             userInterface = iuser;
             commentInterface = icomment;
         }
-        public IActionResult OnGet(Guid UserId)
+        public IActionResult OnGet(Guid id)
         {
             if (User.Identity.IsAuthenticated)
             {
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-                UsersProfile = userInterface.GetUser(UserId).Result;
+                UsersProfile = userInterface.GetUser(id).Result;
                 UserComments = commentInterface.getComments(UsersProfile.Id);
                 return Page();
             }
@@ -47,7 +50,7 @@ namespace Zealand_Carpool.Pages.Userpage
             Comment.UserPostID = LoggedInUser;
 
             commentInterface.AddComment(Comment);
-            return RedirectToPage("UserProfile");
+            return OnGet(UsersProfile.Id);
         }
     }
 }

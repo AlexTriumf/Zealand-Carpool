@@ -1,9 +1,9 @@
-﻿@page "{id}"
+﻿@page "{id:Guid}"
 @model Zealand_Carpool.Pages.Userpage.VisitUsersProfileModel
 @{
 }
 <div class="container">
-    <h3>Velkommen til @Model.UsersProfile.Name @Model.UsersProfile.Surname</h3>
+    <h3>Velkommen til @Model.UsersProfile.Name @Model.UsersProfile.Surname profil</h3> <br/>
     <p>Telefonnummer: @Model.UsersProfile.Phonenumber</p>
 </div>
     <style>
@@ -16,18 +16,20 @@
             width: 250px;
         }
     </style>
-    <div class="container">
+<div class="container">
+    <form method="post">
         <div class="comment">
             <div class="form-group">
                 <label for="ctxt">@Model.LoggedInUser.Name @Model.LoggedInUser.Surname</label>
-                <input asp-for="@Model.Comment.Text" id="ctxt"/>
+                <input asp-for="@Model.Comment.Text" id="ctxt" />
                 <input type="hidden" asp-for="@Model.LoggedInUser.Id" />
                 <input type="hidden" asp-for="@Model.UsersProfile.Id" />
                 <br />
                 <button type="submit" class="btn btn-primary">Kommentér</button>
             </div>
         </div>
-    </div>
+    </form>
+</div>
     <div class="container">
         @foreach (var comment in Model.UserComments)
         {

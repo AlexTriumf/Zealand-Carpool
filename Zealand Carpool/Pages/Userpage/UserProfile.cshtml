@@ -27,21 +27,23 @@
     }
 </style>
 <div class="container">
-    <div class="comment">
-        <div class="form-group">
-            <label for="ctxt">@Model.LoggedInUser.Name @Model.LoggedInUser.Surname</label>
-            <input asp-for="@Model.Comment.Text" id="ctxt"/>
-            <input type="hidden" asp-for="@Model.LoggedInUser.Id" />
-            <br />
-            <button type="submit" class="btn btn-primary">Kommentér</button>
+    <form method="post">
+        <div class="comment">
+            <div class="form-group">
+                <label for="ctxt">@Model.LoggedInUser.Name @Model.LoggedInUser.Surname</label>
+                <input asp-for="@Model.Comment.Text" id="ctxt" />
+                <input type="hidden" asp-for="@Model.LoggedInUser.Id" />
+                <br />
+                <button type="submit" class="btn btn-primary">Kommentér</button>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 <div class="container">
     @foreach (var comment in Model.UserComments)
     {
         <div class="comment">
-            <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@comment.UserPostID">@comment.UserPostID.Name @comment.UserPostID.Surname</a>
+            <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@comment.UserPostID.Id">@comment.UserPostID.Name @comment.UserPostID.Surname</a>
             <p>@comment.Text</p>
         </div>
     }

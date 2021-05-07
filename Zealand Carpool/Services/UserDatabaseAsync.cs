@@ -283,14 +283,14 @@ namespace Zealand_Carpool.Services
             string firstName = names[0];
             if (names.Length == 1)
             {
-                return "SELECT * FROM UserTable WHERE Name LIKE " + firstName + " OR WHERE Surname LIKE " + firstName;
+                return "SELECT * FROM UserTable WHERE Name LIKE '%" + firstName + "%' OR Surname LIKE '%" + firstName +"%';";
             }
 
             if (names.Length > 1)
             {
                 string surName = names[1];
-                return "SELECT * FROM UserTable WHERE Name LIKE " + firstName + " OR " + surName +
-                       " OR WHERE Surname LIKE " + firstName + " OR" + surName;
+                return "SELECT * FROM UserTable WHERE Name LIKE (" + firstName + " OR " + surName +
+                       ") OR Surname LIKE (" + firstName + " OR" + surName + ");";
             }
             else throw new Exception("Wrong input");
 
@@ -308,8 +308,9 @@ namespace Zealand_Carpool.Services
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
                     {
-                        User user = MakeUser(reader);
-                        userList.Add(user);
+                        User user = new User();
+                        user.Id = reader.GetGuid(0);
+                        userList.Add(GetUser(user.Id).Result);
                     }
                 }
                 conn.Close();

@@ -10,6 +10,9 @@ namespace Zealand_Carpool.Pages.Userpage
 {
     public class AllUserModel : PageModel
     {
+        /// <summary>
+        /// Written by Malte
+        /// </summary>
         [BindProperty(SupportsGet = true)]
         public string UserInput { get; set; }
         public List<User> ListOfUsers { get; set; }
@@ -43,7 +46,7 @@ namespace Zealand_Carpool.Pages.Userpage
         public IActionResult OnPost()
         {
 
-            return RedirectToPage("AllUser");
+            return OnGet();
         }
     }
 }
