@@ -17,8 +17,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
         public User LoggedInUser {get;set;}
         [BindProperty]
         public List<Passenger> Passengers { get; set; }
-
-        public bool HasSent { get; set; }
+       
         ICarpool _carpoolInterface;
         IUser _userInterface;
         public RequestCarpoolingModel (ICarpool icarpool, IUser iuser)
@@ -29,19 +28,21 @@ namespace Zealand_Carpool.Pages.CarpoolPage
 
         public IActionResult OnGet(int id)
         {
+
             if (User.Identity.IsAuthenticated)
             {
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 Carpool = _carpoolInterface.GetCarpool(id).Result;
-                Dictionary<Guid,Passenger> passengers = _carpoolInterface.GetPassengers(Carpool).Result;
-                if (passengers.ContainsKey(LoggedInUser.Id)) {
-                    HasSent = true;
-                }
-                if (LoggedInUser.Id == Carpool.Driver.Id && Carpool.Passengerlist.Count>0)
+                Carpool.Passengerlist = _carpoolInterface.GetPassengers(Carpool).Result;
+                
+                
+                if (LoggedInUser.Id == Carpool.Driver.Id)
                 {
+                    Passengers = new List<Passenger>();
                     foreach (Passenger passenger in Carpool.Passengerlist.Values) {
                         passenger.User = _userInterface.GetUser(passenger.User.Id).Result;
+                        Passengers.Add(passenger);
                     }
                 }
                 
@@ -55,7 +56,6 @@ namespace Zealand_Carpool.Pages.CarpoolPage
 
         public IActionResult OnPostRequestCarpool()
         {
-            
             _carpoolInterface.AddPassenger(LoggedInUser,Carpool);
             return RedirectToPage("/CarpoolPage/RequestCarpooling", Carpool.CarpoolId);
         }
@@ -66,10 +66,17 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             return RedirectToPage("/CarpoolPage/Carpools");
         }
 
-        public IActionResult OnPostUpdate()
+        public IActionResult OnPostAcceptPas(string id)
         {
-            //_carpoolInterface.UpdatePassenger();
-            return RedirectToPage("/CarpoolPage/Carpools");
+            _carpoolInterface.UpdatePassenger(Guid.Parse(id), Carpool.CarpoolId);
+            return RedirectToPage("/Userpage/UserCarpools");
+        }
+        public IActionResult OnPostDeletePasFromChau(string id)
+        {
+            User user = new User() { Id = Guid.Parse(id) };
+            
+            _carpoolInterface.DeletePassenger(user, Carpool);
+            return RedirectToPage("/Userpage/UserCarpools");
         }
 
         public IActionResult OnPostDeletePas()

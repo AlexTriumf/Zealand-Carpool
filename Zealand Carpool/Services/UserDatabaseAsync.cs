@@ -176,6 +176,10 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@password", password);
                         SqlDataReader reader = cmd.ExecuteReader();
                         reader.Read();
+                        if (!reader.HasRows)
+                        {
+                            return null;
+                        }
                         User user = MakeUser(reader);
                         return user;
                     }

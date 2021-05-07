@@ -20,17 +20,19 @@ namespace Zealand_Carpool.Models
         public User Driver { get; set; }
         public DateTime Date { get; set; }
         public Dictionary<Guid,Passenger> Passengerlist {get;set;}
+        public string Details { get; set; }
 
         public Carpool() { }
 
         public Carpool(int carpoolId, Branch branch, int passengerSeats,
-            User driver, DateTime date)
+            User driver, DateTime date, string details)
         {
             CarpoolId = carpoolId;
             Branch = branch;
             PassengerSeats = passengerSeats;
             Driver = driver;
             Date = date;
+            Details = details;
         }
 
         public override string ToString()

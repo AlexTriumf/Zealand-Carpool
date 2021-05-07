@@ -22,7 +22,8 @@
             <p>Der bliver kørt fra adreese: @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber, @Model.Carpool.Driver.AddressList[0].CityName @Model.Carpool.Driver.AddressList[0].Postalcode</p>
             <p>Til Afdellingen i @Model.Carpool.Branch.BranchName</p>
             <p>Til Dato & tidspunkt: @Model.Carpool.Date.ToString()</p>
-            @if (!Model.HasSent)
+            <p>Detaljerne for kørslen: @Model.Carpool.Details</p>
+            @if (Model.LoggedInUser.Id != Model.Carpool.Driver.Id && !Model.Carpool.Passengerlist.ContainsKey(Model.LoggedInUser.Id))
             {
                 <form asp-page-handler="RequestCarpool">
                     <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
@@ -39,26 +40,36 @@
                 </button>
                 <br />
                 <h6> Passagere der vil med dig: </h6>
-                @foreach(Models.Passenger passenger in Model.Passengers)
+                @if (Model.Passengers.Count>0)
+                @for(int i = 0; i <Model.Passengers.Count; i++)
                 {
+
                     <div class="card" style="width: 18rem">
                         <div class="card-body">
-                            <h5 class="card-title">@passenger.User.Name @passenger.User.Surname</h5>
-                            <p class="card-text">Bor: @passenger.User.AddressList[0].StreetName @passenger.User.AddressList[0].StreetNumber, @passenger.User.AddressList[0].Postalcode @passenger.User.AddressList[0].CityName</p>
-                            <a asp-page="/Userpage/UserProfile" asp-route-id="@passenger.User.Id" class="card-link">Tryk her for detaljer</a>
-                            <form asp-page-handler="RequestCarpool">
-                                <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
-                                <input type="hidden" asp-for="@passenger.User.Id" />
-                                <button type="submit" class="btn btn-primary mb-3"></button>
-                            </form>
+                            <h5 class="card-title">@Model.Passengers[i].User.Name @Model.Passengers[i].User.Surname</h5>
+                            <p class="card-text">Bor: @Model.Passengers[i].User.AddressList[0].StreetName @Model.Passengers[@i].User.AddressList[0].StreetNumber, @Model.Passengers[i].User.AddressList[0].Postalcode @Model.Passengers[i].User.AddressList[0].CityName</p>
+                            <a asp-page="/Userpage/UserProfile" asp-route-id="@Model.Passengers[i].User.Id" class="card-link">Tryk her for detaljer</a>
                             
+                            <form asp-page-handler="DeletePasFromChau" asp-route-id="@Model.Passengers[i].User.Id">
+                                <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
+                                
+                                <button type="submit" class="btn btn-primary mb-3">Afmeld Passageren</button>
+                            </form>
+                           @if (!Model.Passengers[i].IsAccepted)
+                           {
+                            <form asp-page-handler="AcceptPas" asp-route-id="@Model.Passengers[i].User.Id">
+                                <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
+                               
+                                <button type="submit" class="btn btn-primary mb-3">Acceptere Passageren</button>
+                            </form>
+                           }
                         </div>
                     </div>
                  }
              }
             else if (Model.Carpool.Passengerlist.ContainsKey(Model.LoggedInUser.Id))
             {
-                <button type="button" class="btn btn-primary" data-toggle="modal1" data-target="#exampleModal1">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
                     Afmeld passager plads
                 </button>
             }
@@ -125,7 +136,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Slettelse af Din Carpool</h5>
+                <h5 class="modal-title" id="exampleModalLabel1">Slettelse af Din Carpool</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

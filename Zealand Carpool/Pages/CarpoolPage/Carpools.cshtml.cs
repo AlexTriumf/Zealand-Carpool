@@ -26,11 +26,13 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             _carpoolInterface = icar;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
             Date = DateTime.Today;
-
+            try
+            {
             AllCarpools = _carpoolInterface.GetAllCarpools(Date).Result;
+            } catch (InvalidOperationException) { return RedirectToPage("/Error"); } //need some explaining
             foreach (Carpool carpool1 in AllCarpools.Values)
             {
                 if (carpool1.PassengerSeats == carpool1.Passengerlist.Count)
@@ -38,7 +40,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
                     AllCarpools.Remove(carpool1.CarpoolId);
                 }
             }
-
+            return Page();
         }
 
         public IActionResult OnPost() 
