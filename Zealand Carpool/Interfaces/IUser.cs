@@ -17,5 +17,7 @@ namespace Zealand_Carpool.Interfaces
         Task<bool> DeleteUser(Guid id);
         Task<bool> UpdateUser(Guid id, User user);
         User MakeUser(SqlDataReader sqlreader);
+        //Written by Malte
+        public List<User> SearchUsers(string name);
     }
 }
