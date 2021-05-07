@@ -57,7 +57,7 @@ namespace Zealand_Carpool.Pages.Userpage
                 Comment.UserPostID = LoggedInUser;
 
                 commentInterface.AddComment(Comment);
-            return Page();
+            return OnGet();
         }
     }
 }
