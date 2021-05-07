@@ -36,15 +36,13 @@ namespace Zealand_Carpool.Pages.CarpoolPage
                 Carpool = _carpoolInterface.GetCarpool(id).Result;
                 Carpool.Passengerlist = _carpoolInterface.GetPassengers(Carpool).Result;
                 
+                Passengers = new List<Passenger>();
                 
-                if (LoggedInUser.Id == Carpool.Driver.Id)
-                {
-                    Passengers = new List<Passenger>();
                     foreach (Passenger passenger in Carpool.Passengerlist.Values) {
                         passenger.User = _userInterface.GetUser(passenger.User.Id).Result;
                         Passengers.Add(passenger);
                     }
-                }
+                
                 
                 return Page();
             }

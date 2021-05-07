@@ -39,9 +39,15 @@
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link k" asp-area="" asp-page="/CarpoolPage/Carpools">Carpools</a>
-                            </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Carpooling
+                        </a><div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                            <a class="dropdown-item" asp-page="/CarpoolPage/Carpools">Carpools</a>
+                            <a class="dropdown-item" asp-page="/Carpool/OfferCarpool">Opret Carpool</a>
+                            </div>
+                    </li>
                             <li class="nav-item">
                                 <a class="nav-link k" asp-area="" asp-page="/Userpage/UserChatSignalR">Chat</a>
                             </li>
@@ -50,8 +56,8 @@
                                     Bruger
                                 </a><div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                                    <a class="dropdown-item" asp-page="/Userpage/UserProfile">Bruger profil</a>
-                                    <a class="dropdown-item" asp-page="/Userpage/UserCarpools">Bruger Carpools</a>
+                                    <a class="dropdown-item" asp-page="/Userpage/UserProfile">Din profil</a>
+                                    <a class="dropdown-item" asp-page="/Userpage/UserCarpools">Dine Carpools</a>
                                     <a class="dropdown-item" asp-page="/Userpage/AllUser">Søg en Bruger</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-page="/LoginPage/Logout">Logud</a>

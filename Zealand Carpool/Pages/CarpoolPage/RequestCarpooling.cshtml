@@ -38,10 +38,12 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                     Slet Carpool
                 </button>
-                <br />
-                <h6> Passagere der vil med dig: </h6>
-                @if (Model.Passengers.Count>0)
-                @for(int i = 0; i <Model.Passengers.Count; i++)
+            }
+            <br />
+            <h6> Passagere der har tilsluttet sig denne carpool: </h6>
+            @if (Model.Passengers.Count > 0)
+            {
+                @for (int i = 0; i < Model.Passengers.Count; i++)
                 {
 
                     <div class="card" style="width: 18rem">
@@ -49,30 +51,33 @@
                             <h5 class="card-title">@Model.Passengers[i].User.Name @Model.Passengers[i].User.Surname</h5>
                             <p class="card-text">Bor: @Model.Passengers[i].User.AddressList[0].StreetName @Model.Passengers[@i].User.AddressList[0].StreetNumber, @Model.Passengers[i].User.AddressList[0].Postalcode @Model.Passengers[i].User.AddressList[0].CityName</p>
                             <a asp-page="/Userpage/UserProfile" asp-route-id="@Model.Passengers[i].User.Id" class="card-link">Tryk her for detaljer</a>
-                            
-                            <form asp-page-handler="DeletePasFromChau" asp-route-id="@Model.Passengers[i].User.Id">
-                                <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
-                                
-                                <button type="submit" class="btn btn-primary mb-3">Afmeld Passageren</button>
-                            </form>
-                           @if (!Model.Passengers[i].IsAccepted)
-                           {
-                            <form asp-page-handler="AcceptPas" asp-route-id="@Model.Passengers[i].User.Id">
-                                <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
-                               
-                                <button type="submit" class="btn btn-primary mb-3">Acceptere Passageren</button>
-                            </form>
-                           }
+                            @if (Model.Carpool.Passengerlist.ContainsKey(Model.LoggedInUser.Id) && Model.LoggedInUser.Id == Model.Passengers[i].User.Id)
+                            {
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
+                                    Afmeld passager plads
+                                </button>
+                            }
+                            @if (Model.LoggedInUser.Id == @Model.Carpool.Driver.Id)
+                            {
+                                <form asp-page-handler="DeletePasFromChau" asp-route-id="@Model.Passengers[i].User.Id">
+                                    <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
+                                    <input type="hidden" asp-for="@Model.Passengers[@i].User.Id" />
+                                    <button type="submit" class="btn btn-primary mb-3">Afmeld Passageren</button>
+                                </form>
+                                @if (!Model.Passengers[i].IsAccepted)
+                                {
+                                    <form asp-page-handler="AcceptPas" asp-route-id="@Model.Passengers[i].User.Id">
+                                        <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
+
+                                        <button type="submit" class="btn btn-primary mb-3">Acceptere Passageren</button>
+                                    </form>
+                                }
+                            }
                         </div>
                     </div>
-                 }
-             }
-            else if (Model.Carpool.Passengerlist.ContainsKey(Model.LoggedInUser.Id))
-            {
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
-                    Afmeld passager plads
-                </button>
+                }
             }
+
         </div>
 
 
@@ -104,7 +109,7 @@
 
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho&callback=InitializeMap" async defer></script>
 
-           
+
         </div>
     </div>
 </div>
@@ -125,7 +130,7 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Nej</button>
                 <form method="post" asp-page-handler="DeleteCarpool">
                     <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
-                <button type="submit" class="btn btn-danger">Ja</button>
+                    <button type="submit" class="btn btn-danger">Ja</button>
                 </form>
             </div>
         </div>
