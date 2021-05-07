@@ -36,7 +36,7 @@ namespace Zealand_Carpool.Pages.Userpage
 
         public void OnGet()
         {
-
+            
             if (User.Identity.IsAuthenticated)
             {
                 AllUsers = _userInterface.GetAllUsers().Result;

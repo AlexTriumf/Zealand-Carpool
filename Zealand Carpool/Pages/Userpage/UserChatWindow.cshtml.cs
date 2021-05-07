@@ -13,8 +13,11 @@ namespace Zealand_Carpool.Pages.Userpage
     {
         [BindProperty]
         public Chat chat { get; set; }
+        [BindProperty]
         public User LoggedInUser { get; set; }
+        [BindProperty]
         public User User2 { get; set; }
+        [BindProperty]
         public List<ChatText> ChatTexts { get; set; }
         public Dictionary<Guid, User> AllUsers { get; set; }
         [BindProperty]
@@ -39,21 +42,19 @@ namespace Zealand_Carpool.Pages.Userpage
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 User2 = _userInterface.GetUser(Guid.Parse(Id)).Result;
 
-                //if (_ichatter.HasAChat(LoggedInUser.Id, User2.Id).IsCompletedSuccessfully)
-                //{
-                //    ChatTexts = _ichatter.GetChat(LoggedInUser.Id, User2.Id).Result;
-                //}
-                //else
-                //{
-                //    _ichatter.AddChat(LoggedInUser.Id, User2.Id);
-                //    ChatTexts = _ichatter.GetChat(LoggedInUser.Id, User2.Id).Result;
-                    
+                if (_ichatter.HasAChat(LoggedInUser.Id, User2.Id).Result)
+                {
+                    ChatTexts = _ichatter.GetChat(LoggedInUser.Id, User2.Id).Result;
+                }
+                else
+                {
+                    _ichatter.AddChat(LoggedInUser.Id, User2.Id);
                 }
 
                 return Page();
             }
 
-            //return Page();
+            return Page();
         }
     }
             
