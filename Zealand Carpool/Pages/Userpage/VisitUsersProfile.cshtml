@@ -1,0 +1,42 @@
+﻿@page "{id:Guid}"
+@model Zealand_Carpool.Pages.Userpage.VisitUsersProfileModel
+@{
+}
+<div class="container">
+    <h3>Velkommen til @Model.UsersProfile.Name @Model.UsersProfile.Surname profil</h3> <br/>
+    <p>Telefonnummer: @Model.UsersProfile.Phonenumber</p>
+</div>
+    <style>
+        div.comment {
+            margin: 10px;
+            border-radius: 5px;
+            border: 5px lightgray;
+            background: whitesmoke;
+            padding: 10px;
+            width: 250px;
+        }
+    </style>
+<div class="container">
+    <form method="post">
+        <div class="comment">
+            <div class="form-group">
+                <label for="ctxt">@Model.LoggedInUser.Name @Model.LoggedInUser.Surname</label>
+                <input asp-for="@Model.Comment.Text" id="ctxt" />
+                <input type="hidden" asp-for="@Model.LoggedInUser.Id" />
+                <input type="hidden" asp-for="@Model.UsersProfile.Id" />
+                <br />
+                <button type="submit" class="btn btn-primary">Kommentér</button>
+            </div>
+        </div>
+    </form>
+</div>
+    <div class="container">
+        @foreach (var comment in Model.UserComments)
+        {
+            <div class="comment">
+                <a asp-page="VisitUsersProfile" asp-route-id="@comment.UserPostID">@comment.UserPostID.Name @comment.UserPostID.Surname</a>
+                <p>@comment.Text</p>
+            </div>
+        }
+    </div>
+

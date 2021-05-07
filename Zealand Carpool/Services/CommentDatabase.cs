@@ -11,13 +11,13 @@ namespace Zealand_Carpool.Services
     public class CommentDatabase : IComment
     {
         string ConnString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-        private const String CreateComment = "insert into Comments (UserPostID, Content, UserID,)" +
+        private const String CreateComment = "insert into Comments (UserPostID, Content, UserID)" +
                                              " Values (@USERPOSTID, @CONTENT, @USERID)";
 
         private const String RemoveComment = "delete from Comments where Id = @ID ";
 
         private const String GetCommentString = "SELECT Comments.Id, Comments.UserPostID , Comments.Content, Comments.UserID, FROM Comments WHERE Comments.Id = @Id";
-        private const String GetCommentsString = "select* from Comments where UserID = @UserID";
+        private const String GetCommentsString = "select * from Comments where UserID = @UserID";
 
         public void AddComment(Comment comment)
         {
@@ -27,9 +27,9 @@ namespace Zealand_Carpool.Services
                 using (SqlCommand cmd = new SqlCommand(CreateComment, conn))
                 {
 
-                    cmd.Parameters.AddWithValue("@USERPOSTID", comment.UserPostID);
+                    cmd.Parameters.AddWithValue("@USERPOSTID", comment.UserPostID.Id);
                     cmd.Parameters.AddWithValue("@CONTENT", comment.Text);
-                    cmd.Parameters.AddWithValue("@USERID", comment.UserID);
+                    cmd.Parameters.AddWithValue("@USERID", comment.UserID.Id);
 
 
 
@@ -37,6 +37,7 @@ namespace Zealand_Carpool.Services
 
 
                 }
+                conn.Close();
             }
         }
 
@@ -52,6 +53,7 @@ namespace Zealand_Carpool.Services
                     cmd.Parameters.AddWithValue("@ID", id);
                     int rows = cmd.ExecuteNonQuery();
                 }
+                conn.Close();
             }
         }
 
@@ -75,6 +77,7 @@ namespace Zealand_Carpool.Services
                         c.UserID = reader.GetFieldValue<User>(3);
    
                     }
+                    conn.Close();
                     return c;
                 }
 
@@ -96,13 +99,13 @@ namespace Zealand_Carpool.Services
                     {
                         Comment c = new Comment();
                         c.Id = reader.GetInt32(0);
-                        c.UserPostID = reader.GetFieldValue<User>(1);
+                        c.UserPostID = new UserDatabaseAsync().GetUser(reader.GetGuid(1)).Result;
                         c.Text = reader.GetString(2);
-                        c.UserID = reader.GetFieldValue<User>(3);
+                        c.UserID = new UserDatabaseAsync().GetUser(reader.GetGuid(3)).Result;
                         list.Add(c);
                     }
                 }
-
+                conn.Close();
                 return list;
             }
         }
