@@ -50,17 +50,17 @@ namespace Zealand_Carpool.Pages.Userpage
             Comment.UserPostID = LoggedInUser;
 
             commentInterface.AddComment(Comment);
-            return RedirectToPage(Convert.ToString(UsersProfile.Id));
+            return RedirectToPage("/Userpage/VisitUsersProfile", UsersProfile.Id);
         }
 
         public IActionResult OnPostEdit()
         {
-            return RedirectToPage(Convert.ToString(UsersProfile.Id));
+            return RedirectToPage(UsersProfile.Id.ToString());
         }
         public IActionResult OnPostDelete()
         {
             commentInterface.DeleteComment(Comment.Id);
-            return RedirectToPage(Convert.ToString(UsersProfile.Id));
+            return RedirectToPage("/Userpage/VisitUsersProfile", UsersProfile.Id);
         }
     }
 }
