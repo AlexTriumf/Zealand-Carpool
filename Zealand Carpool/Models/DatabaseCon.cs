@@ -12,9 +12,14 @@ namespace Zealand_Carpool.Models
         private static DatabaseCon _instance = new DatabaseCon();
         private DatabaseCon()
         {
-            SqlConnection conn = new SqlConnection(ConnString);
-                conn.Open();
-                
+                            
+        }
+
+        public SqlConnection SqlConnection()
+        {
+                SqlConnection conn = new SqlConnection(ConnString);
+            conn.Open();    
+            return conn;
         }
 
         public static DatabaseCon Instance => _instance;
