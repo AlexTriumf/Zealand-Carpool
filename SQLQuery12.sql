@@ -1,0 +1,1 @@
+﻿Select * From Chat Where UserOneId = cast('79cbda47-6547-457d-ad01-1c933086572c' as uniqueidentifier) and UserTwoId = cast('1ffc587e-5b8f-44dd-827b-a573328e853d' as uniqueidentifier)

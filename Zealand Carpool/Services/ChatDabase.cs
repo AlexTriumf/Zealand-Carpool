@@ -15,10 +15,10 @@ namespace Zealand_Carpool.Services
 
         string _createChat = "insert into Chat (UserOneId,UserTwoId) Values (@userone, @usertwo)";
         string _sendChatText = "insert into ChatText (ChatId,UserId,Content) Values (@id, @user, @text)";
-        string _getChat = "Select * Chat Where UserOneId = @idone and UserTwoId = @idtwo";
-        string _getChatText = "Select * ChatText Where ChatId = @id";
+        string _getChat = "Select * From Chat Where UserOneId = @idone and UserTwoId = @idtwo";
+        string _getChatText = "Select * From ChatText Where ChatId = @id";
 
-
+        
         public Task<bool> AddChat(Guid userOne, Guid userTwo)
         {
             Task task = Task.Run(() =>
@@ -47,16 +47,18 @@ namespace Zealand_Carpool.Services
                     conn.Open();
                     using (SqlCommand cmd = new SqlCommand(_getChat, conn))
                     {
-                        cmd.Parameters.AddWithValue("@userone", userOne);
-                        cmd.Parameters.AddWithValue("@usertwo", userTwo);
+                        cmd.Parameters.AddWithValue("@idone", userOne);
+                        cmd.Parameters.AddWithValue("@idtwo", userTwo);
                         SqlDataReader reader = cmd.ExecuteReader();
+                        reader.Read();
+
                         Chat chat = MakeChat(reader);
 
-                        cmd.ExecuteNonQuery();
                         if (chat.ChatId > 0) return true;
                     }
-                }
                 return false;
+                    }
+                
             });
             return task;
         }
@@ -94,11 +96,18 @@ namespace Zealand_Carpool.Services
                     using (SqlCommand cmd = new SqlCommand(_getChat, conn))
                     {
 
-                        cmd.Parameters.AddWithValue("@userone", userOne);
-                        cmd.Parameters.AddWithValue("@usertwo", userTwo);
+                        cmd.Parameters.AddWithValue("@idone", userOne);
+                        cmd.Parameters.AddWithValue("@idtwo", userTwo);
                         SqlDataReader reader = cmd.ExecuteReader();
+                        reader.Read();
                         chat = MakeChat(reader);
-                    }
+
+                        cmd.Dispose();
+                        reader.Close();
+                        }
+                    
+                    
+
                     using (SqlCommand cmd = new SqlCommand(_getChatText, conn))
                     {
 
@@ -122,6 +131,8 @@ namespace Zealand_Carpool.Services
         public Chat MakeChat(SqlDataReader reader)
         {
             Chat chat = new Chat();
+            chat.UserOne = new User();
+            chat.UserTwo = new User();
             chat.ChatId = reader.GetInt32(0);
             chat.UserOne.Id = reader.GetGuid(1);
             chat.UserTwo.Id = reader.GetGuid(2);
