@@ -19,9 +19,14 @@ namespace Zealand_Carpool.Pages.Userpage
         public User User2 { get; set; }
         [BindProperty]
         public List<ChatText> ChatTexts { get; set; }
+<<<<<<< HEAD
         [BindProperty]
         public ChatText ctxt { get; set; }
         public Dictionary<Guid, User> AllUsers { get; set; }
+=======
+        public Dictionary<Guid, User> AllUsers { get; set; }
+        [BindProperty]
+>>>>>>> master
         public DateTime Date { get; set; }
 
         IChat _ichatter;
@@ -34,14 +39,22 @@ namespace Zealand_Carpool.Pages.Userpage
             _ichatter = ichat;
         }
 
+<<<<<<< HEAD
         public IActionResult OnGet(Guid Id)
+=======
+        public IActionResult OnGet(string Id)
+>>>>>>> master
         {
 
             if (User.Identity.IsAuthenticated)
             {
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+<<<<<<< HEAD
                 User2 = _userInterface.GetUser(Id).Result;
+=======
+                User2 = _userInterface.GetUser(Guid.Parse(Id)).Result;
+>>>>>>> master
 
                 if (_ichatter.HasAChat(LoggedInUser.Id, User2.Id).Result)
                 {
@@ -56,6 +69,7 @@ namespace Zealand_Carpool.Pages.Userpage
             }
 
             return Page();
+<<<<<<< HEAD
 
         }
 
@@ -65,6 +79,8 @@ namespace Zealand_Carpool.Pages.Userpage
 
             _ichatter.SendChat(ctxt, chat.ChatId);
             return OnGet(LoggedInUser.Id);
+=======
+>>>>>>> master
         }
     }
             

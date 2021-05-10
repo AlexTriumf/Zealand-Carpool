@@ -29,10 +29,15 @@ namespace Zealand_Carpool.Pages.CarpoolPage
         public IActionResult OnGet()
         {
             Date = DateTime.Today;
+<<<<<<< HEAD
             try
             {
             AllCarpools = _carpoolInterface.GetAllCarpools(Date).Result;
             } catch (InvalidOperationException) { return RedirectToPage("/Error"); } //need some explaining
+=======
+            
+            AllCarpools = _carpoolInterface.GetAllCarpools(Date).Result;
+>>>>>>> master
             foreach (Carpool carpool1 in AllCarpools.Values)
             {
                 if (carpool1.PassengerSeats == carpool1.Passengerlist.Count)

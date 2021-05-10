@@ -41,13 +41,18 @@ namespace Zealand_Carpool.Services
                         "inner join Branch on Carpool.Branch = Branch.BranchId " +
                         "WHERE Carpool.Date > @theDate";
 
+<<<<<<< HEAD
         private string _getAllCarpoolsSearch = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
+=======
+        private string _getAllUserCarpools = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
+>>>>>>> master
                         "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
                         "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
                         "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName,Carpool.Detail FROM UserTable " +
                         "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
                         "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
                         "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
+<<<<<<< HEAD
                         "inner join Branch on Carpool.Branch = Branch.BranchId " +
                         "WHERE Carpool.Date > @theDate and Branch.BranchName Like @Search OR AddressList.StreetName Like @Search OR PostalCode.City Like @Search";
 
@@ -60,6 +65,10 @@ namespace Zealand_Carpool.Services
                         "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
                         "inner join Branch on Carpool.Branch = Branch.BranchId";
 
+=======
+                        "inner join Branch on Carpool.Branch = Branch.BranchId";
+
+>>>>>>> master
         private string _deletePassenger = "DELETE FROM Passengers WHERE CarpoolId = @CarpoolId and UserId = @UserId";
 
         private string _deleteCarpool = "DELETE FROM Carpool WHERE CarpoolId = @CarpoolId";
@@ -68,11 +77,15 @@ namespace Zealand_Carpool.Services
         private string _updatePassenger = "UPDATE Passengers SET Request = @request WHERE CarpoolId = @carpoolId and UserId = @userid";
         private string _getAllPassengers = "SELECT Passengers.CarpoolId, Passengers.UserId, Passengers.Request FROM Passengers INNER JOIN Carpool on Carpool.CarpoolId = Passengers.CarpoolId WHERE Carpool.Date > @theDate";
         private string _getAllUserPassengers = "SELECT Passengers.CarpoolId, Passengers.UserId, Passengers.Request FROM Passengers INNER JOIN Carpool on Carpool.CarpoolId = Passengers.CarpoolId WHERE Passengers.UserId = @user";
+<<<<<<< HEAD
         // lav add-get-del passager gør ligesom tweetr med likes
         //lav exeption til user og dette
         //skal hente alle carpools som en user har lavet nu[Done], skal hente alle carpools en user er med i [Done]
         // den der har lavet en carpool accept, delete carpool/passager [Done]
         // userhistory mangler[Done] layout links, Detaljer på carpool.
+=======
+        
+>>>>>>> master
 
         public Task<bool> AddCarpool(Carpool carpool)
         {
@@ -367,6 +380,20 @@ namespace Zealand_Carpool.Services
 
         public Task<Dictionary<int,Carpool>> GetAllCarpools(DateTime date, string search)
         {
+<<<<<<< HEAD
+=======
+            // I'm doing this because the parameter can't take %@search%
+            string _getAllCarpoolsSearch = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
+                        "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
+                        "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName,Carpool.Detail FROM UserTable " +
+                        "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
+                        "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
+                        "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
+                        "inner join Branch on Carpool.Branch = Branch.BranchId " +
+                        "WHERE Carpool.Date > @theDate and (Branch.BranchName Like '%" +search+ "%' OR AddressList.StreetName Like '%" +search+ "%' OR PostalCode.City Like '" +search+ "')";
+        
+>>>>>>> master
             Task<Dictionary<int, Carpool>> task = Task.Run(() =>
             {
                 Carpool carpool = new Carpool();
@@ -378,7 +405,11 @@ namespace Zealand_Carpool.Services
                     using (SqlCommand cmd = new SqlCommand(_getAllCarpoolsSearch, conn))
                     {
                         cmd.Parameters.AddWithValue("@theDate", date);
+<<<<<<< HEAD
                         cmd.Parameters.AddWithValue("@Search", search);
+=======
+                        
+>>>>>>> master
                         SqlDataReader reader = cmd.ExecuteReader();
                             
                         while (reader.Read())

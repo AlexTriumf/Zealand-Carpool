@@ -44,6 +44,9 @@ namespace Zealand_Carpool.Services
 
         string _getAllUsers = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber,UserTable.UserType,AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude,AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode FROM UserTable " +
                                     "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId INNER join PostalCode on AddressList.PostalCode=PostalCode.PostalCode";
+
+        string _getAllPostalCodes = "SELECT * FROM PostalCode";
+        
         public Task<bool> AddUser(User user)
         {
 
@@ -283,6 +286,35 @@ namespace Zealand_Carpool.Services
 
             return task;
         }
+<<<<<<< HEAD
+=======
+
+        public Task<List<Branch>> GetAllPostalCodes()
+        {
+            Task<List<Branch>> task = Task.Run(() =>
+            {
+                List<Branch> listOfCodes = new List<Branch>();
+                using (SqlConnection conn = new SqlConnection(_connString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(_getAllPostalCodes, conn))
+                    {
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Branch branch = new Branch();
+                            branch.BranchPostalCode = reader.GetInt32(0);
+                            branch.BranchName = reader.GetString(1);
+                            listOfCodes.Add(branch);
+                        }
+                        return listOfCodes;
+                    }
+                }
+            });
+
+            return task;
+        }
+>>>>>>> master
         //Written by Malte
         //Primitiv søgefunktion for flere ord
         private string NameSplitter(string name) {

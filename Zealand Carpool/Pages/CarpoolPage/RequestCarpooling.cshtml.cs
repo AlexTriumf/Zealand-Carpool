@@ -9,7 +9,7 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.CarpoolPage
 {
-    public class RequestCarpoolingModel : PageModel
+    public class RequestCarpoolingModel : Shared.ProtectedPageRouting
     {
         [BindProperty]
         public Carpool Carpool { get; set; }
@@ -26,14 +26,21 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             _userInterface = iuser;
         }
 
-        public IActionResult OnGet(int id)
+        protected override IActionResult GetRequest(string id)
         {
+<<<<<<< HEAD
 
             if (User.Identity.IsAuthenticated)
             {
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 Carpool = _carpoolInterface.GetCarpool(id).Result;
+=======
+            int theID = Convert.ToInt32(id);
+                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+                LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+                Carpool = _carpoolInterface.GetCarpool(theID).Result;
+>>>>>>> master
                 Carpool.Passengerlist = _carpoolInterface.GetPassengers(Carpool).Result;
                 
                 Passengers = new List<Passenger>();
@@ -45,11 +52,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
                 
                 
                 return Page();
-            }
-            else
-            {
-                return RedirectToPage("/Index");
-            }
+           
         }
 
         public IActionResult OnPostRequestCarpool()
