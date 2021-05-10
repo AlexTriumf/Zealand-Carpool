@@ -14,7 +14,7 @@ namespace Zealand_Carpool.Services
         private const String CreateComment = "insert into Comments (UserPostID, Content, UserID)" +
                                              " Values (@USERPOSTID, @CONTENT, @USERID)";
 
-        private const String RemoveComment = "delete from Comments where Id = @ID ";
+        private const String RemoveComment = "delete from Comments where Id = @ID";
 
         private const String GetCommentString = "SELECT Comments.Id, Comments.UserPostID , Comments.Content, Comments.UserID, FROM Comments WHERE Comments.Id = @Id";
         private const String GetCommentsString = "select * from Comments where UserID = @UserID";
@@ -43,8 +43,6 @@ namespace Zealand_Carpool.Services
 
         public void DeleteComment(int id)
         {
-            Comment c = GetComment(id);
-
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 conn.Open();

@@ -9,7 +9,7 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
-    public class VisitUsersProfileModel : PageModel
+    public class VisitUsersProfileModel : Shared.ProtectedPageRouting
     {
         /// <summary>
         /// Written by Malte
@@ -28,13 +28,13 @@ namespace Zealand_Carpool.Pages.Userpage
             userInterface = iuser;
             commentInterface = icomment;
         }
-        public IActionResult OnGet(Guid id)
+        protected override IActionResult GetRequest(string id)
         {
             if (User.Identity.IsAuthenticated)
             {
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-                UsersProfile = userInterface.GetUser(id).Result;
+                UsersProfile = userInterface.GetUser(Guid.Parse(id)).Result;
                 UserComments = commentInterface.getComments(UsersProfile.Id);
                 return Page();
             }
@@ -50,7 +50,17 @@ namespace Zealand_Carpool.Pages.Userpage
             Comment.UserPostID = LoggedInUser;
 
             commentInterface.AddComment(Comment);
-            return OnGet(UsersProfile.Id);
+            return RedirectToPage(Convert.ToString(UsersProfile.Id));
+        }
+
+        public IActionResult OnPostEdit()
+        {
+            return RedirectToPage(Convert.ToString(UsersProfile.Id));
+        }
+        public IActionResult OnPostDelete()
+        {
+            commentInterface.DeleteComment(Comment.Id);
+            return RedirectToPage(Convert.ToString(UsersProfile.Id));
         }
     }
 }

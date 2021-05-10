@@ -8,7 +8,7 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
-    public class AllUserModel : PageModel
+    public class AllUserModel : Shared.ProtectedPage
     {
         /// <summary>
         /// Written by Malte
@@ -23,24 +23,15 @@ namespace Zealand_Carpool.Pages.Userpage
         {
             userInterface = iuser;
         }
-        public IActionResult OnGet()
+        protected override IActionResult GetRequest()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+            List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 if (!string.IsNullOrEmpty(UserInput))
                 {
                    ListOfUsers = userInterface.SearchUsers(UserInput); 
                 }
-                
                 return Page();
-            }
-            else
-            {
-                return RedirectToPage("/Index");
-            }
-
         }
 
         public IActionResult OnPost()
