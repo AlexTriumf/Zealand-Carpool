@@ -43,8 +43,6 @@ namespace Zealand_Carpool.Services
 
         public void DeleteComment(int id)
         {
-            Comment c = GetComment(id);
-
             using (SqlConnection conn = new SqlConnection(ConnString))
             {
                 conn.Open();

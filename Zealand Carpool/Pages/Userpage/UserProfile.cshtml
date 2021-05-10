@@ -45,6 +45,17 @@
         <div class="comment">
             <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@comment.UserPostID.Id">@comment.UserPostID.Name @comment.UserPostID.Surname</a>
             <p>@comment.Text</p>
+            @if (comment.UserPostID.Id.Equals(Model.LoggedInUser.Id))
+            {
+                <form asp-page-handler="edit" method="post">
+                    <button class="btn btn-primary">Rediger</button>
+                </form>
+                <form asp-page-handler="delete" method="post">
+                    <input type="hidden" asp-for="@comment.Id" />
+                    <input type="hidden" asp-for="@comment.UserID.Id" />
+                    <button type="submit" class="btn btn-primary"> Slet</button>
+                </form>
+            }
         </div>
     }
 </div>

@@ -50,7 +50,7 @@ namespace Zealand_Carpool.Pages.Userpage
             Comment.UserPostID = LoggedInUser;
 
             commentInterface.AddComment(Comment);
-            return OnGet(UsersProfile.Id);
+            return RedirectToPage(UsersProfile.Id);
         }
 
         public IActionResult OnPostEdit()
@@ -60,7 +60,7 @@ namespace Zealand_Carpool.Pages.Userpage
         public IActionResult OnPostDelete()
         {
             commentInterface.DeleteComment(Comment.Id);
-            return OnGet(UsersProfile.Id);
+            return RedirectToPage(Comment.UserID.Id);
         }
     }
 }

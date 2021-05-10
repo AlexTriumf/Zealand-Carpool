@@ -59,5 +59,10 @@ namespace Zealand_Carpool.Pages.Userpage
                 commentInterface.AddComment(Comment);
             return OnGet();
         }
+        public IActionResult OnPostDelete()
+        {
+            commentInterface.DeleteComment(Comment.Id);
+            return RedirectToPage(Comment.UserID.Id);
+        }
     }
 }
