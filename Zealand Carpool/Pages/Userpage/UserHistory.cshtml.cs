@@ -9,7 +9,7 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
-    public class UserHistoryModel : PageModel
+    public class UserHistoryModel : Shared.ProtectedPage
     {
         [BindProperty]
         public IEnumerable<KeyValuePair<int, Carpool>> Carpools { get; set; }
@@ -28,11 +28,10 @@ namespace Zealand_Carpool.Pages.Userpage
             _carpoolInterface = icarpool;
             _userInterface = iuser;
         }
-        public IActionResult OnGet()
+        protected override IActionResult GetRequest()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-            Date = DateTime.Today;
+            
+                Date = DateTime.Today;
                 
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
@@ -43,12 +42,7 @@ namespace Zealand_Carpool.Pages.Userpage
                                                                      carpool.Value.Driver.Id == LoggedInUser.Id);
                 Carpools = selectedCarpools;
                 return Page();
-            }
-            else
-            {
-                return RedirectToPage("/Index");
-            }
-            
+                           
         }
 
         public IActionResult OnPost()

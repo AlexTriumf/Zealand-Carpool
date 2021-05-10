@@ -11,7 +11,7 @@ using Zealand_Carpool.Services;
 
 namespace Zealand_Carpool.Pages.CarpoolPage
 {
-    public class OfferCarpoolModel : PageModel
+    public class OfferCarpoolModel : Shared.ProtectedPage
     {
         [BindProperty(SupportsGet = true)]
         public Carpool Carpool { get; set; }
@@ -27,25 +27,18 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             _carpoolInterface = icarpool;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        protected override IActionResult GetRequest()
         {
             Carpool = new Carpool();
-            
-            
-            if (User.Identity.IsAuthenticated)
-            {
                 Carpool.Date = DateTime.Today;
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
-                Carpool.Driver = await _userInterface.GetUser(Guid.Parse(listofClaims[0].Value));
-                List<Branch> allBranches = await _carpoolInterface.GetBranches();
+                Carpool.Driver = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+                List<Branch> allBranches = _carpoolInterface.GetBranches().Result;
                 Branches = new SelectList(allBranches,nameof(Branch.BranchId),nameof(Branch.BranchName));
                 
                 return Page();
-            }
-            else
-            {
-                return RedirectToPage("/Index");
-            }
+            
+           
         }
         public IActionResult OnPost()
         {

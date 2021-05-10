@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
-    public class UserCarpoolsModel : PageModel
+    public class UserCarpoolsModel : Shared.ProtectedPage
     {
         [BindProperty]
         public IEnumerable<KeyValuePair<int,Carpool>> Carpools { get; set; }
@@ -27,10 +27,9 @@ namespace Zealand_Carpool.Pages.Userpage
             _userInterface = iuser;
         }
 
-        public IActionResult OnGet()
+        protected override IActionResult GetRequest()
         {
-            if (User.Identity.IsAuthenticated)
-            {
+            
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 var selectedCarpools = from carpool in _carpoolInterface.GetAllCarpools(DateTime.Today).Result                                       
@@ -39,11 +38,7 @@ namespace Zealand_Carpool.Pages.Userpage
                                                                      carpool.Value.Driver.Id == LoggedInUser.Id);
                 Carpools = selectedCarpools;
                 return Page();
-            }
-            else
-            {
-                return RedirectToPage("/Index");
-            }
+            
         }
     }
 }

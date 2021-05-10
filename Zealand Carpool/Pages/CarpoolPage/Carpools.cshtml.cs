@@ -29,10 +29,9 @@ namespace Zealand_Carpool.Pages.CarpoolPage
         public IActionResult OnGet()
         {
             Date = DateTime.Today;
-            try
-            {
+            
             AllCarpools = _carpoolInterface.GetAllCarpools(Date).Result;
-            } catch (InvalidOperationException) { return RedirectToPage("/Error"); } //need some explaining
+           
             foreach (Carpool carpool1 in AllCarpools.Values)
             {
                 if (carpool1.PassengerSeats == carpool1.Passengerlist.Count)
@@ -48,7 +47,13 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             if (!String.IsNullOrWhiteSpace(Search))
             {
                 AllCarpools = _carpoolInterface.GetAllCarpools(Date, Search.ToLower()).Result;
-
+                foreach (Carpool carpool1 in AllCarpools.Values)
+                {
+                    if (carpool1.PassengerSeats == carpool1.Passengerlist.Count)
+                    {
+                        AllCarpools.Remove(carpool1.CarpoolId);
+                    }
+                }
             }
             else 
             {
