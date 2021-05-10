@@ -11,7 +11,7 @@ using Zealand_Carpool.Services;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
-    public class UserProfile : PageModel
+    public class UserProfile : Shared.ProtectedPage
     {
         /// <summary>
         /// Written by Andreas and Malte
@@ -35,20 +35,12 @@ namespace Zealand_Carpool.Pages.Userpage
         }
 
         
-        public IActionResult OnGet()
+        protected override IActionResult GetRequest()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+            List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 UserComments = commentInterface.getComments(LoggedInUser.Id);
                 return Page();
-            }
-            else
-            {
-                return RedirectToPage("/Index");
-            }
-
         }
 
         public IActionResult OnPost()
@@ -57,12 +49,12 @@ namespace Zealand_Carpool.Pages.Userpage
                 Comment.UserPostID = LoggedInUser;
 
                 commentInterface.AddComment(Comment);
-            return OnGet();
+            return Page();
         }
         public IActionResult OnPostDelete()
         {
             commentInterface.DeleteComment(Comment.Id);
-            return RedirectToPage(Comment.UserID.Id);
+            return Page();
         }
     }
 }
