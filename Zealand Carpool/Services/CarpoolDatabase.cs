@@ -68,11 +68,7 @@ namespace Zealand_Carpool.Services
         private string _updatePassenger = "UPDATE Passengers SET Request = @request WHERE CarpoolId = @carpoolId and UserId = @userid";
         private string _getAllPassengers = "SELECT Passengers.CarpoolId, Passengers.UserId, Passengers.Request FROM Passengers INNER JOIN Carpool on Carpool.CarpoolId = Passengers.CarpoolId WHERE Carpool.Date > @theDate";
         private string _getAllUserPassengers = "SELECT Passengers.CarpoolId, Passengers.UserId, Passengers.Request FROM Passengers INNER JOIN Carpool on Carpool.CarpoolId = Passengers.CarpoolId WHERE Passengers.UserId = @user";
-        // lav add-get-del passager gør ligesom tweetr med likes
-        //lav exeption til user og dette
-        //skal hente alle carpools som en user har lavet nu[Done], skal hente alle carpools en user er med i [Done]
-        // den der har lavet en carpool accept, delete carpool/passager [Done]
-        // userhistory mangler[Done] layout links, Detaljer på carpool.
+        
 
         public Task<bool> AddCarpool(Carpool carpool)
         {
