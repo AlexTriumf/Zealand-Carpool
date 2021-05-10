@@ -13,12 +13,17 @@ namespace Zealand_Carpool.Pages.Userpage
 {
     public class UserProfile : PageModel
     {
+        /// <summary>
+        /// Written by Andreas and Malte
+        /// </summary>
         [BindProperty]
         public Comment Comment { get; set; }
 
         private IComment commentInterface;
+
         [BindProperty]
         public User LoggedInUser { get; set; }
+
         public User LoggedInUser2 { get; set; }
         IUser userInterface;
         public List<Comment> UserComments { get; set; }
@@ -27,7 +32,6 @@ namespace Zealand_Carpool.Pages.Userpage
         {
             userInterface = iuser;
             commentInterface = icomment;
-
         }
 
         
@@ -53,7 +57,7 @@ namespace Zealand_Carpool.Pages.Userpage
                 Comment.UserPostID = LoggedInUser;
 
                 commentInterface.AddComment(Comment);
-            return RedirectToPage("UserProfile");
+            return OnGet();
         }
     }
 }

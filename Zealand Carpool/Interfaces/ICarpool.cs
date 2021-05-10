@@ -17,13 +17,17 @@ namespace Zealand_Carpool.Interfaces
         Task<List<Branch>> GetBranches();
 
         Task<Carpool> GetCarpool(int idCarpool);
-        Task<List<Carpool>> GetAllCarpools(DateTime date,string search);
-        Task<List<Carpool>> GetAllCarpools(DateTime date);
+        Task<Dictionary<int,Carpool>> GetAllCarpools(DateTime date,string search);
+        Task<Dictionary<int, Carpool>> GetAllCarpools(Guid userId);
+        Task<Dictionary<int,Carpool>> GetAllCarpools(DateTime date);
         Task<bool> DeleteCarpool(int id);
-        Task<List<User>> GetPassengers();
+        Task<Dictionary<Guid,Passenger>> GetPassengers(Carpool carpool);
+        
         Task<bool> AddPassenger(User user, Carpool carpool);
         Task<bool> DeletePassenger(User user, Carpool carpool);
-        
+        Task<bool> UpdatePassenger(Guid userId, int carpoolId);
+
+
         Carpool MakeCarpool(SqlDataReader sqlReader);
     }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Zealand_Carpool</title>
+    <title>@ViewData["Title"] Zealand Carpool</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -11,7 +11,7 @@
     <header>
         <div class="">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Zealand Carpool</a>
+                <a class="navbar-brand" asp-page="/Index">Zealand Carpool</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -19,7 +19,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-md-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" asp-page="/Index">Hjem <span class="sr-only">(current)</span></a>
                         </li>
 
                         @if (!User.Identity.IsAuthenticated)
@@ -39,9 +39,15 @@
                         }
                         else
                         {
-                            <li class="nav-item">
-                                <a class="nav-link k" asp-area="" asp-page="/Userpage/Address">Min Adresse</a>
-                            </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Carpooling
+                        </a><div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                            <a class="dropdown-item" asp-page="/CarpoolPage/Carpools">Carpools</a>
+                            <a class="dropdown-item" asp-page="/Carpool/OfferCarpool">Opret Carpool</a>
+                            </div>
+                    </li>
                             <li class="nav-item">
                                 <a class="nav-link k" asp-area="" asp-page="/Userpage/UserChatSignalR">Chat</a>
                             </li>
@@ -50,11 +56,13 @@
                                     Bruger
                                 </a><div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                                    <a class="dropdown-item" asp-page="/Userpage/UserProfile">Bruger profil</a>
+                                    <a class="dropdown-item" asp-page="/Userpage/UserProfile">Din profil</a>
+                                    <a class="dropdown-item" asp-page="/Userpage/UserCarpools">Dine Carpools</a>
+                                    <a class="dropdown-item" asp-page="/Userpage/AllUser">Søg en Bruger</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" asp-page="/LoginPage/Logout">Logud</a>
 
-                                </div>
+                                    </div>
                             </li>
                         }
 

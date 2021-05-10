@@ -37,6 +37,7 @@ namespace Zealand_Carpool.Services
 
 
                 }
+                conn.Close();
             }
         }
 
@@ -52,6 +53,7 @@ namespace Zealand_Carpool.Services
                     cmd.Parameters.AddWithValue("@ID", id);
                     int rows = cmd.ExecuteNonQuery();
                 }
+                conn.Close();
             }
         }
 
@@ -75,6 +77,7 @@ namespace Zealand_Carpool.Services
                         c.UserID = reader.GetFieldValue<User>(3);
    
                     }
+                    conn.Close();
                     return c;
                 }
 
@@ -102,7 +105,7 @@ namespace Zealand_Carpool.Services
                         list.Add(c);
                     }
                 }
-
+                conn.Close();
                 return list;
             }
         }

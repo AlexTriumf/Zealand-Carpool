@@ -16,38 +16,30 @@ namespace Zealand_Carpool.Models
         public Branch Branch { get; set; }
         [Required, Range(1, 9)]
         public int PassengerSeats { get; set; }
-        public List<User> PassengerList { get; set; }
-        public  User Driver { get; set; }
+
+        public User Driver { get; set; }
         public DateTime Date { get; set; }
+        public Dictionary<Guid,Passenger> Passengerlist {get;set;}
+        public string Details { get; set; }
 
         public Carpool() { }
 
-        public Carpool(int carpoolId, Branch branch, string homeAddress, int passengerSeats,
-            List<User> passengerList, User driver, DateTime date)
+        public Carpool(int carpoolId, Branch branch, int passengerSeats,
+            User driver, DateTime date, string details)
         {
             CarpoolId = carpoolId;
             Branch = branch;
             PassengerSeats = passengerSeats;
-            PassengerList = passengerList;
             Driver = driver;
             Date = date;
-        }
-
-        public void AddPassenger(User user)
-        {
-            PassengerList.Add(user);
-        }
-
-        public bool RemovePassenger(User user)
-        {
-            return PassengerList.Remove(user);
+            Details = details;
         }
 
         public override string ToString()
         {
             return
                 $"Carpool: {CarpoolId}, Branch: {Branch.BranchName}, " +
-                $"PassengerSeats: {PassengerSeats}, Passengers: {PassengerList.Count}, DriverId: {Driver.Id.ToString()}, Date: {Date}";
+                $"PassengerSeats: {PassengerSeats}, DriverId: {Driver.Id.ToString()}, Date: {Date}";
         }
     }
 }

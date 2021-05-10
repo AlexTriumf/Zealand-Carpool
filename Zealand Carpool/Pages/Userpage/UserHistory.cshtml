@@ -2,3 +2,75 @@
 @model Zealand_Carpool.Pages.Userpage.UserHistoryModel
 @{
 }
+
+<div class="container">
+
+    <div class="text-center">
+        <form method="post" class="row">
+
+            <div class="col-auto">
+                <label>Søg</label>
+            </div>
+            <div class="col">
+
+                <input type="text" asp-for="@Model.Search" class="form-control" placeholder="Søg i Afdeling eller Adresse (skal udfyldes)">
+                <input type="hidden" asp-for="@Model.LoggedInUser.Id" />
+            </div>
+            <div class="col">
+                <input asp-for="@Model.Date" class="form-control" />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">Søg</button>
+            </div>
+
+        </form>
+    </div> <br />
+    
+        @foreach (var carpool in Model.Carpools)
+        {
+            <div class="shadow p-3 mb-5 bg-white rounde">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="text-center"><b>Kør med</b> <br /> <i>@carpool.Value.Driver.Name <br /> @carpool.Value.Driver.Surname</i></h3>
+                    </div>
+                    <div class="col">
+                        <p><b>Der bliver kørt fra adreese:</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
+                        <br />
+                        <p><b>Til Afdellingen i</b> @carpool.Value.Branch.BranchName</p>
+                        <br />
+                        <p><b>Til Dato & tidspunkt:</b> @carpool.Value.Date.ToString()</p>
+                        <br />
+                        @if (carpool.Value.Driver.Id == Model.LoggedInUser.Id)
+                        {
+                            <b>Du er Chauffør for denne carpool</b>
+                        }
+                        else
+                        {
+                            <b> Du er Passager for denne Carpool</b>
+                            @if (carpool.Value.Passengerlist[Model.LoggedInUser.Id].IsAccepted)
+                            {
+                                <h6>Du er blevet accepteret og er derfor med i denne Carpool !</h6>
+                            }
+                            else
+                            {
+                                <h6>Din anmodning er sendt og venter på at blive besvaret, ændringen vil vises her!</h6>
+                            }
+                        }
+                    </div>
+
+
+                    <div class="col">
+                        <br />
+                        @if (carpool.Value.Driver.Id != Model.LoggedInUser.Id)
+                        {
+                            <a class="btn btn-info" type="button" asp-page="/CarpoolPage/RequestCarpooling">Kontakt chauffør</a>
+                        }
+                        <br />
+                        <a class="btn btn-success" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.Value.CarpoolId">Gå til Carpool</a>
+                    </div>
+                </div>
+            </div>
+            <br />
+        }
+
+    </div>

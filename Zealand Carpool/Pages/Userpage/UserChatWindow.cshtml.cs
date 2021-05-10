@@ -55,6 +55,14 @@ namespace Zealand_Carpool.Pages.Userpage
             }
 
             return Page();
+
+        }
+
+        public IActionResult OnPost(ChatText text)
+        {
+
+            _ichatter.SendChat(text, chat.ChatId);
+            return RedirectToPage("UserChatWindow");
         }
     }
             

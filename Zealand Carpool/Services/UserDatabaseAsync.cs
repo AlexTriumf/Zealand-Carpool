@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Zealand_Carpool.Interfaces;
 using Zealand_Carpool.Models;
@@ -176,6 +177,10 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@password", password);
                         SqlDataReader reader = cmd.ExecuteReader();
                         reader.Read();
+                        if (!reader.HasRows)
+                        {
+                            return null;
+                        }
                         User user = MakeUser(reader);
                         return user;
                     }
@@ -277,6 +282,49 @@ namespace Zealand_Carpool.Services
             });
 
             return task;
+        }
+        //Written by Malte
+        //Primitiv søgefunktion for flere ord
+        private string NameSplitter(string name) {
+            string input = name;
+            string[] names = input.Split(' ');
+            string firstName = names[0];
+            if (names.Length == 1)
+            {
+                return "SELECT * FROM UserTable WHERE Name LIKE '%" + firstName + "%' OR Surname LIKE '%" + firstName +"%';";
+            }
+
+            if (names.Length > 1)
+            {
+                string surName = names[1];
+                return "SELECT * FROM UserTable WHERE Name LIKE (" + firstName + " OR " + surName +
+                       ") OR Surname LIKE (" + firstName + " OR" + surName + ");";
+            }
+            else throw new Exception("Wrong input");
+
+
+        }
+        public List<User> SearchUsers(string name)
+        {
+            List<User> userList = new List<User>();
+
+            using (SqlConnection conn = new SqlConnection(_connString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand(NameSplitter(name), conn))
+                {
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        User user = new User();
+                        user.Id = reader.GetGuid(0);
+                        userList.Add(GetUser(user.Id).Result);
+                    }
+                }
+                conn.Close();
+            }
+            
+            return userList;
         }
     }
 }

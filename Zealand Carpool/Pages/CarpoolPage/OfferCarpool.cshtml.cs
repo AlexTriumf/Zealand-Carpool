@@ -31,7 +31,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
         {
             Carpool = new Carpool();
             
-            // få fat i alle branches
+            
             if (User.Identity.IsAuthenticated)
             {
                 Carpool.Date = DateTime.Today;
@@ -49,9 +49,14 @@ namespace Zealand_Carpool.Pages.CarpoolPage
         }
         public IActionResult OnPost()
         {
+            if (Carpool.PassengerSeats<=0)
+            {
+                return RedirectToPage("/CarpoolPage/OfferCarpool");
+            }
             Carpool.Branch = new Branch();
             Carpool.Branch.BranchId = BranchId;
             _carpoolInterface.AddCarpool(Carpool);
+            
             return RedirectToPage("/UserPage/UserCarpools");
         }
     }

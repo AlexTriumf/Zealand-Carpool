@@ -10,19 +10,24 @@
         <div class="col-6">
             <form method="post">
                 <div asp-validation-summary="ModelOnly"></div>
-                    <label class="custom-control-label">Kørsel fra @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber</label>
+                <label class="custom-control-label">Kørsel fra @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber</label>
                 <br />
-                    <div class="form-group">
-                        <label class="custom-control-label">Til afdeling</label><br />
-                        <select name="BranchId" asp-for="@Model.BranchId" asp-items="@Model.Branches">
-                        </select>
-                        
-                    </div><br />
+                <div class="form-group">
+                    <label class="custom-control-label">Til afdeling</label><br />
+                    <select name="BranchId" asp-for="@Model.BranchId" asp-items="@Model.Branches">
+                    </select>
+
+                </div><br />
                 <div class="form-group">
                     <label class="custom-control-label">Dato & Tidpunkt</label>
                     <input asp-for="@Model.Carpool.Date" class="form-control" />
                     <span asp-validation-for="@Model.Carpool.Date" class="text-danger"></span>
                 </div> <br>
+                <div class="form-group">
+                    <label class="custom-control-label">Detaljer til turen</label>
+                    <textarea asp-for="@Model.Carpool.Details" cols="120" style="height:5rem" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.Carpool.Details" class="text-danger"></span>
+                </div> <br />
                 <div class="form-group">
                     <label class="custom-control-label">Antal passager</label>
                     <input asp-for="@Model.Carpool.PassengerSeats" class="form-control" />
