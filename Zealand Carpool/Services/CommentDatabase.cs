@@ -21,46 +21,34 @@ namespace Zealand_Carpool.Services
 
         public void AddComment(Comment comment)
         {
-            using (SqlConnection conn = new SqlConnection(ConnString))
+            using (SqlCommand cmd = new SqlCommand(CreateComment, DatabaseCon.Instance.SqlConnection()))
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(CreateComment, conn))
-                {
 
-                    cmd.Parameters.AddWithValue("@USERPOSTID", comment.UserPostID.Id);
-                    cmd.Parameters.AddWithValue("@CONTENT", comment.Text);
-                    cmd.Parameters.AddWithValue("@USERID", comment.UserID.Id);
+                cmd.Parameters.AddWithValue("@USERPOSTID", comment.UserPostID.Id);
+                cmd.Parameters.AddWithValue("@CONTENT", comment.Text);
+                cmd.Parameters.AddWithValue("@USERID", comment.UserID.Id);
 
 
 
-                    cmd.ExecuteNonQuery();
-
-
-                }
-                conn.Close();
+                cmd.ExecuteNonQuery();
             }
         }
 
         public void DeleteComment(int id)
         {
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(RemoveComment, conn))
+            
+                using (SqlCommand cmd = new SqlCommand(RemoveComment, DatabaseCon.Instance.SqlConnection()))
                 {
                     cmd.Parameters.AddWithValue("@ID", id);
                     int rows = cmd.ExecuteNonQuery();
                 }
-                conn.Close();
-            }
+              
         }
 
         public Comment GetComment(int id)
         {
-            using (SqlConnection conn = new SqlConnection(ConnString))
-            {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(GetCommentString, conn))
+            
+                using (SqlCommand cmd = new SqlCommand(GetCommentString, DatabaseCon.Instance.SqlConnection()))
                 {
                     cmd.Parameters.AddWithValue("@ID", id);
 
@@ -75,22 +63,19 @@ namespace Zealand_Carpool.Services
                         c.UserID = reader.GetFieldValue<User>(3);
    
                     }
-                    conn.Close();
+                    
                     return c;
                 }
 
                 throw new KeyNotFoundException("Der var ingen kommentarer med id = " + id);
-            }
+            
         }
 
         public List<Comment> getComments(Guid UserId)
         {
             List<Comment> list = new List<Comment>();
-            using (SqlConnection conn = new SqlConnection(ConnString))
+            using (SqlCommand cmd = new SqlCommand(GetCommentsString, DatabaseCon.Instance.SqlConnection()))
             {
-                conn.Open();
-                using (SqlCommand cmd = new SqlCommand(GetCommentsString, conn))
-                {
                     cmd.Parameters.AddWithValue("@UserID", UserId);
                     SqlDataReader reader = cmd.ExecuteReader();
                     while (reader.Read())
@@ -102,10 +87,9 @@ namespace Zealand_Carpool.Services
                         c.UserID = new UserDatabaseAsync().GetUser(reader.GetGuid(3)).Result;
                         list.Add(c);
                     }
-                }
-                conn.Close();
-                return list;
             }
+                
+            return list;
         }
 
         public Comment MakeComment(SqlDataReader sqlReader)
