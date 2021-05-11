@@ -49,12 +49,12 @@ namespace Zealand_Carpool.Pages.Userpage
                 Comment.UserPostID = LoggedInUser;
 
                 commentInterface.AddComment(Comment);
-            return Page();
+            return RedirectToPage();
         }
         public IActionResult OnPostDelete()
         {
             commentInterface.DeleteComment(Comment.Id);
-            return Page();
+            return RedirectToPage();
         }
     }
 }
