@@ -41,7 +41,7 @@
                 @if (comment.UserPostID.Id.Equals(Model.LoggedInUser.Id))
                 {
                     <form asp-page-handler="edit" method="post">
-                        <button class="btn btn-primary">Rediger</button>
+                        <button type="submit" class="btn btn-primary">Rediger</button>
                     </form>
                     <form asp-page-handler="delete" method="post">
                         <input type="hidden" asp-for="@comment.Id" />
