@@ -35,7 +35,7 @@
             <span class="border-bottom"></span>
             @if (Model.LoggedInUser.Id == Model.Carpool.Driver.Id)
             {
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
                     Slet Carpool
                 </button>
             }
@@ -53,7 +53,7 @@
                             <a asp-page="/Userpage/UserProfile" asp-route-id="@Model.Passengers[i].User.Id" class="card-link">Tryk her for detaljer</a>
                             @if (Model.Carpool.Passengerlist.ContainsKey(Model.LoggedInUser.Id) && Model.LoggedInUser.Id == Model.Passengers[i].User.Id)
                             {
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1">
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal1">
                                     Afmeld passager plads
                                 </button>
                             }
@@ -71,6 +71,9 @@
 
                                         <button type="submit" class="btn btn-primary mb-3">Acceptere Passageren</button>
                                     </form>
+                                } else
+                                {
+                                    <p>Personen er blevet accepteret til denne Carpool</p>
                                 }
                             }
                         </div>

@@ -285,8 +285,6 @@ namespace Zealand_Carpool.Services
             Task<List<Branch>> task = Task.Run(() =>
             {
                 List<Branch> listOfCodes = new List<Branch>();
-                
-                    
                     using (SqlCommand cmd = new SqlCommand(_getAllPostalCodes, DatabaseCon.Instance.SqlConnection()))
                     {
                         SqlDataReader reader = cmd.ExecuteReader();

@@ -15,8 +15,7 @@ namespace Zealand_Carpool.Services
 {
     public class CarpoolDatabase : ICarpool
     {
-        private string _connString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
+        
         private string _addCarpool = "INSERT INTO Carpool (UserId, Branch, PassengerSeats, Date, Detail) " +
                                        "VALUES (@UserId, @Branch, @PassengerSeats, @Date, @Detail)";
         private string _getBranches = "SELECT * FROM Branch";
@@ -64,11 +63,8 @@ namespace Zealand_Carpool.Services
         {
             Task<bool> task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
 
-                    using (SqlCommand cmd = new SqlCommand(_addCarpool, conn))
+                    using (SqlCommand cmd = new SqlCommand(_addCarpool, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@UserId", carpool.Driver.Id);
                         cmd.Parameters.AddWithValue("@Branch", carpool.Branch.BranchId);
@@ -81,7 +77,7 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@Detail", carpool.Details);
                         
                         int rowsAffected = cmd.ExecuteNonQuery();
-                        conn.Close();
+                        
                         if (rowsAffected == 1)
                         {
                             return true;
@@ -89,7 +85,7 @@ namespace Zealand_Carpool.Services
                         return false;
                         throw new InvalidOperationException("Der blev ikke tilføjet carpool, brugerID: " + carpool.Driver.Id);
                     }
-                }
+                
             
             });
             return task;
@@ -98,12 +94,11 @@ namespace Zealand_Carpool.Services
         public Task<List<Branch>> GetBranches()
         {
             Task<List<Branch>> task = Task.Run(() => { 
-            using (SqlConnection conn = new SqlConnection(_connString))
-            {
-                conn.Open();
+            
+                
                 List<Branch> branches = new List<Branch>();
 
-                using (SqlCommand cmd = new SqlCommand(_getBranches, conn))
+                using (SqlCommand cmd = new SqlCommand(_getBranches, DatabaseCon.Instance.SqlConnection()))
                 {
 
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -118,7 +113,7 @@ namespace Zealand_Carpool.Services
                     }
                         return branches;
                 }
-            }}); return task;
+            }); return task;
         }
 
 
@@ -128,11 +123,9 @@ namespace Zealand_Carpool.Services
             Task<Carpool> task = Task.Run(() =>
             {
                 Carpool carpool = new Carpool();
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
+                
 
-                    using (SqlCommand cmd = new SqlCommand(_getCarpool, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getCarpool, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@carpoolId", IdCarpool);
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -143,7 +136,7 @@ namespace Zealand_Carpool.Services
                         reader.Close();
                     }
 
-                    using (SqlCommand cmd = new SqlCommand(_getPassengers, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getPassengers, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@carpoolId", carpool.CarpoolId);
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -158,7 +151,7 @@ namespace Zealand_Carpool.Services
                             carpool.Passengerlist.Add(passenger.User.Id,passenger);
                         }
                     }
-                } return carpool;
+                 return carpool;
             }); return task;
         }
 
@@ -169,16 +162,15 @@ namespace Zealand_Carpool.Services
         {
             Task<bool> task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
+                
+                    
 
-                    using (SqlCommand cmd = new SqlCommand(_deleteCarpool, conn))
+                    using (SqlCommand cmd = new SqlCommand(_deleteCarpool, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@CarpoolId", carpoolId);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
-                        conn.Close();
+                        
                         if (rowsAffected == 1)
                         {
                             return true;
@@ -188,7 +180,7 @@ namespace Zealand_Carpool.Services
                         throw new InvalidOperationException("Der blev ikke slettet carpool id: " + carpoolId );
                         }
                     }
-                }
+                
             });
 
             return task;
@@ -200,11 +192,9 @@ namespace Zealand_Carpool.Services
         {
             Task<bool> task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
+               
 
-                    using (SqlCommand cmd = new SqlCommand(_addPassenger, conn))
+                    using (SqlCommand cmd = new SqlCommand(_addPassenger, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@CarpoolId", carpool.CarpoolId);
                         cmd.Parameters.AddWithValue("@UserId", user.Id);
@@ -219,7 +209,7 @@ namespace Zealand_Carpool.Services
                         return false;
                         throw new InvalidOperationException("Der blev ikke tilføjet passager id: " + user.Id);
                     }
-                }
+                
             });
 
             return task;
@@ -229,17 +219,15 @@ namespace Zealand_Carpool.Services
         {
             Task<bool> task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
+                
 
-                    using (SqlCommand cmd = new SqlCommand(_deletePassenger, conn))
+                    using (SqlCommand cmd = new SqlCommand(_deletePassenger, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@CarpoolId", carpool.CarpoolId);
                         cmd.Parameters.AddWithValue("@UserId", user.Id);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
-                        conn.Close();
+                        
                         if (rowsAffected == 1)
                         {
                             return true;
@@ -249,7 +237,7 @@ namespace Zealand_Carpool.Services
                             throw new InvalidOperationException("Der blev ikke slettet passager id: " + user.Id );
                         }
                     }
-                }
+                
             });
 
             return task;
@@ -259,12 +247,11 @@ namespace Zealand_Carpool.Services
         {
             Task<Dictionary<Guid,Passenger>> task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
+                
+                    
                     Dictionary<Guid,Passenger> listOfpassenger = new Dictionary<Guid, Passenger>();
 
-                    using (SqlCommand cmd = new SqlCommand(_getPassengers, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getPassengers, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@carpoolId", carpool.CarpoolId);
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -283,7 +270,7 @@ namespace Zealand_Carpool.Services
                         
                         
                     }
-                }
+                
             });
             return task;
         }
@@ -292,11 +279,8 @@ namespace Zealand_Carpool.Services
         {
             Task<bool> task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
-
-                    using (SqlCommand cmd = new SqlCommand(_updatePassenger, conn))
+         
+                    using (SqlCommand cmd = new SqlCommand(_updatePassenger, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@CarpoolId", carpoolId);
                         cmd.Parameters.AddWithValue("@UserId", userId);
@@ -311,7 +295,7 @@ namespace Zealand_Carpool.Services
                         return false;
                         throw new InvalidOperationException("Der blev ikke updateret passager id: " +userId+ " carpool id: " + carpoolId);
                     }
-                }
+                
             });
 
             return task;
@@ -368,11 +352,9 @@ namespace Zealand_Carpool.Services
             {
                 Carpool carpool = new Carpool();
                 Dictionary<int, Carpool> carpools = new Dictionary<int, Carpool>();
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
+               
 
-                    using (SqlCommand cmd = new SqlCommand(_getAllCarpoolsSearch, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getAllCarpoolsSearch, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@theDate", date);
                         
@@ -388,7 +370,7 @@ namespace Zealand_Carpool.Services
 
                     }
 
-                    using (SqlCommand cmd = new SqlCommand(_getAllPassengers, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getAllPassengers, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@theDate", date);
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -407,7 +389,7 @@ namespace Zealand_Carpool.Services
                             }
                         }
                     }
-                }
+                
 
 
                 return carpools;
@@ -421,11 +403,10 @@ namespace Zealand_Carpool.Services
             {
                 Carpool carpool = new Carpool();
                 Dictionary<int, Carpool> carpools = new Dictionary<int, Carpool>();
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
+                
+                    
 
-                    using (SqlCommand cmd = new SqlCommand(_getAllUserCarpools, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getAllUserCarpools, DatabaseCon.Instance.SqlConnection()))
                     {
                         
                         
@@ -441,7 +422,7 @@ namespace Zealand_Carpool.Services
 
                     }
 
-                    using (SqlCommand cmd = new SqlCommand(_getAllUserPassengers, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getAllUserPassengers, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@user", userId);
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -460,7 +441,7 @@ namespace Zealand_Carpool.Services
                             }
                         }
                     }
-                }
+                
 
 
                 return carpools;
@@ -476,11 +457,10 @@ namespace Zealand_Carpool.Services
             {
                 Carpool carpool = new Carpool();
                 Dictionary<int,Carpool> carpools = new Dictionary<int, Carpool>();
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
+                
+                  
 
-                    using (SqlCommand cmd = new SqlCommand(_getAllCarpools, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getAllCarpools, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@theDate", date);
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -495,7 +475,7 @@ namespace Zealand_Carpool.Services
 
                     }
 
-                    using (SqlCommand cmd = new SqlCommand(_getAllPassengers, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getAllPassengers, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@theDate", date);
                         SqlDataReader reader = cmd.ExecuteReader();
@@ -514,7 +494,7 @@ namespace Zealand_Carpool.Services
                             }
                         }
                     }
-                }
+                
                 
                 
                 return carpools;
