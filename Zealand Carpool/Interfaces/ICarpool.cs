@@ -20,14 +20,13 @@ namespace Zealand_Carpool.Interfaces
         Task<Dictionary<int,Carpool>> GetAllCarpools(DateTime date,string search);
         Task<Dictionary<int, Carpool>> GetAllCarpools(Guid userId);
         Task<Dictionary<int,Carpool>> GetAllCarpools(DateTime date);
+        Task<Dictionary<int, Carpool>> GetAllCarpoolsAdmin(DateTime date, string search);
         Task<bool> DeleteCarpool(int id);
         Task<Dictionary<Guid,Passenger>> GetPassengers(Carpool carpool);
-        
+        Task<Dictionary<Guid, Passenger>> GetPassengersAdmin(string search);
         Task<bool> AddPassenger(User user, Carpool carpool);
         Task<bool> DeletePassenger(User user, Carpool carpool);
         Task<bool> UpdatePassenger(Guid userId, int carpoolId);
-
-
         Carpool MakeCarpool(SqlDataReader sqlReader);
     }
 }

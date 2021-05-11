@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Zealand_Carpool.Models
 {
     /// <summary>
-    /// A Singleton class to which a Database connection is made
+    /// A Singleton class to which a Database connection is made and opened
     /// made by Andreas
     /// </summary>
     public class DatabaseCon

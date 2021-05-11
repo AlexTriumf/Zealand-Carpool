@@ -10,9 +10,13 @@ using System.Linq;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
+    /// <summary>
+    /// A PageModel to see all the users carpools and to which the user is passenger to
+    /// Made by Andreas
+    /// </summary>
     public class UserCarpoolsModel : Shared.ProtectedPage
     {
-        [BindProperty]
+        
         public IEnumerable<KeyValuePair<int,Carpool>> Carpools { get; set; }
         [BindProperty]
         public User LoggedInUser { get; set; }

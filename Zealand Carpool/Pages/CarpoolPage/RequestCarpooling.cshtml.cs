@@ -9,6 +9,10 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.CarpoolPage
 {
+    /// <summary>
+    /// A PageModel to see the specific carpool
+    /// Made by Andreas
+    /// </summary>
     public class RequestCarpoolingModel : Shared.ProtectedPageRouting
     {
         [BindProperty]

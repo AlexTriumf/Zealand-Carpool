@@ -12,6 +12,10 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.LoginPage
 {
+    /// <summary>
+    /// A PageModel to login
+    /// Made by Andreas
+    /// </summary>
     public class LoginModel : PageModel
     {
         IUser _userInterface;

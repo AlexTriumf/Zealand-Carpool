@@ -1,5 +1,5 @@
 ﻿@page
-@{@using System.Globalization
+@{ 
 @model Zealand_Carpool.Pages.CarpoolPage.CarpoolsModel
 }
 
@@ -25,6 +25,11 @@
 
         </form>
     </div> <br />
+    @if (Model.AllCarpools.Count == 0) 
+    {
+        <h4 class="text-center">Der er ikke nogen carpools med din søgning</h4>
+        <h5 class="text-center">Indtast en adresse / bynavn / Afdellings navn og derfra vælg fra et bestemt tidpunkt og tryk søg</h5>
+    }
 
     @foreach (Models.Carpool carpool in Model.AllCarpools.Values)
     {

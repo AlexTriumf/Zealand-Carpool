@@ -10,6 +10,10 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.LoginPage
 {
+    /// <summary>
+    /// A PageModel to update the user
+    /// Made by Andreas
+    /// </summary>
     public class UpdateUserModel : PageModel
     {
         [BindProperty(SupportsGet = true)]

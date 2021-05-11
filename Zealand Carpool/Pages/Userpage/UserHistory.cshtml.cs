@@ -9,6 +9,10 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
+    /// <summary>
+    /// A PageModel to see all the carpools the user has been in or made
+    /// Made by Andreas
+    /// </summary>
     public class UserHistoryModel : Shared.ProtectedPage
     {
         [BindProperty]

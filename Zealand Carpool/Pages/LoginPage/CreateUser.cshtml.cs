@@ -10,6 +10,10 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.LoginPage
 {
+    /// <summary>
+    /// A PageModel to create a user
+    /// Made by Andreas
+    /// </summary>
     public class CreateUserModel : PageModel
     {
         [BindProperty]

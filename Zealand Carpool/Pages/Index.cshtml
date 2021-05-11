@@ -4,19 +4,38 @@
     ViewData["Title"] = "Home page";
 }
 <head>
-<link rel="stylesheet" href="~/css/Index.css" />
+    <link rel="stylesheet" href="~/css/Index.css" />
 </head>
 
 <div id="Image1">
     <div class="container">
-                <h2 class="text-center">Velkommen til <br /> <b id="LogoT">Zealand - Carpool</b> </h2>
-                <h6 class="text-center"><i>Du er ikke logget ind, tryk på knappen nedunder for at logge ind</i></h6>
-                <div class="text-center">
-                    <button id="myModalBtn" class="btn" hidden data-toggle="modal" data-target="#myModal"><i class="button alert-info"></i></button>
-                    <a class="btn bg-success" id="LogBut"type="button" asp-page="/LoginPage/Login">Login</a>
-                </div>
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <h2 class="text-center">Velkommen til <br /> <b id="LogoT">Zealand - Carpool</b> </h2>
+            <h6 class="text-center"><i>Du er ikke logget ind, tryk på knappen nedunder for at logge ind</i></h6>
+            <div class="text-center">
+                <button id="myModalBtn" class="btn" hidden data-toggle="modal" data-target="#myModal"><i class="button alert-info"></i></button>
+                <a class="btn bg-success" id="LogBut" type="button" asp-page="/LoginPage/Login">Login</a>
             </div>
-            
-    
-    
+        } else
+        {
+
+        <h2 class="text-center">Velkommen til <br /> <b id="LogoT">Zealand - Carpool</b> </h2>
+        <div class="row">
+            <div class="col">
+
+        <a class="btn bg-success" id="LogBut" type="button" asp-page="/UserPage/UserCarpools">Se dine Carpool</a>
+            </div> 
+            <div class="col">
+                <a class="btn bg-success" id="LogBut" type="button" asp-page="/CarpoolPage/Carpools">Se nuværende Carpools</a>
+            </div>
+            <div class="col">
+                <a class="btn bg-success" id="LogBut" type="button" asp-page="/CarpoolPage/OfferCarpool">Opret en Carpool</a>
+            </div>
+        </div>
+        }
+
+    </div>
+
+
 </div>

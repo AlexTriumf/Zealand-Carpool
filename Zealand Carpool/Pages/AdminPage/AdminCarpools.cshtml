@@ -1,0 +1,98 @@
+﻿@page
+@model Zealand_Carpool.Pages.AdminPage.AdminCarpoolsModel
+@{
+}
+
+<div class="container">
+
+    <div class="text-center">
+        <form method="post" class="row">
+
+            <div class="col-auto">
+                <label>Søg</label>
+            </div>
+            <div class="col">
+
+                <input type="text" asp-for="@Model.Search" class="form-control" placeholder="Søg i Afdeling eller Adresse (skal udfyldes)">
+
+            </div>
+            <div class="col">
+                <input asp-for="@Model.Date" class="form-control" />
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">Søg</button>
+            </div>
+
+        </form>
+    </div> <br />
+    <h6 class="text-center">Der kom @(Model.AllCarpools.Count+Model.AllPassengers.Count) Resultater op</h6>
+
+    @if (Model.AllCarpools.Count == 0 && Model.AllPassengers.Count == 0)
+    {
+        <h4 class="text-center">Der er ikke nogen carpools med din søgning, indtast uden mellemrum</h4>
+        <h5 class="text-center">Indtast en adresse / bynavn / Afdellings navn / postnummer / Bruger ID / Brugens hele navn og derfra vælg fra et bestemt tidpunkt og tryk søg</h5>
+    }
+
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Carpoolens ID</th>
+                <th scope="col">Chaufførens ID</th>
+                <th scope="col">Chaufførens navn</th>
+                <th scope="col">Carpoolens start Adresse</th>
+                <th scope="col">Carpoolens Detaljer</th>
+                <th scope="col">Carpoolens Passagersæder</th>
+                <th scope="col">Carpoolens kørsel Til Afdeling</th>
+                <th scope="col">Carpoolens Passagers ID'er</th>
+                <th scope="col">Gå til carpool</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Models.Carpool carpool in Model.AllCarpools.Values)
+            {
+                <tr>
+                    <th scope="row">@carpool.CarpoolId</th>
+                    <td>@carpool.Driver.Id</td>
+                    <td>@carpool.Driver.Name @carpool.Driver.Surname</td>
+                    <td>@carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber, @carpool.Driver.AddressList[0].CityName @carpool.Driver.AddressList[0].Postalcode</td>
+                    <td>@carpool.Details</td>
+                    <td>@carpool.PassengerSeats</td>
+                    <td>@carpool.Branch.BranchName @carpool.Branch.BranchPostalCode</td>
+                    <td>
+                        @foreach (Models.Passenger passenger in carpool.Passengerlist.Values)
+                        {<p> PassagerID:@passenger.User.Id, </p>}
+                    </td>
+                    <td><a class="btn btn-info" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.CarpoolId">Gå til Carpool</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Carpoolens ID</th>
+                <th scope="col">Bruger ID</th>
+                <th scope="col">Bruger navn</th>
+                <th scope="col">Blev accepteret</th>
+                <th scope="col">Gå til carpool</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Models.Passenger passenger1 in Model.AllPassengers.Values)
+            {
+                <tr>
+                    <th scope="row">@passenger1.Carpool.CarpoolId</th>
+                    <td>@passenger1.User.Id</td>
+                    <td>@passenger1.User.Name @passenger1.User.Surname</td>
+                    <td>@passenger1.IsAccepted</td>   
+                    <td><a class="btn btn-info" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@passenger1.Carpool.CarpoolId">Gå til Carpool</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+

@@ -9,6 +9,10 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.CarpoolPage
 {
+    /// <summary>
+    /// The PageModel to see all carpools
+    /// Made by Andreas
+    /// </summary>
     public class CarpoolsModel : PageModel
     {
         

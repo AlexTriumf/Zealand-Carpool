@@ -52,7 +52,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label class="form-text">Postnummer</label>
-                            <select name="PostalCode" asp-for="@Model.PostalCode" asp-items="@Model.PostalCodes"></select>
+                            <select class="form-control" name="PostalCode" asp-for="@Model.PostalCode" asp-items="@Model.PostalCodes"></select>
                                 <span asp-validation-for="@Model.Address1.Postalcode" class="text-danger"></span>
                         </div>
                     </div>

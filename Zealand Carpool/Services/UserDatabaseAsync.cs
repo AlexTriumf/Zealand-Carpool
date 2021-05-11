@@ -47,6 +47,11 @@ namespace Zealand_Carpool.Services
 
         string _getAllPostalCodes = "SELECT * FROM PostalCode";
         
+        /// <summary>
+        /// Add a user to the datebase
+        /// </summary>
+        /// <param name="user">a User object</param>
+        /// <returns>A boolean if the user is added correctly to the database</returns>
         public Task<bool> AddUser(User user)
         {
 
@@ -90,8 +95,12 @@ namespace Zealand_Carpool.Services
             return Task.FromResult(task.IsCompletedSuccessfully);
         }
 
-       
 
+        /// <summary>
+        /// remove a user from the database
+        /// </summary>
+        /// <param name="id">A Guid</param>
+        /// <returns>A boolean if the user is removed correctly from the database</returns>
         public Task<bool> DeleteUser(Guid id)
         {
 
@@ -113,7 +122,11 @@ namespace Zealand_Carpool.Services
             
             return task;
         }
-
+        /// <summary>
+        /// Get a user from its ID 
+        /// </summary>
+        /// <param name="id">Guid</param>
+        /// <returns>An User object</returns>
         public Task<User> GetUser(Guid id)
         {
             User user = new User();
@@ -136,7 +149,13 @@ namespace Zealand_Carpool.Services
             return task;
         }
 
-        //getting less data to only get that users id
+        /// <summary>
+        /// Get a user from it's email and password
+        /// getting less data to only get that users id
+        /// </summary>
+        /// <param name="email">string</param>
+        /// <param name="password">string</param>
+        /// <returns>An User object, only ID</returns>
         public Task<User> GetUserID(string email, string password)
         {
             Task<User> task = Task.Run(() =>
@@ -162,6 +181,12 @@ namespace Zealand_Carpool.Services
 
             return task;
         }
+        /// <summary>
+        /// Get a user from email and password
+        /// </summary>
+        /// <param name="email">string</param>
+        /// <param name="password">string</param>
+        /// <returns>An User object</returns>
         public Task<User> GetUser(string email, string password)
         {
             
@@ -187,7 +212,11 @@ namespace Zealand_Carpool.Services
             
             return task;
         }
-
+        /// <summary>
+        /// Makes a user object
+        /// </summary>
+        /// <param name="sqlReader">SqlDataReader</param>
+        /// <returns>An User object</returns>
         public User MakeUser(SqlDataReader sqlReader)
         {
             User user = new User();
@@ -215,6 +244,12 @@ namespace Zealand_Carpool.Services
             return user;
         }
 
+        /// <summary>
+        /// Updates user in the database
+        /// </summary>
+        /// <param name="id">Guid</param>
+        /// <param name="user">User</param>
+        /// <returns>A boolean if the user is updated correctly from the database</returns>
         public Task<bool> UpdateUser(Guid id, User user)
         {
             Task task = Task.Run(async () =>
@@ -255,31 +290,39 @@ namespace Zealand_Carpool.Services
             return Task.FromResult(task.IsCompletedSuccessfully);
         }
 
-        public Task<Dictionary<Guid,User>> GetAllUsers()
+        /// <summary>
+        /// Get all users from the database
+        /// </summary>
+        /// <returns>A Task, that contains a Dictionary of key: Guid and values: User</returns>
+        public Task<Dictionary<Guid, User>> GetAllUsers()
         {
             Task<Dictionary<Guid, User>> task = Task.Run(() =>
             {
                 Dictionary<Guid, User> dicOfUsers = new Dictionary<Guid, User>();
-                
-                    
-                    using (SqlCommand cmd = new SqlCommand(_getAllUsers, DatabaseCon.Instance.SqlConnection()))
-                    {
-                        SqlDataReader reader = cmd.ExecuteReader();
-                        while (reader.Read())
-                        {
-                            User user = MakeUser(reader);
-                            dicOfUsers.Add(user.Id, user);
 
-                        }
-                        return dicOfUsers;
-                        
+
+                using (SqlCommand cmd = new SqlCommand(_getAllUsers, DatabaseCon.Instance.SqlConnection()))
+                {
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        User user = MakeUser(reader);
+                        dicOfUsers.Add(user.Id, user);
+
                     }
-                
+                    return dicOfUsers;
+
+                }
+
             });
 
             return task;
         }
 
+        /// <summary>
+        /// Get all postal codes that is in the database
+        /// </summary>
+        /// <returns>A task that contain a list of object Branches</returns>
         public Task<List<Branch>> GetAllPostalCodes()
         {
             Task<List<Branch>> task = Task.Run(() =>

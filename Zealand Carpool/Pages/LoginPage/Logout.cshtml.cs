@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Zealand_Carpool.Pages.LoginPage
 {
+    /// <summary>
+    /// A Pagemodel to logout
+    /// Made by Andreas
+    /// </summary>
     public class LogoutModel : PageModel
     {
         public IActionResult OnGet()

@@ -301,7 +301,42 @@ namespace Zealand_Carpool.Services
             return task;
         }
 
-        
+
+        public Task<Dictionary<Guid, Passenger>> GetPassengersAdmin(string search)
+        {
+            Task<Dictionary<Guid, Passenger>> task = Task.Run(() =>
+            {
+                //doing this because of '%@search%' can't compile
+                string _getAllPassengersAdmin = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, Passengers.CarpoolId, Passengers.Request FROM Passengers INNER JOIN UserTable on UserTable.UserId = Passengers.UserId" +
+                    " WHERE Passengers.UserId Like '%" + search + "%' OR Passengers.CarpoolId Like '%" + search + "%' OR UserTable.Name Like '%" + search + "%' OR UserTable.Surname Like '%" + search + "%'";
+                Dictionary<Guid, Passenger> listOfpassenger = new Dictionary<Guid, Passenger>();
+
+                using (SqlCommand cmd = new SqlCommand(_getAllPassengersAdmin, DatabaseCon.Instance.SqlConnection()))
+                {
+                    
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Passenger passenger = new Passenger();
+                        passenger.Carpool = new Carpool();
+                        passenger.User = new User();
+                        passenger.User.Id = reader.GetGuid(0);
+                        passenger.User.Name = reader.GetString(1);
+                        passenger.User.Surname = reader.GetString(2);
+                        passenger.Carpool.CarpoolId = reader.GetInt32(3);
+                        passenger.IsAccepted = reader.GetBoolean(4);
+                        listOfpassenger.Add(passenger.User.Id, passenger);
+                    }
+                    return listOfpassenger;
+
+
+                }
+
+            });
+            return task;
+        }
+
         public Carpool MakeCarpool(SqlDataReader sqlReader)
         {
             Carpool carpool1 = new Carpool();
@@ -395,6 +430,68 @@ namespace Zealand_Carpool.Services
                 return carpools;
             }); return task;
             
+        }
+
+        public Task<Dictionary<int, Carpool>> GetAllCarpoolsAdmin(DateTime date, string search)
+        {
+            // I'm doing this because the parameter can't take %@search%
+            string _getAllCarpoolsSearch = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
+                        "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
+                        "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName,Carpool.Detail FROM UserTable " +
+                        "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
+                        "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
+                        "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
+                        "inner join Branch on Carpool.Branch = Branch.BranchId " +
+                        "WHERE Carpool.Date > @theDate and (Branch.BranchName Like '%" + search + "%' OR AddressList.StreetName Like '%" + search + "%' OR PostalCode.City Like '" + search + "' OR " +
+                        "AddressList.PostalCode Like '%" + search + "%' OR UserTable.UserId Like '%" + search + "%' OR UserTable.Name Like '%" + search + "%')";
+
+            
+
+        Task<Dictionary<int, Carpool>> task = Task.Run(() =>
+            {
+                Carpool carpool = new Carpool();
+                Dictionary<int, Carpool> carpools = new Dictionary<int, Carpool>();
+
+
+                using (SqlCommand cmd = new SqlCommand(_getAllCarpoolsSearch, DatabaseCon.Instance.SqlConnection()))
+                {
+                    cmd.Parameters.AddWithValue("@theDate", date);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        carpool = MakeCarpool(reader);
+                        carpools.Add(carpool.CarpoolId, carpool);
+                    }
+                    cmd.Dispose();
+                    reader.Close();
+
+                }
+
+                using (SqlCommand cmd = new SqlCommand(_getAllPassengers, DatabaseCon.Instance.SqlConnection()))
+                {
+                    cmd.Parameters.AddWithValue("@theDate", date);
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        Passenger passenger = new Passenger();
+                        passenger.Carpool = new Carpool();
+                        passenger.Carpool.CarpoolId = reader.GetInt32(0);
+                        passenger.User = new User();
+                        passenger.User.Id = reader.GetGuid(1);
+                        passenger.IsAccepted = reader.GetBoolean(2);
+                        if (carpools.ContainsKey(passenger.Carpool.CarpoolId))
+                        {
+                            carpools[passenger.Carpool.CarpoolId].Passengerlist.Add(passenger.User.Id, passenger);
+                        }
+                    }
+                }
+
+                return carpools;
+            }); return task;
+
         }
 
         public Task<Dictionary<int, Carpool>> GetAllCarpools(Guid userId)

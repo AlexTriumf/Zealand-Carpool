@@ -50,7 +50,7 @@
                         <div class="card-body">
                             <h5 class="card-title">@Model.Passengers[i].User.Name @Model.Passengers[i].User.Surname</h5>
                             <p class="card-text">Bor: @Model.Passengers[i].User.AddressList[0].StreetName @Model.Passengers[@i].User.AddressList[0].StreetNumber, @Model.Passengers[i].User.AddressList[0].Postalcode @Model.Passengers[i].User.AddressList[0].CityName</p>
-                            <a asp-page="/Userpage/UserProfile" asp-route-id="@Model.Passengers[i].User.Id" class="card-link">Tryk her for detaljer</a>
+                            <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@Model.Passengers[i].User.Id" class="card-link">Tryk her for detaljer</a>
                             @if (Model.Carpool.Passengerlist.ContainsKey(Model.LoggedInUser.Id) && Model.LoggedInUser.Id == Model.Passengers[i].User.Id)
                             {
                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal1">

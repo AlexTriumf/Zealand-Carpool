@@ -11,6 +11,10 @@ using Zealand_Carpool.Services;
 
 namespace Zealand_Carpool.Pages.CarpoolPage
 {
+    /// <summary>
+    /// A PageModel to add a carpool
+    /// Made by Andreas
+    /// </summary>
     public class OfferCarpoolModel : Shared.ProtectedPage
     {
         [BindProperty(SupportsGet = true)]
