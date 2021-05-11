@@ -17,7 +17,7 @@ namespace Zealand_Carpool.Services
         private const String RemoveComment = "delete from Comments where Id = @ID";
 
         private const String GetCommentString = "SELECT Comments.Id, Comments.UserPostID , Comments.Content, Comments.UserID, FROM Comments WHERE Comments.Id = @Id";
-        private const String GetCommentsString = "select * from Comments where UserID = @UserID";
+        private const String GetCommentsString = "select * from Comments where UserID = @UserID ORDER BY Id DESC";
 
         public void AddComment(Comment comment)
         {
