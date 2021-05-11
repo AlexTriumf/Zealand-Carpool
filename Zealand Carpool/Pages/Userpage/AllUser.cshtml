@@ -18,7 +18,7 @@
                 <img class="card-img-top" src="img/img_avatar1.png" alt="Card image"/>
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@Convert.ToString(user.Id)">
+                        <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@user.Id">
                             @user.Name @user.Surname
                         </a>
                     </h4>
