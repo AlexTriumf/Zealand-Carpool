@@ -16,6 +16,7 @@
             background: whitesmoke;
             padding: 10px;
             width: 250px;
+            height: 120px;
         }
     </style>
 <div class="container">
@@ -40,13 +41,10 @@
                 <p>@comment.Text</p>
                 @if (comment.UserPostID.Id.Equals(Model.LoggedInUser.Id))
                 {
-                    <form asp-page-handler="edit" method="post">
-                        <button type="submit" class="btn btn-primary">Rediger</button>
-                    </form>
                     <form asp-page-handler="delete" method="post">
                         <input type="hidden" asp-for="@comment.Id" />
                         <input type="hidden" asp-for="@comment.UserID.Id" />
-                        <button type="submit" class="btn btn-primary"> Slet</button>
+                        <button type="submit" class="btn btn-link btn-sm float-right">Slet</button>
                     </form>
                 }
                 
