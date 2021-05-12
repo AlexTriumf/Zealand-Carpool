@@ -57,5 +57,11 @@ namespace Zealand_Carpool.Pages.Userpage
             commentInterface.DeleteComment(Comment.Id);
             return RedirectToPage("/Userpage/VisitUsersProfile", UsersProfile.Id);
         }
+
+        public IActionResult OnPostDeleteUser(Guid id)
+        {
+            userInterface.DeleteUser(id);
+            return RedirectToPage("/AllUser");
+        }
     }
 }

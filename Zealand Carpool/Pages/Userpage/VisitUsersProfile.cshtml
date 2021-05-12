@@ -7,6 +7,34 @@
 <div class="container">
     <h3>Velkommen til @Model.UsersProfile.Name @Model.UsersProfile.Surname profil</h3> <br/>
     <p>Telefonnummer: @Model.UsersProfile.Phonenumber</p>
+    @if (Model.LoggedInUser.UserType == UserType.Admin)
+    {
+<form asp-page-handler="DeleteUser" method="post">
+    <div class="form-group">
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Slet bruger</button>
+
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Bekræft slet bruger</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Er du sikker på at du vil slette denne bruger?</p>
+                        <p>Når du har bekræftet valget er det ikke muligt at få brugeren tilbage igen</p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" asp-for="@Model.UsersProfile.Id" />
+                        <button type="submit" class="btn btn-danger">Bekræft</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Anuller</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+    }
 </div>
     <style>
         div.comment {
@@ -39,7 +67,7 @@
             <div class="comment">
                 <a asp-page="VisitUsersProfile" asp-route-id="@comment.UserPostID.Id">@comment.UserPostID.Name @comment.UserPostID.Surname</a>
                 <p>@comment.Text</p>
-                @if (comment.UserPostID.Id.Equals(Model.LoggedInUser.Id))
+                @if (comment.UserPostID.Id.Equals(Model.LoggedInUser.Id) || Model.LoggedInUser.UserType == UserType.Admin)
                 {
                     <form asp-page-handler="delete" method="post">
                         <input type="hidden" asp-for="@comment.Id" />
