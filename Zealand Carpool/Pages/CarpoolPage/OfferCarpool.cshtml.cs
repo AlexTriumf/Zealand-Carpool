@@ -41,8 +41,6 @@ namespace Zealand_Carpool.Pages.CarpoolPage
                 Branches = new SelectList(allBranches,nameof(Branch.BranchId),nameof(Branch.BranchName));
                 
                 return Page();
-            
-           
         }
         public IActionResult OnPost()
         {
@@ -52,7 +50,13 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             }
             Carpool.Branch = new Branch();
             Carpool.Branch.BranchId = BranchId;
+            try
+            {
             _carpoolInterface.AddCarpool(Carpool);
+            } catch (InvalidOperationException ex)
+            {
+                return RedirectToPage("/Error");
+            }
             
             return RedirectToPage("/UserPage/UserCarpools");
         }

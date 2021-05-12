@@ -55,9 +55,9 @@ namespace Zealand_Carpool.Services
         public Task<bool> AddUser(User user)
         {
 
-            Task task = Task.Run(async () => {
-                
-                    
+            Task<bool> task = Task.Run(async () => {
+
+                int rows;
                     using (SqlCommand cmd = new SqlCommand(_createUser, DatabaseCon.Instance.SqlConnection()))
                     {
 
@@ -67,7 +67,11 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@Phonenumber", user.Phonenumber);
                         cmd.Parameters.AddWithValue("@UserType", user.UserType);
                         cmd.Parameters.AddWithValue("@Password", user.Password);
-                        cmd.ExecuteNonQuery();
+                        rows = cmd.ExecuteNonQuery();
+                    if (rows == 0)
+                    {
+                        return false;
+                    }
                     }
 
                     Task<User> task1 = GetUserID(user.Email, user.Password);
@@ -87,12 +91,17 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@PostalCode", user.AddressList[0].Postalcode);
                         cmd.Parameters.AddWithValue("@lat", user.AddressList[0].Latitude);
                         cmd.Parameters.AddWithValue("@long", user.AddressList[0].Longtitude);
-                        cmd.ExecuteNonQuery();
+                        rows = cmd.ExecuteNonQuery();
+                    if (rows == 0)
+                    {
+                        return false;
                     }
+                }
+                return true;
                 
             });
            
-            return Task.FromResult(task.IsCompletedSuccessfully);
+            return task;
         }
 
 
@@ -252,9 +261,9 @@ namespace Zealand_Carpool.Services
         /// <returns>A boolean if the user is updated correctly from the database</returns>
         public Task<bool> UpdateUser(Guid id, User user)
         {
-            Task task = Task.Run(async () =>
+            Task<bool> task = Task.Run(async () =>
             {
-                
+                int rows;
                     
                     using (SqlCommand cmd = new SqlCommand(_updateUser, DatabaseCon.Instance.SqlConnection()))
                     {
@@ -266,8 +275,11 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@usertype", user.UserType);
                         cmd.Parameters.AddWithValue("@password", user.Password);
 
-                        cmd.ExecuteNonQuery();
-
+                        rows = cmd.ExecuteNonQuery();
+                        if (rows == 0)
+                        {
+                            return false;
+                        }
                     }
                     using var client = new HttpClient();
                     var content = await client.GetStringAsync("https://maps.googleapis.com/maps/api/geocode/json?address=" + user.AddressList[0].StreetName + "+" + user.AddressList[0].StreetNumber + "+" + user.AddressList[0].Postalcode + "&key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho");
@@ -283,8 +295,12 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@postalcode", user.AddressList[0].Postalcode);
                         cmd.Parameters.AddWithValue("@lat", user.AddressList[0].Latitude);
                         cmd.Parameters.AddWithValue("@long", user.AddressList[0].Longtitude);
-                        cmd.ExecuteNonQuery();
-                    }
+                        rows = cmd.ExecuteNonQuery();
+                        if (rows == 0)
+                        {
+                            return false;
+                        }
+                    } return true;
                 
             });
             return Task.FromResult(task.IsCompletedSuccessfully);

@@ -13,7 +13,7 @@ using Zealand_Carpool.Services;
 /// </summary>
 namespace Zealand_Carpool.Services
 {
-    public class CarpoolDatabase : ICarpool
+    public class CarpoolDatabaseAsync : ICarpool
     {
         
         private string _addCarpool = "INSERT INTO Carpool (UserId, Branch, PassengerSeats, Date, Detail) " +
