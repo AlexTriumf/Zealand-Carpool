@@ -11,6 +11,7 @@ namespace Zealand_Carpool.Services
 {
     public class ChatDabase : IChat
     {
+        //lavet af Andreas ændret af Aleksandar
 
         string _connString =
             "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";

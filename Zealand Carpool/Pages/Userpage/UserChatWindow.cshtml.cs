@@ -10,6 +10,7 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
+    //Lavet af Aleksandar
     public class UserChatWindowModel : Shared.ProtectedPageRouting
     {
         [BindProperty]
