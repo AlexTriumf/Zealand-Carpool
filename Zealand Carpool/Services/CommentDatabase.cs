@@ -57,18 +57,24 @@ namespace Zealand_Carpool.Services
                     
                     while (reader.Read())
                     {
+
                         c.Id = reader.GetInt32(0);
-                        c.UserPostID = reader.GetFieldValue<User>(1);
+                        try
+                        {
+                            c.UserPostID = new UserDatabaseAsync().GetUser(reader.GetGuid(1)).Result;
+                        }
+                        catch (AggregateException)
+                        {
+                        }
+
                         c.Text = reader.GetString(2);
-                        c.UserID = reader.GetFieldValue<User>(3);
-   
-                    }
+                        c.UserID = new UserDatabaseAsync().GetUser(reader.GetGuid(3)).Result;
+
+                }
                     
                     return c;
                 }
 
-                throw new KeyNotFoundException("Der var ingen kommentarer med id = " + id);
-            
         }
 
         public List<Comment> getComments(Guid UserId)
@@ -82,7 +88,13 @@ namespace Zealand_Carpool.Services
                     {
                         Comment c = new Comment();
                         c.Id = reader.GetInt32(0);
+                    try
+                    {
                         c.UserPostID = new UserDatabaseAsync().GetUser(reader.GetGuid(1)).Result;
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
                         c.Text = reader.GetString(2);
                         c.UserID = new UserDatabaseAsync().GetUser(reader.GetGuid(3)).Result;
                         list.Add(c);

@@ -61,7 +61,7 @@ namespace Zealand_Carpool.Pages.Userpage
         public IActionResult OnPostDeleteUser(Guid id)
         {
             userInterface.DeleteUser(id);
-            return RedirectToPage("/AllUser");
+            return RedirectToPage("/Userpage/AllUser");
         }
     }
 }
