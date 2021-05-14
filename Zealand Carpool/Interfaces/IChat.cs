@@ -18,6 +18,6 @@ namespace Zealand_Carpool.Interfaces
         public Task<bool> HasAChat(Guid userone, Guid userTwo);
         public Task SendChat(ChatText chatText, int chatId);
         public Chat MakeChat(System.Data.SqlClient.SqlDataReader reader);
-        public Task<Chat> GetChatId(Guid userOne, Guid userTwo);
+        public Task<Chat> GetChatId(Guid userOne, Guid userTwo); //tilføjet af Aleksandar
     }
 }
