@@ -56,6 +56,7 @@ namespace Zealand_Carpool.Pages.Userpage
                 {
                     
                 _ichatter.AddChat(LoggedInUser.Id, User2.Id);
+                ChatTexts = _ichatter.GetChat(LoggedInUser.Id, User2.Id).Result;
                 }
 
                 Chat = _ichatter.GetChatId(LoggedInUser.Id, User2.Id).Result;

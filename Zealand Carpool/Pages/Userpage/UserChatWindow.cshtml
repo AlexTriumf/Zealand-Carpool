@@ -25,7 +25,7 @@
     
 <div class="mesgs">
     <div class="msg_history">
-
+        
         @foreach (ChatText chattexts in Model.ChatTexts.Where(u => u.user.Id == Model.User2.Id))
         {
             <div class="incoming_msg">
