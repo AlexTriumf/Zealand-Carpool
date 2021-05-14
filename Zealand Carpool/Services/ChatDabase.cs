@@ -66,6 +66,7 @@ namespace Zealand_Carpool.Services
                 }
 
             });
+            
             return task;
         }
 
@@ -115,7 +116,7 @@ namespace Zealand_Carpool.Services
                         reader.Close();
                     }
 
-
+                    
 
                     using (SqlCommand cmd = new SqlCommand(_getChatText, conn))
                     {

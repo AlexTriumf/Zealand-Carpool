@@ -54,12 +54,14 @@ namespace Zealand_Carpool.Pages.Userpage
                 }
                 else 
                 {
-                    
-                _ichatter.AddChat(LoggedInUser.Id, User2.Id);
-                ChatTexts = _ichatter.GetChat(LoggedInUser.Id, User2.Id).Result;
+                    _ichatter.AddChat(LoggedInUser.Id, User2.Id);
                 }
 
                 Chat = _ichatter.GetChatId(LoggedInUser.Id, User2.Id).Result;
+                if (ChatTexts == null)
+                {
+                return RedirectToPage("UserChatWindow", User2.Id);
+                }
                 return Page();
         }
 
