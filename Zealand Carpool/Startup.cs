@@ -32,7 +32,7 @@ namespace Zealand_Carpool
             });
             
             services.AddSingleton<Interfaces.IUser, Services.UserDatabaseAsync>();
-            services.AddSingleton<Interfaces.ICarpool, Services.CarpoolDatabase>();
+            services.AddSingleton<Interfaces.ICarpool, Services.CarpoolDatabaseAsync>();
             services.AddSingleton<Interfaces.IChat, Services.ChatDabase>();
             services.AddSingleton<Interfaces.IComment, Services.CommentDatabase>();
 

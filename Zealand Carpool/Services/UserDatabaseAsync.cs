@@ -48,6 +48,33 @@ namespace Zealand_Carpool.Services
         string _getAllPostalCodes = "SELECT * FROM PostalCode";
         
         /// <summary>
+        /// Checks if a user is already in the database 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>A boolean</returns>
+        public Task<bool> CheckUser(User user)
+        {
+            Task<bool> task = Task.Run(() => {
+                using (SqlCommand cmd = new SqlCommand(_getUserById, DatabaseCon.Instance.SqlConnection()))
+            {
+                
+                cmd.Parameters.AddWithValue("@Email", user.Email);
+                cmd.Parameters.AddWithValue("@Password", user.Password);
+                    SqlDataReader reader = cmd.ExecuteReader(); ;
+                    reader.ReadAsync();
+                if (reader.HasRows)
+                {
+                    return false;
+                }
+                else { return true; }
+            }
+            });
+            return task;
+        }
+
+
+
+        /// <summary>
         /// Add a user to the datebase
         /// </summary>
         /// <param name="user">a User object</param>
@@ -55,10 +82,11 @@ namespace Zealand_Carpool.Services
         public Task<bool> AddUser(User user)
         {
 
-            Task task = Task.Run(async () => {
+            Task<bool> task = Task.Run(async () => {
+
+                int rows;
                 
-                    
-                    using (SqlCommand cmd = new SqlCommand(_createUser, DatabaseCon.Instance.SqlConnection()))
+                using (SqlCommand cmd = new SqlCommand(_createUser, DatabaseCon.Instance.SqlConnection()))
                     {
 
                         cmd.Parameters.AddWithValue("@Name", user.Name);
@@ -67,7 +95,12 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@Phonenumber", user.Phonenumber);
                         cmd.Parameters.AddWithValue("@UserType", user.UserType);
                         cmd.Parameters.AddWithValue("@Password", user.Password);
-                        cmd.ExecuteNonQuery();
+                        rows = cmd.ExecuteNonQuery();
+                    if (rows == 0)
+                    {
+                        return false;
+                        throw new AggregateException("The User object was not valid");
+                    }
                     }
 
                     Task<User> task1 = GetUserID(user.Email, user.Password);
@@ -87,12 +120,18 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@PostalCode", user.AddressList[0].Postalcode);
                         cmd.Parameters.AddWithValue("@lat", user.AddressList[0].Latitude);
                         cmd.Parameters.AddWithValue("@long", user.AddressList[0].Longtitude);
-                        cmd.ExecuteNonQuery();
+                        rows = cmd.ExecuteNonQuery();
+                    if (rows == 0)
+                    {
+                        return false;
+                        throw new AggregateException("The Address object was not valid");
                     }
+                }
+                return true;
                 
             });
            
-            return Task.FromResult(task.IsCompletedSuccessfully);
+            return task;
         }
 
 
@@ -112,12 +151,13 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@ID", id);
 
                         int rows = cmd.ExecuteNonQuery();
-                        if (rows > 0) return true;
+                    if (rows == 0)
+                    {
+                        return false;
+                        throw new AggregateException("Der blev ikke slettet" + id.ToString());
+                    } return true;
                     }
-                    
-                
-                return false;
-                
+ 
             });
             
             return task;
@@ -131,14 +171,16 @@ namespace Zealand_Carpool.Services
         {
             User user = new User();
             Task<User> task = Task.Run(() => {
-                
-                    
                     using (SqlCommand cmd = new SqlCommand(_getUser, DatabaseCon.Instance.SqlConnection()))
                     {
                         User user = new User();
                         cmd.Parameters.AddWithValue("@id", id);
                         SqlDataReader reader = cmd.ExecuteReader();
-                        reader.Read();
+                        reader.ReadAsync();
+                        if (!reader.HasRows)
+                        {
+                        throw new InvalidOperationException("User not found");
+                        }
                         user = MakeUser(reader);
 
                         return user;
@@ -172,7 +214,7 @@ namespace Zealand_Carpool.Services
                         
                         while (reader.Read())
                         {
-                        user.Id = reader.GetGuid(0);
+                            user.Id = reader.GetGuid(0);
                         }
                         return user;
                     }
@@ -199,7 +241,7 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@email", email);
                         cmd.Parameters.AddWithValue("@password", password);
                         SqlDataReader reader = cmd.ExecuteReader();
-                        reader.Read();
+                        reader.ReadAsync();
                         if (!reader.HasRows)
                         {
                             return null;
@@ -252,9 +294,9 @@ namespace Zealand_Carpool.Services
         /// <returns>A boolean if the user is updated correctly from the database</returns>
         public Task<bool> UpdateUser(Guid id, User user)
         {
-            Task task = Task.Run(async () =>
+            Task<bool> task = Task.Run(async () =>
             {
-                
+                int rows;
                     
                     using (SqlCommand cmd = new SqlCommand(_updateUser, DatabaseCon.Instance.SqlConnection()))
                     {
@@ -266,8 +308,12 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@usertype", user.UserType);
                         cmd.Parameters.AddWithValue("@password", user.Password);
 
-                        cmd.ExecuteNonQuery();
-
+                        rows = cmd.ExecuteNonQuery();
+                        if (rows == 0)
+                        {
+                            return false;
+                        throw new AggregateException("The User object was not valid");
+                    }
                     }
                     using var client = new HttpClient();
                     var content = await client.GetStringAsync("https://maps.googleapis.com/maps/api/geocode/json?address=" + user.AddressList[0].StreetName + "+" + user.AddressList[0].StreetNumber + "+" + user.AddressList[0].Postalcode + "&key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho");
@@ -283,11 +329,16 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@postalcode", user.AddressList[0].Postalcode);
                         cmd.Parameters.AddWithValue("@lat", user.AddressList[0].Latitude);
                         cmd.Parameters.AddWithValue("@long", user.AddressList[0].Longtitude);
-                        cmd.ExecuteNonQuery();
+                        rows = cmd.ExecuteNonQuery();
+                        if (rows == 0)
+                        {
+                            return false;
+                        throw new AggregateException("The Address object was not valid");
                     }
+                    } return true;
                 
             });
-            return Task.FromResult(task.IsCompletedSuccessfully);
+            return task;
         }
 
         /// <summary>
@@ -368,10 +419,7 @@ namespace Zealand_Carpool.Services
         }
         public List<User> SearchUsers(string name)
         {
-            List<User> userList = new List<User>();
-
-            
-                
+            List<User> userList = new List<User>();    
                 using (SqlCommand cmd = new SqlCommand(NameSplitter(name), DatabaseCon.Instance.SqlConnection()))
                 {
                     SqlDataReader reader = cmd.ExecuteReader();

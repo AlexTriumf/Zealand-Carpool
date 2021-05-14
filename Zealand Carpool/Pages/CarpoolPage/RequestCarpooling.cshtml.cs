@@ -32,10 +32,21 @@ namespace Zealand_Carpool.Pages.CarpoolPage
 
         protected override IActionResult GetRequest(string id)
         {
+            if(id == "0")
+            {
+                return RedirectToPage("/CarpoolPage/Carpools");
+            }
             int theID = Convert.ToInt32(id);
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+            try
+            {
+
                 Carpool = _carpoolInterface.GetCarpool(theID).Result;
+            } catch (InvalidOperationException)
+            {
+                return RedirectToPage("/Error");
+            }
                 Carpool.Passengerlist = _carpoolInterface.GetPassengers(Carpool).Result;
                 
                 Passengers = new List<Passenger>();
@@ -52,32 +63,54 @@ namespace Zealand_Carpool.Pages.CarpoolPage
 
         public IActionResult OnPostRequestCarpool()
         {
+            try
+            {
             _carpoolInterface.AddPassenger(LoggedInUser,Carpool);
+            }
+            catch (AggregateException ex) { return RedirectToPage("/Error"); }
             return RedirectToPage("/CarpoolPage/RequestCarpooling", Carpool.CarpoolId);
         }
 
         public IActionResult OnPostDeleteCarpool()
         {
+            try
+            {
             _carpoolInterface.DeleteCarpool(Carpool.CarpoolId);
+            } catch (AggregateException ex)
+            {
+                return RedirectToPage("/Error");
+            }
             return RedirectToPage("/CarpoolPage/Carpools");
         }
 
         public IActionResult OnPostAcceptPas(string id)
         {
+            try
+            {
             _carpoolInterface.UpdatePassenger(Guid.Parse(id), Carpool.CarpoolId);
+            } catch (AggregateException ex)
+            {
+                return RedirectToPage("/Error");
+            }
             return RedirectToPage("/Userpage/UserCarpools");
         }
         public IActionResult OnPostDeletePasFromChau(string id)
         {
             User user = new User() { Id = Guid.Parse(id) };
-            
+            try
+            {
             _carpoolInterface.DeletePassenger(user, Carpool);
+            } catch (AggregateException ex) { return RedirectToPage("/Error"); }
             return RedirectToPage("/Userpage/UserCarpools");
         }
 
         public IActionResult OnPostDeletePas()
         {
+            try
+            {
             _carpoolInterface.DeletePassenger(LoggedInUser, Carpool);
+            }
+            catch (AggregateException ex) { return RedirectToPage("/Error"); }
             return RedirectToPage("/CarpoolPage/Carpools");
         }
 
