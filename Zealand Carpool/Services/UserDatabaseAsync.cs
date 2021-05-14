@@ -179,7 +179,7 @@ namespace Zealand_Carpool.Services
                         reader.ReadAsync();
                         if (!reader.HasRows)
                         {
-                        throw new InvalidOperationException("User not found");
+                        throw new AggregateException("User not found");
                         }
                         user = MakeUser(reader);
 
