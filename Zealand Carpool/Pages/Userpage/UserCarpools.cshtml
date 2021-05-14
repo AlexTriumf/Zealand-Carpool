@@ -24,17 +24,14 @@
                     {
                         <p><b>Der bliver kørt fra adreese:</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
                         <br />
-                        <p><b>Til Afdellingen i</b> @carpool.Value.Branch.BranchName</p>
+                        <p><b>Til Afdellingen i:</b> @carpool.Value.Branch.BranchName</p>
                     }
                     else
                     {
                         <p><b>Der bliver kørt fra Afdeling:</b> @carpool.Value.Branch.BranchName </p>
                         <br />
-                        <p><b>Til Adresse i</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
+                        <p><b>Til Adresse :</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
                     }
-                    <p><b>Der bliver kørt fra adreese:</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
-                    <br />
-                    <p><b>Til Afdellingen i</b> @carpool.Value.Branch.BranchName</p>
                     <br />
                     <p><b>Til Dato & tidspunkt:</b> @carpool.Value.Date.ToString()</p>
                     <br />
@@ -62,7 +59,7 @@
                     <br />
                     @if (carpool.Value.Driver.Id != Model.LoggedInUser.Id)
                     {
-                    <a class="btn btn-info" type="button" asp-page="/CarpoolPage/RequestCarpooling">Kontakt chauffør</a>
+                        <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@carpool.Value.Driver.Id" class="btn btn-info">Kontakt Chauffør</a>
                     }
                     <br />
                     <a class="btn btn-success" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.Value.CarpoolId">Gå til Carpool</a>

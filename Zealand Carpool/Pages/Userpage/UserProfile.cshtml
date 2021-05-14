@@ -30,14 +30,14 @@
             Hej @Model.LoggedInUser.Name @Model.LoggedInUser.Surname
 
             <br />
-            <p>ID: @Model.LoggedInUser.Id</p>
+            
             <p>Email: @Model.LoggedInUser.Email</p>
             <p>Telefonnummer: @Model.LoggedInUser.Phonenumber</p>
             <p>Bruger type: @Model.LoggedInUser.UserType.ToString()</p>
             @foreach (Models.Address address in Model.LoggedInUser.AddressList)
             {
                 <p>Adresse: @address.StreetName @address.StreetNumber , @address.CityName @address.Postalcode</p>
-                <p>@address.Longtitude og @address.Latitude</p>
+                
             }
             <p>Updater din bruger: <a class="btn bg-success" type="button" asp-page="/LoginPage/UpdateUser">Updater Bruger</a></p>
             <p>Se de carpools du har oprettet og været med til: 
@@ -75,30 +75,13 @@
             <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho&callback=InitializeMap" async defer></script>
         </div>
     </div>
-    <form method="post">
-        <div class="comment">
-            <div class="form-group">
-                <label for="ctxt">@Model.LoggedInUser.Name @Model.LoggedInUser.Surname</label>
-                <input asp-for="@Model.Comment.Text" id="ctxt" />
-                <input type="hidden" asp-for="@Model.LoggedInUser.Id" />
-                <br />
-                <button type="submit" class="btn btn-primary">Kommentér</button>
-            </div>
-        </div>
-    </form>
+   
     @foreach (var comment in Model.UserComments)
     {
         <div class="comment">
             <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@comment.UserPostID.Id">@comment.UserPostID.Name @comment.UserPostID.Surname</a>
             <p>@comment.Text</p>
-            @if (comment.UserPostID.Id.Equals(Model.LoggedInUser.Id))
-            {
-                <form asp-page-handler="delete" method="post">
-                    <input type="hidden" asp-for="@comment.Id" />
-                    <input type="hidden" asp-for="@comment.UserID.Id" />
-                    <button type="submit" class="btn btn-link btn-sm float-right">Slet</button>
-                </form>
-            }
+            
         </div>
     }
 </div>

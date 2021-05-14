@@ -19,14 +19,13 @@ namespace Zealand_Carpool.Pages.Userpage
         [BindProperty]
         public Comment Comment { get; set; }
 
-        private IComment commentInterface;
 
         [BindProperty]
         public User LoggedInUser { get; set; }
 
-        public User LoggedInUser2 { get; set; }
-        IUser userInterface;
         public List<Comment> UserComments { get; set; }
+        private IComment commentInterface;
+        IUser userInterface;
 
         public UserProfile(IUser iuser, IComment icomment)
         {
@@ -43,18 +42,5 @@ namespace Zealand_Carpool.Pages.Userpage
                 return Page();
         }
 
-        public IActionResult OnPost()
-        {
-                Comment.UserID = LoggedInUser;
-                Comment.UserPostID = LoggedInUser;
-
-                commentInterface.AddComment(Comment);
-            return RedirectToPage();
-        }
-        public IActionResult OnPostDelete()
-        {
-            commentInterface.DeleteComment(Comment.Id);
-            return RedirectToPage();
-        }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Zealand_Carpool.Pages.Shared;
 
 namespace Zealand_Carpool.Pages.LoginPage
 {
@@ -12,13 +13,11 @@ namespace Zealand_Carpool.Pages.LoginPage
     /// A Pagemodel to logout
     /// Made by Andreas
     /// </summary>
-    public class LogoutModel : PageModel
+    public class LogoutModel : ProtectedPage
     {
-        public IActionResult OnGet()
+        protected override IActionResult GetRequest()
         {
-            if (User.Identity.IsAuthenticated)
-            { return Page(); }
-            return RedirectToPage("/Index");
+            return Page();
         }
 
         public IActionResult OnPostLogout()

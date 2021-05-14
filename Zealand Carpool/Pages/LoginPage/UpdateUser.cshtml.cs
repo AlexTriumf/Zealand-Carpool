@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Zealand_Carpool.Interfaces;
 using Zealand_Carpool.Models;
+using Zealand_Carpool.Pages.Shared;
 
 namespace Zealand_Carpool.Pages.LoginPage
 {
@@ -14,7 +15,7 @@ namespace Zealand_Carpool.Pages.LoginPage
     /// A PageModel to update the user
     /// Made by Andreas
     /// </summary>
-    public class UpdateUserModel : PageModel
+    public class UpdateUserModel : ProtectedPage
     {
         [BindProperty(SupportsGet = true)]
         public User UpdateUser { get; set; }
@@ -31,22 +32,22 @@ namespace Zealand_Carpool.Pages.LoginPage
         {
             _userInterface = iuser;
         }
-        public async Task<IActionResult> OnGetAsync()
+        protected override IActionResult GetRequest()
         {
-            List<Branch> postals = await _userInterface.GetAllPostalCodes();
+            List<Branch> postals = _userInterface.GetAllPostalCodes().Result;
             PostalCodes = new SelectList(postals, nameof(Branch.BranchPostalCode), nameof(Branch.BranchPostalCode));
-            if (User.Identity.IsAuthenticated)
-            {
-                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+              List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 UpdateUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 return Page();
-            } else { return RedirectToPage("/Index"); }
+            
         }
 
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
             {
+                List<Branch> postals =  _userInterface.GetAllPostalCodes().Result;
+                PostalCodes = new SelectList(postals, nameof(Branch.BranchPostalCode), nameof(Branch.BranchPostalCode));
                 return Page();
             }
             UpdateUser.AddressList = new List<Address>();
