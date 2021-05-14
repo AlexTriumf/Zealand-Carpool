@@ -12,7 +12,7 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
-    public class UserChatSignalRModel : PageModel
+    public class UserChatSignalRModel : Shared.ProtectedPage
     {
         [BindProperty]
         public Chat chat { get; set; }
@@ -34,17 +34,15 @@ namespace Zealand_Carpool.Pages.Userpage
             _ichatter = ichat;
         }
 
-        public void OnGet()
+        protected override IActionResult GetRequest()
         {
             
-            if (User.Identity.IsAuthenticated)
-            {
                 AllUsers = _userInterface.GetAllUsers().Result;
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = new Services.UserDatabaseAsync().GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-            }
-            
-            }
+                return Page();
+
+        }
         
         public IActionResult OnPost()
         {
