@@ -31,7 +31,7 @@
                     <button type="submit" class="btn btn-primary mb-3">Ansøg om plads</button>
                 </form>
             }
-        <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@Model.Carpool.Driver.Id" class="btn btn-info">Kontakt Chauffør</a>
+        <a asp-page="/Userpage/UserChatWindow" asp-route-id="@Model.Carpool.Driver.Id" class="btn btn-info">Kontakt Chauffør</a>
             <span class="border-bottom"></span>
             @if (Model.LoggedInUser.Id == Model.Carpool.Driver.Id)
             {
