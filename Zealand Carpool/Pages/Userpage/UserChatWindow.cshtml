@@ -1,5 +1,7 @@
 ﻿@page "{Id}"
 @using Zealand_Carpool.Models
+@using System.Globalization
+@using Chat = Zealand_Carpool.Hub.Chat
 @model Zealand_Carpool.Pages.Userpage.UserChatWindowModel
 @{
 }
@@ -19,86 +21,117 @@
     <link rel="stylesheet" href="~/css/Chat.css" />
 </head>
 <body>
-<div class="container">
-    <div class="text-center">
-        <h4>Du skriver til @Model.User2.Name @Model.User2.Surname</h4>
-    </div>
-    <br />
-    @foreach (Models.ChatText chatTexts in Model.ChatTexts)
-    {
-        <div class="media">
-            <div class="media-body">
-                <h5 class="mt-0">@chatTexts.user.Name @chatTexts.user.Surname</h5>
-                @chatTexts.message
-            </div>
-        </div>
-    }
-
-</div>
+<h4>Du skriver med @Model.User2.Name @Model.User2.Surname</h4>
     
 <div class="mesgs">
-                <div class="msg_history">
-                    
-                        <div class="incoming_msg">
-                            <div class="incoming_msg_img"> <img src="/img/user-profile.png" alt="sunil"> </div>
-                       
-                            <div class="received_msg">
-                                <div class="received_withd_msg">
-                                    <p>
-                                      
-                                     
-                                    </p>
-                                    <span class="time_date"> 11:01 AM | June 9</span>
-                                </div>
-                            </div>
-                                      }
-                        </div>
-                    
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>
-                                Dette er en test besked
-                            </p>
-                            <span class="time_date"> 11:01 AM | June 9</span>
-                        </div>
-                    </div>
-                    <div class="incoming_msg">
-                        <div class="incoming_msg_img"> <img src="/img/user-profile.png" alt="sunil"> </div>
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>Dette er en test besked</p>
-                                <span class="time_date"> 11:01 AM | Yesterday</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>Dette er en test besked</p>
-                            <span class="time_date"> 11:01 AM | Today</span>
-                        </div>
-                    </div>
-                    <div class="incoming_msg">
-                        <div class="incoming_msg_img"> <img src="/img/user-profile.png" alt="sunil"> </div>
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>
-                                    Dette er en test besked
-                                </p>
-                                <span class="time_date"> 11:01 AM | Today</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="type_msg">
-                    <div class="input_msg_write">
-                        <input type="text" class="write_msg" placeholder="Skriv en besked.." />
-       
-                        <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+    <div class="msg_history">
+
+        @foreach (ChatText chattexts in Model.ChatTexts.Where(u => u.user.Id != Model.LoggedInUser.Id))
+        {
+            <div class="incoming_msg">
+                <div class="incoming_msg_img"> <img src="/img/user-profile.png" alt="sunil"> </div>
+
+                <div class="received_msg">
+                    <div class="received_withd_msg">
+                        <span class="time_date"> @chattexts.user.Name @chattexts.user.Surname</span>
+                        <p>
+                            @chattexts.message
+                        </p>
+                        <span class="time_date">@chattexts.TimeStamp</span>
                     </div>
                 </div>
             </div>
-<br/>
-<br />
-<br />
+        }
+        @foreach (ChatText chattexts in Model.ChatTexts.Where(u => u.user.Id == Model.LoggedInUser.Id))
+        {
+            <div class="outgoing_msg">
+                <div class="sent_msg">
+                    <span class="time_date"> @chattexts.user.Name @chattexts.user.Surname</span>
+                    <p>
+                        @chattexts.message
+                    </p>
+                    <span class="time_date"> @chattexts.TimeStamp</span>
+                </div>
+            </div>
+        }
+       
+
+    </div>
+<div class="type_msg">
+<form method="post">
+    <div class="input_msg_write">
+        <input asp-for="@Model.Chattxts.message" placeholder="Skriv en besked.."/>
+        <input type="hidden" asp-for="@Model.Chat.ChatId"/>
+
+
+        <button class="msg_send_btn" type="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+
+    </div>
+</form>
+       
+</div>
+
+</div>
+
+
+<script>
+    $(document).ready(function () {
+       
+        $('footer').empty();
+    });
+</script>
+
+    <container>
+        <head runat="server">
+            <title>Map</title>
+            <meta name="viewport" content="initial-scale=1.0">
+            <meta charset="utf-8">
+            <style>
+
+                #map {
+                    height: 400px;
+                    /*            width: 400px; */
+                    margin-left: 60%;
+                    /*margin-right: auto;*/
+                }
+            </style>
+        </head>
+        <body>
+            <div id="map"></div>
+
+            <script>
+        function InitializeMap() {
+
+            var latlng = new google.maps.LatLng(@Model.LoggedInUser.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @Model.LoggedInUser.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")));
+            var user2 = new google.maps.LatLng(@Model.User2.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @Model.User2.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")));
+            var myOptions = {
+                zoom: 7,
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            var map = new google.maps.Map(document.getElementById("map"), myOptions);
+
+            new google.maps.Marker({
+                position: latlng,
+                map,
+                title: "User1",
+            });
+
+            new google.maps.Marker({
+                position: user2,
+                map,
+                title: "User2",
+            });
+
+        }
+            </script>
+
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho&callback=InitializeMap" async defer></script>
+        </body>
+    </container> 
+    <br />
+    <br />
+    <br />
 
 </body>

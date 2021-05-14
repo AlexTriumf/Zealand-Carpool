@@ -1,0 +1,1 @@
+﻿Select * From Chat Where (UserOneId = '1ffc587e-5b8f-44dd-827b-a573328e853d' and UserTwoId = '159c8876-7e02-4446-a92e-990bddea035c') OR (UserTwoId = '1ffc587e-5b8f-44dd-827b-a573328e853d' and UserOneId = '159c8876-7e02-4446-a92e-990bddea035c')
