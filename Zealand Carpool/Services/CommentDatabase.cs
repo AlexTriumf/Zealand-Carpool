@@ -70,7 +70,7 @@ namespace Zealand_Carpool.Services
                         c.Text = reader.GetString(2);
                         c.UserID = new UserDatabaseAsync().GetUser(reader.GetGuid(3)).Result;
 
-                }
+                    }
                     
                     return c;
                 }
@@ -92,12 +92,17 @@ namespace Zealand_Carpool.Services
                     {
                         c.UserPostID = new UserDatabaseAsync().GetUser(reader.GetGuid(1)).Result;
                     }
-                    catch (InvalidOperationException)
+                    catch (AggregateException)
                     {
                     }
-                        c.Text = reader.GetString(2);
+
+                    if (c.UserPostID != null)
+                    {
+                       c.Text = reader.GetString(2);
                         c.UserID = new UserDatabaseAsync().GetUser(reader.GetGuid(3)).Result;
-                        list.Add(c);
+                        list.Add(c); 
+                    }
+                        
                     }
             }
                 
