@@ -31,6 +31,7 @@ namespace Zealand_Carpool.Services
 
 
                 cmd.ExecuteNonQuery();
+                DatabaseCon.Instance.SqlConnectionClose();
             }
         }
 
@@ -42,7 +43,8 @@ namespace Zealand_Carpool.Services
                     cmd.Parameters.AddWithValue("@ID", id);
                     int rows = cmd.ExecuteNonQuery();
                 }
-              
+                DatabaseCon.Instance.SqlConnectionClose();
+
         }
 
         public Comment GetComment(int id)
@@ -71,8 +73,8 @@ namespace Zealand_Carpool.Services
                         c.UserID = new UserDatabaseAsync().GetUser(reader.GetGuid(3)).Result;
 
                     }
-                    
-                    return c;
+                DatabaseCon.Instance.SqlConnectionClose();
+                return c;
                 }
 
         }
@@ -105,7 +107,7 @@ namespace Zealand_Carpool.Services
                         
                     }
             }
-                
+            DatabaseCon.Instance.SqlConnectionClose();
             return list;
         }
 

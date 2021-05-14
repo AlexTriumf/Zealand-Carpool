@@ -69,6 +69,7 @@ namespace Zealand_Carpool.Services
                 else { return true; }
             }
             });
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -143,7 +144,7 @@ namespace Zealand_Carpool.Services
                 return true;
                 
             });
-           
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -172,7 +173,7 @@ namespace Zealand_Carpool.Services
                     }
  
             });
-            
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
         /// <summary>
@@ -200,7 +201,7 @@ namespace Zealand_Carpool.Services
                     }
                 
             });
-            
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -233,7 +234,7 @@ namespace Zealand_Carpool.Services
                     }
                 
             });
-
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
         /// <summary>
@@ -264,7 +265,7 @@ namespace Zealand_Carpool.Services
                     }
                 
             });
-            
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
         /// <summary>
@@ -351,6 +352,8 @@ namespace Zealand_Carpool.Services
                     } return true;
                 
             });
+
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -379,7 +382,7 @@ namespace Zealand_Carpool.Services
                 }
 
             });
-
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -406,7 +409,7 @@ namespace Zealand_Carpool.Services
                     }
                 
             });
-
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
         //Written by Malte
@@ -443,8 +446,8 @@ namespace Zealand_Carpool.Services
                         userList.Add(GetUser(user.Id).Result);
                     }
                 }
-                
-            
+
+            DatabaseCon.Instance.SqlConnectionClose();
             return userList;
         }
     }

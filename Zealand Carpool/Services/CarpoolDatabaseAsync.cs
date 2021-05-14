@@ -116,7 +116,9 @@ namespace Zealand_Carpool.Services
                     }
                         return branches;
                 }
-            }); return task;
+            });
+            DatabaseCon.Instance.SqlConnectionClose();
+            return task;
         }
 
 
@@ -158,7 +160,9 @@ namespace Zealand_Carpool.Services
                         }
                     }
                  return carpool;
-            }); return task;
+            });
+            DatabaseCon.Instance.SqlConnectionClose();
+            return task;
         }
 
 
@@ -188,7 +192,7 @@ namespace Zealand_Carpool.Services
                     }
                 
             });
-
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -215,7 +219,7 @@ namespace Zealand_Carpool.Services
                     }
                 
             });
-
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -241,7 +245,7 @@ namespace Zealand_Carpool.Services
                 }
                 
             });
-
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -274,6 +278,7 @@ namespace Zealand_Carpool.Services
                     }
                 
             });
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -299,7 +304,7 @@ namespace Zealand_Carpool.Services
                     }
                 
             });
-
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -336,6 +341,7 @@ namespace Zealand_Carpool.Services
                 }
 
             });
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -431,7 +437,9 @@ namespace Zealand_Carpool.Services
 
 
                 return carpools;
-            }); return task;
+            });
+            DatabaseCon.Instance.SqlConnectionClose();
+            return task;
             
         }
 
@@ -493,7 +501,9 @@ namespace Zealand_Carpool.Services
                 }
 
                 return carpools;
-            }); return task;
+            });
+        DatabaseCon.Instance.SqlConnectionClose();
+            return task;
 
         }
 
@@ -545,7 +555,9 @@ namespace Zealand_Carpool.Services
 
 
                 return carpools;
-            }); return task;
+            });
+            DatabaseCon.Instance.SqlConnectionClose();
+            return task;
 
         }
 
@@ -598,7 +610,9 @@ namespace Zealand_Carpool.Services
                 
                 
                 return carpools;
-            }); return task;
+            });
+            DatabaseCon.Instance.SqlConnectionClose();
+            return task;
         }
 
        
