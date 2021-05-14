@@ -78,12 +78,12 @@ namespace Zealand_Carpool.Services
                         
                         int rowsAffected = cmd.ExecuteNonQuery();
                         
-                        if (rowsAffected == 1)
+                        if (rowsAffected == 0)
                         {
-                            return true;
+                            return false;
+                            throw new AggregateException("Der blev ikke tilføjet carpool, brugerID: " + carpool.Driver.Id);
                         }
-                        return false;
-                        throw new InvalidOperationException("Der blev ikke tilføjet carpool, brugerID: " + carpool.Driver.Id);
+                        return true;
                     }
                 
             
@@ -118,7 +118,7 @@ namespace Zealand_Carpool.Services
 
 
         
-        public Task<Carpool> GetCarpool(int IdCarpool)
+        public Task<Carpool> GetCarpool(int idCarpool)
         {
             Task<Carpool> task = Task.Run(() =>
             {
@@ -127,10 +127,13 @@ namespace Zealand_Carpool.Services
 
                     using (SqlCommand cmd = new SqlCommand(_getCarpool, DatabaseCon.Instance.SqlConnection()))
                     {
-                        cmd.Parameters.AddWithValue("@carpoolId", IdCarpool);
+                        cmd.Parameters.AddWithValue("@carpoolId", idCarpool);
                         SqlDataReader reader = cmd.ExecuteReader();
-                        reader.Read();
-                        
+                        reader.ReadAsync();
+                        if (!reader.HasRows)
+                        {
+                        throw new InvalidOperationException("Der var ingen carpools med det id " + idCarpool);
+                        }
                         carpool = MakeCarpool(reader);
                         cmd.Dispose();
                         reader.Close();
@@ -177,7 +180,7 @@ namespace Zealand_Carpool.Services
                         } else
                         {
                         return false;
-                        throw new InvalidOperationException("Der blev ikke slettet carpool id: " + carpoolId );
+                        throw new AggregateException("Der blev ikke slettet carpool id: " + carpoolId );
                         }
                     }
                 
@@ -192,8 +195,6 @@ namespace Zealand_Carpool.Services
         {
             Task<bool> task = Task.Run(() =>
             {
-               
-
                     using (SqlCommand cmd = new SqlCommand(_addPassenger, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@CarpoolId", carpool.CarpoolId);
@@ -202,12 +203,12 @@ namespace Zealand_Carpool.Services
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         
-                        if (rowsAffected == 1)
+                        if (rowsAffected == 0)
                         {
-                            return true;
+                            return false;
+                            throw new AggregateException("Der blev ikke tilføjet passager id: " + user.Id);
                         }
-                        return false;
-                        throw new InvalidOperationException("Der blev ikke tilføjet passager id: " + user.Id);
+                        return true;
                     }
                 
             });
@@ -227,16 +228,14 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@UserId", user.Id);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
-                        
-                        if (rowsAffected == 1)
-                        {
-                            return true;
-                        } else
-                        {
-                            return false;
-                            throw new InvalidOperationException("Der blev ikke slettet passager id: " + user.Id );
-                        }
+
+                    if (rowsAffected == 0)
+                    {
+                        return false;
+                        throw new AggregateException("Der blev ikke deleted passager id: " + user.Id);
                     }
+                    return true;
+                }
                 
             });
 
@@ -293,7 +292,7 @@ namespace Zealand_Carpool.Services
                             return true;
                         }
                         return false;
-                        throw new InvalidOperationException("Der blev ikke updateret passager id: " +userId+ " carpool id: " + carpoolId);
+                        throw new AggregateException("Der blev ikke updateret passager id: " +userId+ " carpool id: " + carpoolId);
                     }
                 
             });

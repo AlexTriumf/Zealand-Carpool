@@ -39,7 +39,14 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             int theID = Convert.ToInt32(id);
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+            try
+            {
+
                 Carpool = _carpoolInterface.GetCarpool(theID).Result;
+            } catch (InvalidOperationException)
+            {
+                return RedirectToPage("/Error");
+            }
                 Carpool.Passengerlist = _carpoolInterface.GetPassengers(Carpool).Result;
                 
                 Passengers = new List<Passenger>();
@@ -60,7 +67,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             {
             _carpoolInterface.AddPassenger(LoggedInUser,Carpool);
             }
-            catch (InvalidOperationException ex) { return RedirectToPage("/Error"); }
+            catch (AggregateException ex) { return RedirectToPage("/Error"); }
             return RedirectToPage("/CarpoolPage/RequestCarpooling", Carpool.CarpoolId);
         }
 
@@ -69,7 +76,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             try
             {
             _carpoolInterface.DeleteCarpool(Carpool.CarpoolId);
-            } catch (InvalidOperationException ex)
+            } catch (AggregateException ex)
             {
                 return RedirectToPage("/Error");
             }
@@ -81,7 +88,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             try
             {
             _carpoolInterface.UpdatePassenger(Guid.Parse(id), Carpool.CarpoolId);
-            } catch (InvalidOperationException ex)
+            } catch (AggregateException ex)
             {
                 return RedirectToPage("/Error");
             }
@@ -93,7 +100,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             try
             {
             _carpoolInterface.DeletePassenger(user, Carpool);
-            } catch (InvalidOperationException ex) { return RedirectToPage("/Error"); }
+            } catch (AggregateException ex) { return RedirectToPage("/Error"); }
             return RedirectToPage("/Userpage/UserCarpools");
         }
 
@@ -103,7 +110,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             {
             _carpoolInterface.DeletePassenger(LoggedInUser, Carpool);
             }
-            catch (InvalidOperationException ex) { return RedirectToPage("/Error"); }
+            catch (AggregateException ex) { return RedirectToPage("/Error"); }
             return RedirectToPage("/CarpoolPage/Carpools");
         }
 

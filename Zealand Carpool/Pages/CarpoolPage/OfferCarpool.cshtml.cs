@@ -53,7 +53,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             try
             {
             _carpoolInterface.AddCarpool(Carpool);
-            } catch (InvalidOperationException ex)
+            } catch (AggregateException ex)
             {
                 return RedirectToPage("/Error");
             }

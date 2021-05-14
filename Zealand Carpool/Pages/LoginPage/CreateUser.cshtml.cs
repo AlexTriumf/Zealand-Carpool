@@ -48,14 +48,23 @@ namespace Zealand_Carpool.Pages.LoginPage
 
         public IActionResult OnPost()
         {
-            if (!ModelState.IsValid)
+            bool a = _userInterface.CheckUser(CreateUser).Result;
+            if (!ModelState.IsValid || !_userInterface.CheckUser(CreateUser).Result)
             {
+                List<Branch> postals = _userInterface.GetAllPostalCodes().Result;
+                PostalCodes = new SelectList(postals, nameof(Branch.BranchPostalCode), nameof(Branch.BranchPostalCode));
                 return Page();
             }
             CreateUser.AddressList = new List<Address>();
             CreateUser.AddressList.Add(Address1);
             CreateUser.AddressList[0].Postalcode = PostalCode;
+            try
+            {
             _userInterface.AddUser(CreateUser);
+            } catch(AggregateException)
+            {
+                RedirectToPage("/Error");
+            }
             
             return RedirectToPage("/LoginPage/Login");
         }

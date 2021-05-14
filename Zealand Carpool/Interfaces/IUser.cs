@@ -12,6 +12,7 @@ namespace Zealand_Carpool.Interfaces
     /// </summary>
     public interface IUser
     {
+        Task<bool> CheckUser(User user);
         Task<bool> AddUser(User user);
         Task<User> GetUser(Guid id);
         Task<User> GetUser(string email, string password);
