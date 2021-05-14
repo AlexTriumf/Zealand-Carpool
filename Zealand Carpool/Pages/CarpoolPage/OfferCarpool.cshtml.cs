@@ -59,11 +59,12 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             if (AddressId == 0)
             {
                 Carpool.HomeAdress = true;
+                Carpool.Branch.BranchId = BranchId;
             }
             if (BranchId == 0)
             {
                 Carpool.HomeAdress = false;
-            Carpool.Branch.BranchId = AddressId;
+                Carpool.Branch.BranchId = AddressId;
             }
             try
             {

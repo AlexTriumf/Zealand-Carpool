@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Zealand_Carpool.Interfaces;
 using Zealand_Carpool.Models;
+using Zealand_Carpool.Pages.Shared;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
-    public class UserChatModel : PageModel
+    public class UserChatModel : ProtectedPageRouting
     {
         public User LoggedInUser {get;set;}
         public User User2 { get; set; }
@@ -21,11 +22,10 @@ namespace Zealand_Carpool.Pages.Userpage
             _ichatter = ichat;
         }
 
-        public IActionResult OnGet(string userId)
+        protected override IActionResult GetRequest(string userId)
         {
 
-            if (User.Identity.IsAuthenticated)
-            {
+            
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = new Services.UserDatabaseAsync().GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 
@@ -37,12 +37,7 @@ namespace Zealand_Carpool.Pages.Userpage
                     
                 }
                 return Page();
-            }
-            else
-            {
-                return RedirectToPage("/Index");
-            }
-
+            
         }
     }
 }
