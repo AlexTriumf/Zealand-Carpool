@@ -64,7 +64,7 @@ namespace Zealand_Carpool.Pages.LoginPage
             } catch(AggregateException)
             {
                 RedirectToPage("/Error");
-            }
+            } 
             
             return RedirectToPage("/LoginPage/Login");
         }

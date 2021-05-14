@@ -42,7 +42,7 @@
 
             <script>
         function InitializeMap() {
-
+            
             var latlng = new google.maps.LatLng(@Model.LoggedInUser.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @Model.LoggedInUser.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")));
 
             var myOptions = {

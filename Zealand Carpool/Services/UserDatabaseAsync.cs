@@ -82,7 +82,7 @@ namespace Zealand_Carpool.Services
         public Task<bool> AddUser(User user)
         {
 
-            Task<bool> task = Task.Run(async () => {
+            Task<bool> task = Task.Run(() => {
 
                 int rows;
                 
@@ -107,11 +107,24 @@ namespace Zealand_Carpool.Services
                     task1.Wait();
                     user.Id = task1.Result.Id;
                     using var client = new HttpClient();
-                    var content = await client.GetStringAsync("https://maps.googleapis.com/maps/api/geocode/json?address=" + user.AddressList[0].StreetName + "+" + user.AddressList[0].StreetNumber + "+" + user.AddressList[0].Postalcode + "&key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho");
+                    var content = client.GetStringAsync("https://maps.googleapis.com/maps/api/geocode/json?address=" + user.AddressList[0].StreetName + "+" + user.AddressList[0].StreetNumber + "+" + user.AddressList[0].Postalcode + "&key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho").Result;
                     Geo geoData = JsonConvert.DeserializeObject<Geo>(content);
 
+                /*this can return indexOutOfRangeExeption but I'm making sure that it will
+                work by just catching an exception, why? Google data retrievel can get 3 different exceptions
+               and the outcome is the same
+                 */
+                    try
+                    {
                     user.AddressList[0].Latitude = double.Parse(geoData.results[0].geometry.location.lat, new CultureInfo("en-UK"));
                     user.AddressList[0].Longtitude = double.Parse(geoData.results[0].geometry.location.lng, new CultureInfo("en-UK"));
+                    } catch (Exception)
+                    {
+                    user.AddressList[0].Latitude = 0;
+                    user.AddressList[0].Longtitude = 0;
+                    }
+
+                    
                     using (SqlCommand cmd = new SqlCommand(_createUserToAddress, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@id", user.Id);
