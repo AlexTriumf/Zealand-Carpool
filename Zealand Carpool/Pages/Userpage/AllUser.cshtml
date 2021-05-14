@@ -15,7 +15,7 @@
         @foreach (var user in Model.ListOfUsers)
         {
             <div class="card" style="width: 300px">
-                <img class="card-img-top" src="img/img_avatar1.png" alt="Card image"/>
+                <img class="card-img-top" src="/img/img_avatar1.png" alt="Card image" style="width: 100%"/>
                 <div class="card-body">
                     <h4 class="card-title">
                         <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@user.Id">
