@@ -87,9 +87,10 @@ namespace Zealand_Carpool.Services
                         }
                         return true;
                     }
-                
-            
+
+
             });
+                DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 

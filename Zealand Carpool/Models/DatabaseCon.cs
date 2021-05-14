@@ -26,6 +26,14 @@ namespace Zealand_Carpool.Models
             return conn;
         }
 
+        public void SqlConnectionClose()
+        {
+            SqlConnection conn = new SqlConnection(ConnString);
+            conn.CloseAsync();
+            
+            
+        }
+
         public static DatabaseCon Instance => _instance;
 
     }
