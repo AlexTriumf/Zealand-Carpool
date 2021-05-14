@@ -45,6 +45,7 @@
             @if (Model.LoggedInUser.UserType == Models.UserType.Admin)
             {
                 <p>Se alle Carpools: <a class="btn bg-success" type="button" asp-page="/AdminPage/AdminCarpools">Admin Carpool panel</a></p>
+                <p>Opret ny Admin: <a class="btn bg-success" type="button" asp-page="/LoginPage/CreateUser">Opret Administrator</a></p>
             }
         </div>
         <div class="col">

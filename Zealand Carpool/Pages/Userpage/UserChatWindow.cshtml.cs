@@ -10,6 +10,7 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
+    //Lavet af Aleksandar
     public class UserChatWindowModel : Shared.ProtectedPageRouting
     {
         [BindProperty]
@@ -53,11 +54,14 @@ namespace Zealand_Carpool.Pages.Userpage
                 }
                 else 
                 {
-                    
-                _ichatter.AddChat(LoggedInUser.Id, User2.Id);
+                    _ichatter.AddChat(LoggedInUser.Id, User2.Id);
                 }
 
                 Chat = _ichatter.GetChatId(LoggedInUser.Id, User2.Id).Result;
+                if (ChatTexts == null)
+                {
+                return RedirectToPage("UserChatWindow", User2.Id);
+                }
                 return Page();
         }
 

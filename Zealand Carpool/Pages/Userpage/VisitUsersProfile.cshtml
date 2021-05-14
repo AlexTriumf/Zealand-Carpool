@@ -33,6 +33,7 @@
             <p>Telefonnummer: @Model.UsersProfile.Phonenumber</p>
             <p>Adresse: @Model.UsersProfile.AddressList[0].StreetName @Model.UsersProfile.AddressList[0].StreetNumber</p>
             <p>By: @Model.UsersProfile.AddressList[0].CityName @Model.UsersProfile.AddressList[0].Postalcode</p><br />
+            <a asp-page="/Userpage/UserChatWindow" asp-route-id="@Model.UsersProfile.Id" class="btn btn-info">Kontakt @Model.UsersProfile.Name</a>
         </div>
         <div class="col">
             <div id="map"></div>
