@@ -29,18 +29,17 @@ namespace Zealand_Carpool.Services
         {
             Task task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(_createChat, conn))
+               
+                    using (SqlCommand cmd = new SqlCommand(_createChat, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@userone", userOne);
                         cmd.Parameters.AddWithValue("@usertwo", userTwo);
 
                         cmd.ExecuteNonQuery();
                     }
-                }
+                
             });
+            DatabaseCon.Instance.SqlConnectionClose();
             return Task.FromResult(task.IsCompletedSuccessfully);
         }
 
@@ -48,10 +47,8 @@ namespace Zealand_Carpool.Services
         {
             Task<bool> task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(_getChat, conn))
+                
+                    using (SqlCommand cmd = new SqlCommand(_getChat, DatabaseCon.Instance.SqlConnection()))
                     {
                         cmd.Parameters.AddWithValue("@idone", userOne);
                         cmd.Parameters.AddWithValue("@idtwo", userTwo);
@@ -63,10 +60,10 @@ namespace Zealand_Carpool.Services
 
                     }
                     return true;
-                }
+                
 
             });
-            
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -76,11 +73,9 @@ namespace Zealand_Carpool.Services
 
             Task task = Task.Run(() =>
             {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
+                
 
-                    using (SqlCommand cmd = new SqlCommand(_sendChatText, conn))
+                    using (SqlCommand cmd = new SqlCommand(_sendChatText, DatabaseCon.Instance.SqlConnection()))
                     {
 
                         cmd.Parameters.AddWithValue("@id", chatId);
@@ -89,8 +84,9 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@Timestamp", DateTime.Now);
                         cmd.ExecuteNonQuery();
                     }
-                }
+                
             });
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -100,10 +96,8 @@ namespace Zealand_Carpool.Services
             List<ChatText> chatText = new List<ChatText>();
             Task<List<ChatText>> task = Task.Run(async () =>
             {
-                using (SqlConnection conn = new SqlConnection(_connString))
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(_getChat, conn))
+               
+                    using (SqlCommand cmd = new SqlCommand(_getChat, DatabaseCon.Instance.SqlConnection()))
                     {
 
                         cmd.Parameters.AddWithValue("@idone", userOne);
@@ -118,7 +112,7 @@ namespace Zealand_Carpool.Services
 
                     
 
-                    using (SqlCommand cmd = new SqlCommand(_getChatText, conn))
+                    using (SqlCommand cmd = new SqlCommand(_getChatText, DatabaseCon.Instance.SqlConnection()))
                     {
 
                         cmd.Parameters.AddWithValue("@id", chat.ChatId);
@@ -131,10 +125,10 @@ namespace Zealand_Carpool.Services
                             chatText.Add(new ChatText { user = user1, message = reader.GetString(2), TimeStamp = reader.GetDateTime(3) });
                         }
                     }
-                }
+                
                 return chatText;
             });
-
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
 
@@ -171,7 +165,7 @@ namespace Zealand_Carpool.Services
                 }
 
             });
-
+            DatabaseCon.Instance.SqlConnectionClose();
             return task;
         }
     }
