@@ -1,5 +1,6 @@
 ﻿@page
 @using Zealand_Carpool.Models
+@using System.Globalization
 @model Zealand_Carpool.Pages.Userpage.UserChatSignalRModel
 @{
 }
@@ -52,70 +53,67 @@
                                     @user.AddressList[0].Postalcode
                                 </p>
                             </div>
-                            <a asp-page="/Userpage/UserChatWindow" asp-route-Id="@user.Id"> @user.Id @user.Name</a>
-                            <button id="myModalBtn" class="btn" hidden data-toggle="modal" data-target="#myModal"><i class="btn alert-primary"></i></button>
-                            <a class="btn bg-success" id="LogBut" type="button" asp-page="">Chat</a>
+                            <a class="btn bg-success" type="button" asp-page="/Userpage/UserChatWindow" asp-route-id="@user.Id">Chat med @user.Name</a>
+                            
                         </div>
                         }
                     </div>
                 </div>
             </div>
             <div class="mesgs">
-                <div class="msg_history">
-                   
-                        <div class="incoming_msg">
-                            <div class="incoming_msg_img"> <img src="/img/user-profile.png" alt="sunil"> </div>
-                            <div class="received_msg">
-                                <div class="received_withd_msg">
-                                    <p>
-                                        
-                                    </p>
-                                    <span class="time_date"> 11:01 AM | June 9</span>
-                                </div>
-                            </div>
-                        </div>
-                    
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>
-                                Dette er en test besked
-                            </p>
-                            <span class="time_date"> 11:01 AM | June 9</span>
-                        </div>
-                    </div>
-                    <div class="incoming_msg">
-                        <div class="incoming_msg_img"> <img src="/img/user-profile.png" alt="sunil"> </div>
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>Dette er en test besked</p>
-                                <span class="time_date"> 11:01 AM | Yesterday</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="outgoing_msg">
-                        <div class="sent_msg">
-                            <p>Dette er en test besked</p>
-                            <span class="time_date"> 11:01 AM | Today</span>
-                        </div>
-                    </div>
-                    <div class="incoming_msg">
-                        <div class="incoming_msg_img"> <img src="/img/user-profile.png" alt="sunil"> </div>
-                        <div class="received_msg">
-                            <div class="received_withd_msg">
-                                <p>
-                                    Dette er en test besked
-                                </p>
-                                <span class="time_date"> 11:01 AM | Today</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="type_msg">
-                    <div class="input_msg_write">
-                        <input type="text" class="write_msg" placeholder="Skriv en besked.." />
-                        <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-                    </div>
-                </div>
+                <container>
+                    <head runat="server">
+                        <title>Map</title>
+                        <meta name="viewport" content="initial-scale=1.0">
+                        <meta charset="utf-8">
+                        <style>
+        
+                            #map {
+                                height: 400px;
+                                /*            width: 400px; */
+                                margin-left: 60%;
+                                /*margin-right: auto;*/
+                            }
+                        </style>
+                    </head>
+                    <body>
+                    <div id="map"></div>
+
+                    <script>
+    function InitializeMap() {
+
+        var latlng = new google.maps.LatLng(@Model.LoggedInUser.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @Model.LoggedInUser.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")));
+        var myOptions = {
+            zoom: 12,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(document.getElementById("map"), myOptions);
+        //var infoWindow = new google.maps.InfoWindow();
+        new google.maps.Marker({
+            position: latlng,
+            map,
+            title: "Zealand Roskilde",
+        });
+                           
+                
+
+        @foreach(Models.User user in Model.AllUsers.Values){
+            <text>
+                new google.maps.Marker({
+                    map: map,
+                    position:  @user.AddressList[0].Latitude.ToString(new CultureInfo("en-US")), @user.AddressList[0].Longtitude.ToString(new CultureInfo("en-US")) ,
+                    title: 'Hello World!'
+                });
+            </text>
+
+        }
+        </script>
+
+                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2t8TFM7VJY_gUpk45PYxbxqqxPcasVho&callback=InitializeMap" async defer></script>
+                    </body>
+                </container>
             </div>
         </div>
     </div>

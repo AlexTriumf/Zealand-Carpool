@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,12 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Pages.Userpage
 {
-    public class UserChatWindowModel : PageModel
+    public class UserChatWindowModel : Shared.ProtectedPageRouting
     {
         [BindProperty]
-        public Chat chat { get; set; }
+        public ChatText Chattxts { get; set; }
+        [BindProperty]
+        public Chat Chat { get; set; }
         [BindProperty]
         public User LoggedInUser { get; set; }
         [BindProperty]
@@ -33,31 +36,44 @@ namespace Zealand_Carpool.Pages.Userpage
             _ichatter = ichat;
         }
 
-        public IActionResult OnGet(string Id)
+        protected override IActionResult GetRequest(string Id)
         {
 
-            if (User.Identity.IsAuthenticated)
-            {
-                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+
+
+            List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 User2 = _userInterface.GetUser(Guid.Parse(Id)).Result;
+                
+
 
                 if (_ichatter.HasAChat(LoggedInUser.Id, User2.Id).Result)
                 {
                     ChatTexts = _ichatter.GetChat(LoggedInUser.Id, User2.Id).Result;
                 }
-                else
+                else 
                 {
-                    _ichatter.AddChat(LoggedInUser.Id, User2.Id);
+                    
+                _ichatter.AddChat(LoggedInUser.Id, User2.Id);
                 }
 
+                Chat = _ichatter.GetChatId(LoggedInUser.Id, User2.Id).Result;
                 return Page();
-            }
-
-            return Page();
         }
+
+        public IActionResult OnPost()
+        {
+            List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+            LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+            Chattxts.user = LoggedInUser;
+
+           
+            _ichatter.SendChat(Chattxts, Chat.ChatId);
+            return RedirectToPage("UserChatWindow", User2.Id);
+        }
+
     }
+}
             
         
     
-}
