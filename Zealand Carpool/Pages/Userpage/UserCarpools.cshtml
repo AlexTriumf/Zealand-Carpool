@@ -20,23 +20,37 @@
                     <i>@carpool.Value.Driver.Name <br /> @carpool.Value.Driver.Surname</i></h3>
                 </div>
                 <div class="col">
+                    @if (carpool.Value.HomeAdress)
+                    {
+                        <p><b>Der bliver kørt fra adreese:</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
+                        <br />
+                        <p><b>Til Afdellingen i</b> @carpool.Value.Branch.BranchName</p>
+                    }
+                    else
+                    {
+                        <p><b>Der bliver kørt fra Afdeling:</b> @carpool.Value.Branch.BranchName </p>
+                        <br />
+                        <p><b>Til Adresse i</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
+                    }
                     <p><b>Der bliver kørt fra adreese:</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
                     <br />
                     <p><b>Til Afdellingen i</b> @carpool.Value.Branch.BranchName</p>
                     <br />
                     <p><b>Til Dato & tidspunkt:</b> @carpool.Value.Date.ToString()</p>
                     <br />
-                    <p><b>Plader Tilbage: </b> @(carpool.Value.PassengerSeats-carpool.Value.Passengerlist.Count)</p>  
+                    <p><b>Plader Tilbage: </b> @(carpool.Value.PassengerSeats-carpool.Value.Passengerlist.Count)</p>
                     @if (carpool.Value.Driver.Id == Model.LoggedInUser.Id)
                     {
                         <b>Du er Chauffør for denne carpool</b>
-                    } else
+                    }
+                    else
                     {
                         <b> Du er Passager for denne Carpool</b>
                         @if (carpool.Value.Passengerlist[Model.LoggedInUser.Id].IsAccepted)
                         {
                             <h6>Du er blevet accepteret og er derfor med i denne Carpool !</h6>
-                        } else
+                        }
+                        else
                         {
                             <h6>Din anmodning er sendt og venter på at blive besvaret, ændringen vil vises her!</h6>
                         }

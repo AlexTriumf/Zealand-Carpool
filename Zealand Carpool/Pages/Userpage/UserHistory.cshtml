@@ -34,9 +34,18 @@
                         <h3 class="text-center"><b>Kør med</b> <br /> <i>@carpool.Value.Driver.Name <br /> @carpool.Value.Driver.Surname</i></h3>
                     </div>
                     <div class="col">
-                        <p><b>Der bliver kørt fra adreese:</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
-                        <br />
-                        <p><b>Til Afdellingen i</b> @carpool.Value.Branch.BranchName</p>
+                        @if (carpool.Value.HomeAdress)
+                        {
+                            <p><b>Der bliver kørt fra adreese:</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
+                            <br />
+                            <p><b>Til Afdellingen i</b> @carpool.Value.Branch.BranchName</p>
+                        }
+                        else
+                        {
+                            <p><b>Der bliver kørt fra Afdeling:</b> @carpool.Value.Branch.BranchName </p>
+                            <br />
+                            <p><b>Til Adresse i</b> @carpool.Value.Driver.AddressList[0].StreetName @carpool.Value.Driver.AddressList[0].StreetNumber, @carpool.Value.Driver.AddressList[0].CityName @carpool.Value.Driver.AddressList[0].Postalcode</p>
+                        }
                         <br />
                         <p><b>Til Dato & tidspunkt:</b> @carpool.Value.Date.ToString()</p>
                         <br />

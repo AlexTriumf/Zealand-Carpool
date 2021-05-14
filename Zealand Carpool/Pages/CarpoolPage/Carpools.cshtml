@@ -40,8 +40,17 @@
                     
                 </div>
                 <div class="col">
-                    <p>Adresse: @carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber, @carpool.Driver.AddressList[0].CityName @carpool.Driver.AddressList[0].Postalcode</p>
-                    <p>Til Afdellingen i @carpool.Branch.BranchName</p>
+
+                    @if (@carpool.HomeAdress)
+                    {
+                        <p>Der bliver kørt fra adreese: @carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber, @carpool.Driver.AddressList[0].CityName @carpool.Driver.AddressList[0].Postalcode</p>
+                        <p>Til Afdellingen i @carpool.Branch.BranchName</p>
+                    }
+                    else
+                    {
+                        <p>Der bliver kørt fra Afdeling: @carpool.Branch.BranchName</p>
+                        <p>Til Adresse i  @carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber, @carpool.Driver.AddressList[0].CityName @carpool.Driver.AddressList[0].Postalcode </p>
+                    }
                     <p>Til Dato & tidspunkt: @carpool.Date.ToString()</p>
                     <p><b>Pladser Tilbage: </b> @(carpool.PassengerSeats-carpool.Passengerlist.Count)</p>
                 </div>

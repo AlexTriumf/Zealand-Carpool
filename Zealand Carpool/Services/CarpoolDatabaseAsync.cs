@@ -16,14 +16,14 @@ namespace Zealand_Carpool.Services
     public class CarpoolDatabaseAsync : ICarpool
     {
         
-        private string _addCarpool = "INSERT INTO Carpool (UserId, Branch, PassengerSeats, Date, Detail) " +
-                                       "VALUES (@UserId, @Branch, @PassengerSeats, @Date, @Detail)";
+        private string _addCarpool = "INSERT INTO Carpool (UserId, Branch, PassengerSeats, Date, Detail, HomeAddressBool) " +
+                                       "VALUES (@UserId, @Branch, @PassengerSeats, @Date, @Detail, @Home)";
         private string _getBranches = "SELECT * FROM Branch";
 
         private string _getCarpool = "SELECT UserTable.UserId,UserTable.Name,UserTable.Surname,UserTable.Email,UserTable.Phonenumber, " +
                         "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude, " +
                         "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId, " +
-                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName,Carpool.Detail FROM UserTable " +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Carpool.HomeAddressBool,Branch.BranchName,Carpool.Detail FROM UserTable " +
                         "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
                         "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
                         "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
@@ -33,7 +33,7 @@ namespace Zealand_Carpool.Services
         private string _getAllCarpools = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
                         "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
                         "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
-                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName,Carpool.Detail FROM UserTable " +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Carpool.HomeAddressBool,Branch.BranchName,Carpool.Detail FROM UserTable " +
                         "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
                         "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
                         "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
@@ -43,7 +43,7 @@ namespace Zealand_Carpool.Services
         private string _getAllUserCarpools = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
                         "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
                         "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
-                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName,Carpool.Detail FROM UserTable " +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Carpool.HomeAddressBool,Branch.BranchName,Carpool.Detail FROM UserTable " +
                         "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
                         "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
                         "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
@@ -70,6 +70,8 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@Branch", carpool.Branch.BranchId);
                         cmd.Parameters.AddWithValue("@PassengerSeats", carpool.PassengerSeats);
                         cmd.Parameters.AddWithValue("@Date", carpool.Date);
+                        cmd.Parameters.AddWithValue("@Home", carpool.HomeAdress);
+                    
                         if (carpool.Details is null)
                         {
                             carpool.Details = "";
@@ -363,8 +365,9 @@ namespace Zealand_Carpool.Services
             carpool1.Branch.BranchId = sqlReader.GetInt32(12);
             carpool1.PassengerSeats = sqlReader.GetInt32(13);
             carpool1.Date = sqlReader.GetDateTime(14);
-            carpool1.Branch.BranchName = sqlReader.GetString(15);
-            carpool1.Details = sqlReader.GetString(16);
+            carpool1.HomeAdress = sqlReader.GetBoolean(15);
+            carpool1.Branch.BranchName = sqlReader.GetString(16);
+            carpool1.Details = sqlReader.GetString(17);
             carpool1.Passengerlist = new Dictionary<Guid, Passenger>();
             return carpool1;
         }
@@ -375,7 +378,7 @@ namespace Zealand_Carpool.Services
             string _getAllCarpoolsSearch = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
                         "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
                         "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
-                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName,Carpool.Detail FROM UserTable " +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Carpool.HomeAddressBool,Branch.BranchName,Carpool.Detail FROM UserTable " +
                         "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
                         "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
                         "Inner join Carpool on UserTable.UserId = Carpool.UserId " +
@@ -437,7 +440,7 @@ namespace Zealand_Carpool.Services
             string _getAllCarpoolsSearch = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, UserTable.Email, UserTable.Phonenumber, " +
                         "AddressList.StreetName,AddressList.Streetnr,AddressList.Latitude," +
                         "AddressList.Longtitude,PostalCode.City,PostalCode.PostalCode, Carpool.CarpoolId," +
-                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Branch.BranchName,Carpool.Detail FROM UserTable " +
+                        "Carpool.Branch,Carpool.PassengerSeats,Carpool.Date,Carpool.HomeAddressBool,Branch.BranchName,Carpool.Detail FROM UserTable " +
                         "INNER JOIN AddressList ON UserTable.UserId=AddressList.UserId " +
                         "INNER join PostalCode on AddressList.PostalCode= PostalCode.PostalCode " +
                         "Inner join Carpool on UserTable.UserId = Carpool.UserId " +

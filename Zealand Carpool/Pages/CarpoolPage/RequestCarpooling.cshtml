@@ -19,8 +19,16 @@
     </div>
     <div class="row">
         <div class="col">
-            <p>Der bliver kørt fra adreese: @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber, @Model.Carpool.Driver.AddressList[0].CityName @Model.Carpool.Driver.AddressList[0].Postalcode</p>
-            <p>Til Afdellingen i @Model.Carpool.Branch.BranchName</p>
+            @if (@Model.Carpool.HomeAdress)
+            {
+                <p>Der bliver kørt fra adreese: @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber, @Model.Carpool.Driver.AddressList[0].CityName @Model.Carpool.Driver.AddressList[0].Postalcode</p>
+                <p>Til Afdellingen i @Model.Carpool.Branch.BranchName</p>
+            }
+            else
+            {
+        <p>Der bliver kørt fra Afdeling: @Model.Carpool.Branch.BranchName</p>
+        <p>Til Adresse i  @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber, @Model.Carpool.Driver.AddressList[0].CityName @Model.Carpool.Driver.AddressList[0].Postalcode </p>
+            }
             <p>Til Dato & tidspunkt: @Model.Carpool.Date.ToString()</p>
             <p>Detaljerne for kørslen: @Model.Carpool.Details</p>
             @if (Model.LoggedInUser.Id != Model.Carpool.Driver.Id && !Model.Carpool.Passengerlist.ContainsKey(Model.LoggedInUser.Id))
@@ -31,7 +39,7 @@
                     <button type="submit" class="btn btn-primary mb-3">Ansøg om plads</button>
                 </form>
             }
-        <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@Model.Carpool.Driver.Id" class="btn btn-info">Kontakt Chauffør</a>
+            <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@Model.Carpool.Driver.Id" class="btn btn-info">Kontakt Chauffør</a>
             <span class="border-bottom"></span>
             @if (Model.LoggedInUser.Id == Model.Carpool.Driver.Id)
             {
@@ -71,7 +79,8 @@
 
                                         <button type="submit" class="btn btn-primary mb-3">Acceptere Passageren</button>
                                     </form>
-                                } else
+                                }
+                                else
                                 {
                                     <p>Personen er blevet accepteret til denne Carpool</p>
                                 }

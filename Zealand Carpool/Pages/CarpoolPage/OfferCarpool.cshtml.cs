@@ -20,7 +20,9 @@ namespace Zealand_Carpool.Pages.CarpoolPage
         [BindProperty(SupportsGet = true)]
         public Carpool Carpool { get; set; }
         public SelectList Branches { get; set; }
-       [BindProperty]
+        [BindProperty]
+        public int AddressId { get; set; }
+        [BindProperty]
        public int BranchId { get; set; }
 
         ICarpool _carpoolInterface;
@@ -38,6 +40,11 @@ namespace Zealand_Carpool.Pages.CarpoolPage
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 Carpool.Driver = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 List<Branch> allBranches = _carpoolInterface.GetBranches().Result;
+            Branch homeadress = new Branch();
+            homeadress.BranchId = 0;
+            homeadress.BranchName = Carpool.Driver.AddressList[0].StreetName + " " + Carpool.Driver.AddressList[0].StreetNumber + " " + Carpool.Driver.AddressList[0].CityName + " " + Carpool.Driver.AddressList[0].Postalcode;
+            homeadress.BranchPostalCode = Carpool.Driver.AddressList[0].Postalcode;
+            allBranches.Add(homeadress);
                 Branches = new SelectList(allBranches,nameof(Branch.BranchId),nameof(Branch.BranchName));
                 
                 return Page();
@@ -49,7 +56,15 @@ namespace Zealand_Carpool.Pages.CarpoolPage
                 return RedirectToPage("/CarpoolPage/OfferCarpool");
             }
             Carpool.Branch = new Branch();
-            Carpool.Branch.BranchId = BranchId;
+            if (AddressId == 0)
+            {
+                Carpool.HomeAdress = true;
+            }
+            if (BranchId == 0)
+            {
+                Carpool.HomeAdress = false;
+            Carpool.Branch.BranchId = AddressId;
+            }
             try
             {
             _carpoolInterface.AddCarpool(Carpool);

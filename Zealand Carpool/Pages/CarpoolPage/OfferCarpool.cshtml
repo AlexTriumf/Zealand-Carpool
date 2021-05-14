@@ -10,11 +10,16 @@
         <div class="col-6">
             <form method="post">
                 <div asp-validation-summary="ModelOnly"></div>
-                <label class="custom-control-label">Kørsel fra @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber</label>
+                <div class="form-group">
+                    <label class="custom-control-label">Fra Adresse/Afdeling </label><br />
+                    <select name="AddressId" class="form-control" asp-for="@Model.AddressId" asp-items="@Model.Branches">
+                    </select>
+
+                </div><br />
                 <br />
                 <div class="form-group">
-                    <label class="custom-control-label">Til afdeling</label><br />
-                    <select name="BranchId" asp-for="@Model.BranchId" asp-items="@Model.Branches">
+                    <label class="custom-control-label">Til Adresse/Afdeling</label><br />
+                    <select name="BranchId" class="form-control" asp-for="@Model.BranchId" asp-items="@Model.Branches">
                     </select>
 
                 </div><br />

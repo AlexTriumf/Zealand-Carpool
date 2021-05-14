@@ -16,7 +16,7 @@ namespace Zealand_Carpool.Models
         public Branch Branch { get; set; }
         [Required, Range(1, 9)]
         public int PassengerSeats { get; set; }
-
+        public bool HomeAdress { get; set; }
         public User Driver { get; set; }
         public DateTime Date { get; set; }
         public Dictionary<Guid,Passenger> Passengerlist {get;set;}
@@ -25,7 +25,7 @@ namespace Zealand_Carpool.Models
         public Carpool() { }
 
         public Carpool(int carpoolId, Branch branch, int passengerSeats,
-            User driver, DateTime date, string details)
+            User driver, DateTime date, string details, bool homeA)
         {
             CarpoolId = carpoolId;
             Branch = branch;
@@ -33,6 +33,7 @@ namespace Zealand_Carpool.Models
             Driver = driver;
             Date = date;
             Details = details;
+            HomeAdress = homeA;
         }
 
         public override string ToString()

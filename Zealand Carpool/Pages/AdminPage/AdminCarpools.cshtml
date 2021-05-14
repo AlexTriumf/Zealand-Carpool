@@ -43,7 +43,7 @@
                 <th scope="col">Carpoolens start Adresse</th>
                 <th scope="col">Carpoolens Detaljer</th>
                 <th scope="col">Carpoolens Passagersæder</th>
-                <th scope="col">Carpoolens kørsel Til Afdeling</th>
+                <th scope="col">Carpoolens slut adresse</th>
                 <th scope="col">Carpoolens Passagers ID'er</th>
                 <th scope="col">Gå til carpool</th>
             </tr>
@@ -51,20 +51,36 @@
         <tbody>
             @foreach (Models.Carpool carpool in Model.AllCarpools.Values)
             {
-                <tr>
-                    <th scope="row">@carpool.CarpoolId</th>
-                    <td>@carpool.Driver.Id</td>
-                    <td>@carpool.Driver.Name @carpool.Driver.Surname</td>
+            <tr>
+                <th scope="row">@carpool.CarpoolId</th>
+                <td>@carpool.Driver.Id</td>
+                <td>@carpool.Driver.Name @carpool.Driver.Surname</td>
+                @if (carpool.HomeAdress)
+                {
                     <td>@carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber, @carpool.Driver.AddressList[0].CityName @carpool.Driver.AddressList[0].Postalcode</td>
-                    <td>@carpool.Details</td>
-                    <td>@carpool.PassengerSeats</td>
-                    <td>@carpool.Branch.BranchName @carpool.Branch.BranchPostalCode</td>
-                    <td>
-                        @foreach (Models.Passenger passenger in carpool.Passengerlist.Values)
-                        {<p> PassagerID:@passenger.User.Id, </p>}
-                    </td>
-                    <td><a class="btn btn-info" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.CarpoolId">Gå til Carpool</a></td>
-                </tr>
+
+                }
+                else
+                {
+                    <td>@carpool.Branch.BranchName </td>
+                }
+                <td>@carpool.Details</td>
+                <td>@carpool.PassengerSeats</td>
+                @if (!carpool.HomeAdress)
+                {
+                    <td>@carpool.Driver.AddressList[0].StreetName @carpool.Driver.AddressList[0].StreetNumber, @carpool.Driver.AddressList[0].CityName @carpool.Driver.AddressList[0].Postalcode</td>
+
+                }
+                else
+                {
+                    <td>@carpool.Branch.BranchName </td>
+                }
+                <td>
+                    @foreach (Models.Passenger passenger in carpool.Passengerlist.Values)
+                    {<p> PassagerID:@passenger.User.Id, </p>}
+                </td>
+                <td><a class="btn btn-info" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.CarpoolId">Gå til Carpool</a></td>
+            </tr>
             }
         </tbody>
     </table>
