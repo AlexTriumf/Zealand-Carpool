@@ -35,7 +35,7 @@
                     <br />
                     <p><b>Til Dato & tidspunkt:</b> @carpool.Value.Date.ToString()</p>
                     <br />
-                    <p><b>Plader Tilbage: </b> @(carpool.Value.PassengerSeats-carpool.Value.Passengerlist.Count)</p>
+                    <p><b>Pladser Tilbage: </b> @(carpool.Value.PassengerSeats-carpool.Value.Passengerlist.Count)</p>
                     @if (carpool.Value.Driver.Id == Model.LoggedInUser.Id)
                     {
                         <b>Du er Chauffør for denne carpool</b>

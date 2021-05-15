@@ -67,14 +67,14 @@
                             }
                             @if (Model.LoggedInUser.Id == @Model.Carpool.Driver.Id)
                             {
-                                <form asp-page-handler="DeletePasFromChau" asp-route-id="@Model.Passengers[i].User.Id">
+                                <form asp-page-handler="DeletePasFromChau" asp-route-pas="@Model.Passengers[i].User.Id">
                                     <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
                                     <input type="hidden" asp-for="@Model.Passengers[@i].User.Id" />
                                     <button type="submit" class="btn btn-primary mb-3">Afmeld Passageren</button>
                                 </form>
                                 @if (!Model.Passengers[i].IsAccepted)
                                 {
-                                    <form asp-page-handler="AcceptPas" asp-route-id="@Model.Passengers[i].User.Id">
+                                    <form asp-page-handler="AcceptPas" asp-route-pas="@Model.Passengers[i].User.Id">
                                         <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
 
                                         <button type="submit" class="btn btn-primary mb-3">Acceptere Passageren</button>

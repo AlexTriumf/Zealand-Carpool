@@ -83,25 +83,25 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             return RedirectToPage("/CarpoolPage/Carpools");
         }
 
-        public IActionResult OnPostAcceptPas(string id)
+        public IActionResult OnPostAcceptPas(string pas)
         {
             try
             {
-            _carpoolInterface.UpdatePassenger(Guid.Parse(id), Carpool.CarpoolId);
+            _carpoolInterface.UpdatePassenger(Guid.Parse(pas), Carpool.CarpoolId);
             } catch (AggregateException ex)
             {
                 return RedirectToPage("/Error");
             }
-            return RedirectToPage("/Userpage/UserCarpools");
+            return RedirectToPage("/CarpoolPage/RequestCarpooling", Carpool.CarpoolId);
         }
-        public IActionResult OnPostDeletePasFromChau(string id)
+        public IActionResult OnPostDeletePasFromChau(string pas)
         {
-            User user = new User() { Id = Guid.Parse(id) };
+            User user = new User() { Id = Guid.Parse(pas) };
             try
             {
             _carpoolInterface.DeletePassenger(user, Carpool);
             } catch (AggregateException ex) { return RedirectToPage("/Error"); }
-            return RedirectToPage("/Userpage/UserCarpools");
+            return RedirectToPage("/CarpoolPage/RequestCarpooling", Carpool.CarpoolId);
         }
 
         public IActionResult OnPostDeletePas()
