@@ -11,13 +11,14 @@
         <div class="shadow p-3 mb-5 bg-white rounde">
             <div class="row">
                 <div class="col-sm-3">
-                    
+
                     <h3 class="text-center">
-                    @if (carpool.Value.Driver.Id == Model.LoggedInUser.Id)
-                    {<b>Chauffør</b>}
-                    else
-                    {<b>Kør med</b>} <br />
-                    <i>@carpool.Value.Driver.Name <br /> @carpool.Value.Driver.Surname</i></h3>
+                        @if (carpool.Value.Driver.Id == Model.LoggedInUser.Id)
+                        {<b>Chauffør</b>}
+                        else
+                        {<b>Kør med</b>} <br />
+                        <i>@carpool.Value.Driver.Name <br /> @carpool.Value.Driver.Surname</i>
+                    </h3>
                 </div>
                 <div class="col-sm-7">
                     @if (carpool.Value.HomeAdress)
@@ -57,20 +58,25 @@
 
                 <div class="col-sm-2">
                     <br />
-                    <div class="float-right">
-
-                    @if (carpool.Value.Driver.Id != Model.LoggedInUser.Id)
-                    {
-                        <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@carpool.Value.Driver.Id" class="btn btn-info">Kontakt Chauffør</a>
-                    }
-                    <br />
-                    <a class="btn btn-success" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.Value.CarpoolId">Gå til Carpool</a>
+                        <div class="float-right">
+                    <div class="row">
+                            <div class="col-auto">
+                            @if (carpool.Value.Driver.Id != Model.LoggedInUser.Id)
+                            {
+                                <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@carpool.Value.Driver.Id" class="btn btn-info">Kontakt Chauffør</a>
+                            }
+                            </div>
+                            <div class="col-auto">
+                            <a class="btn btn-success" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.Value.CarpoolId">Gå til Carpool</a>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
-            <br />
-        }
-    
+        <br />
+    }
+
 </div>
 

@@ -19,7 +19,7 @@
             <div class="col-lg-5">
                 <input asp-for="@Model.Date" class="form-control" />
             </div>
-            <div class="col-md-1">
+            <div class="col-lg-1">
                 <div class="float-right">
                 <button type="submit" class="btn btn-primary mb-3">Søg</button>
                 </div>
@@ -79,12 +79,17 @@
                     <div class="col-sm-2">
                         <br />
                         <div class="float-right">
-                        @if (carpool.Value.Driver.Id != Model.LoggedInUser.Id)
-                        {
-                            <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@carpool.Value.Driver.Id" class="btn btn-info float-right">Kontakt Chauffør</a>
-                        }
-                        <br />
-                        <a class="btn btn-success float-right" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.Value.CarpoolId">Gå til Carpool</a>
+                            <div class="row">
+                                <div class="col-auto">
+                                    @if (carpool.Value.Driver.Id != Model.LoggedInUser.Id)
+                                    {
+                                        <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@carpool.Value.Driver.Id" class="btn btn-info">Kontakt Chauffør</a>
+                                    }
+                                </div>
+                                <div class="col-auto">
+                                    <a class="btn btn-success" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.Value.CarpoolId">Gå til Carpool</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
