@@ -23,7 +23,7 @@ namespace Zealand_Carpool.Interfaces
         Task<Dictionary<int, Carpool>> GetAllCarpoolsAdmin(DateTime date, string search);
         Task<bool> DeleteCarpool(int id);
         Task<Dictionary<Guid,Passenger>> GetPassengers(Carpool carpool);
-        Task<Dictionary<Guid, Passenger>> GetPassengersAdmin(string search);
+        Task<List<Passenger>> GetPassengersAdmin(string search);
         Task<bool> AddPassenger(User user, Carpool carpool);
         Task<bool> DeletePassenger(User user, Carpool carpool);
         Task<bool> UpdatePassenger(Guid userId, int carpoolId);

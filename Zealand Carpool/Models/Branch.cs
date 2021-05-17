@@ -13,5 +13,13 @@ namespace Zealand_Carpool.Models
         public int BranchId { get; set; }
         public string BranchName { get; set; }
         public int BranchPostalCode { get; set; }
+
+        public Branch () { }
+
+        public Branch (string name, int postalcode)
+        {
+            BranchName = name;
+            BranchPostalCode = postalcode;
+        }
     }
 }

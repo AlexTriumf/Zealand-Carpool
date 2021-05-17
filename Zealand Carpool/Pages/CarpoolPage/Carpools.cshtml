@@ -11,16 +11,18 @@
             <div class="col-auto">
                 <label>Søg</label>
             </div>
-            <div class="col">
+            <div class="col-lg-5">
 
                 <input type="text" asp-for="@Model.Search" class="form-control" placeholder="Søg i Afdeling eller Adresse (skal udfyldes)">
 
             </div>
-            <div class="col">
+            <div class="col-lg-5">
                 <input asp-for="@Model.Date" class="form-control" />
             </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary mb-3">Søg</button>
+            <div class="col-md-1">
+                <div class="float-right">
+                <button type="submit" class="btn btn-primary mb-3 ">Søg</button>
+                </div>
             </div>
 
         </form>
@@ -35,11 +37,12 @@
     {
         <div class="shadow p-3 mb-5 bg-white rounde">
             <div class="row">
-                <div class="col">
+                <div class="col-sm-3">
                     <h3>Kør med @carpool.Driver.Name @carpool.Driver.Surname</h3>
                     
                 </div>
-                <div class="col">
+
+                <div class="col-sm-9">
 
                     @if (@carpool.HomeAdress)
                     {
@@ -53,11 +56,9 @@
                     }
                     <p>Til Dato & tidspunkt: @carpool.Date.ToString()</p>
                     <p><b>Pladser Tilbage: </b> @(carpool.PassengerSeats-carpool.Passengerlist.Count)</p>
-                </div>
-
-
-                <div class="col">
+                    <div class="float-right">
                     <a class="btn btn-info" type="button" asp-page="/CarpoolPage/RequestCarpooling" asp-route-id="@carpool.CarpoolId">Kør med!</a>
+                     </div>
                 </div>
             </div>
             <br />

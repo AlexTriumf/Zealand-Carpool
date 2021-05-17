@@ -309,14 +309,14 @@ namespace Zealand_Carpool.Services
         }
 
 
-        public Task<Dictionary<Guid, Passenger>> GetPassengersAdmin(string search)
+        public Task<List<Passenger>> GetPassengersAdmin(string search)
         {
-            Task<Dictionary<Guid, Passenger>> task = Task.Run(() =>
+            Task<List<Passenger>> task = Task.Run(() =>
             {
                 //doing this because of '%@search%' can't compile
                 string _getAllPassengersAdmin = "SELECT UserTable.UserId, UserTable.Name, UserTable.Surname, Passengers.CarpoolId, Passengers.Request FROM Passengers INNER JOIN UserTable on UserTable.UserId = Passengers.UserId" +
                     " WHERE Passengers.UserId Like '%" + search + "%' OR Passengers.CarpoolId Like '%" + search + "%' OR UserTable.Name Like '%" + search + "%' OR UserTable.Surname Like '%" + search + "%'";
-                Dictionary<Guid, Passenger> listOfpassenger = new Dictionary<Guid, Passenger>();
+                List<Passenger> listOfPassenger = new List<Passenger>();
 
                 using (SqlCommand cmd = new SqlCommand(_getAllPassengersAdmin, DatabaseCon.Instance.SqlConnection()))
                 {
@@ -333,9 +333,9 @@ namespace Zealand_Carpool.Services
                         passenger.User.Surname = reader.GetString(2);
                         passenger.Carpool.CarpoolId = reader.GetInt32(3);
                         passenger.IsAccepted = reader.GetBoolean(4);
-                        listOfpassenger.Add(passenger.User.Id, passenger);
+                        listOfPassenger.Add(passenger);
                     }
-                    return listOfpassenger;
+                    return listOfPassenger;
 
 
                 }

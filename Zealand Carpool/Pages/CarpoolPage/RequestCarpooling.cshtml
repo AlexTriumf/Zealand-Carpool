@@ -26,8 +26,8 @@
             }
             else
             {
-        <p>Der bliver kørt fra Afdeling: @Model.Carpool.Branch.BranchName</p>
-        <p>Til Adresse i  @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber, @Model.Carpool.Driver.AddressList[0].CityName @Model.Carpool.Driver.AddressList[0].Postalcode </p>
+                <p>Der bliver kørt fra Afdeling: @Model.Carpool.Branch.BranchName</p>
+                <p>Til Adresse i  @Model.Carpool.Driver.AddressList[0].StreetName @Model.Carpool.Driver.AddressList[0].StreetNumber, @Model.Carpool.Driver.AddressList[0].CityName @Model.Carpool.Driver.AddressList[0].Postalcode </p>
             }
             <p>Til Dato & tidspunkt: @Model.Carpool.Date.ToString()</p>
             <p>Detaljerne for kørslen: @Model.Carpool.Details</p>
@@ -67,23 +67,67 @@
                             }
                             @if (Model.LoggedInUser.Id == @Model.Carpool.Driver.Id)
                             {
-                                <form asp-page-handler="DeletePasFromChau" asp-route-pas="@Model.Passengers[i].User.Id">
-                                    <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
-                                    <input type="hidden" asp-for="@Model.Passengers[@i].User.Id" />
-                                    <button type="submit" class="btn btn-primary mb-3">Afmeld Passageren</button>
-                                </form>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#Modal-@i">
+                                    Afmeld Passageren
+                                </button>
+
                                 @if (!Model.Passengers[i].IsAccepted)
                                 {
-                                    <form asp-page-handler="AcceptPas" asp-route-pas="@Model.Passengers[i].User.Id">
-                                        <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
-
-                                        <button type="submit" class="btn btn-primary mb-3">Acceptere Passageren</button>
-                                    </form>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#example-@i">
+                                        Acceptere Passageren
+                                    </button>
                                 }
                                 else
                                 {
                                     <p>Personen er blevet accepteret til denne Carpool</p>
                                 }
+                    <div class="modal fade" id="example-@i" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Acceptering af passageren</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Er du sikker på at du vil Acceptere @Model.Passengers[i].User.Name @Model.Passengers[i].User.Surname ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Nej</button>
+                                    <form asp-page-handler="AcceptPas" asp-route-pas="@Model.Passengers[i].User.Id">
+                                        <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
+
+                                        <button type="submit" class="btn btn-success">Acceptere Passageren</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="modal fade" id="Modal-@i" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Afmeldelse af passageren</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Er du sikker på at du vil afmelde @Model.Passengers[i].User.Name @Model.Passengers[i].User.Surname ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Nej</button>
+                                    <form asp-page-handler="DeletePasFromChau" asp-route-pas="@Model.Passengers[i].User.Id">
+                                        <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
+                                        <input type="hidden" asp-for="@Model.Passengers[i].User.Id" />
+                                        <button type="submit" class="btn btn-danger">Afmeld Passageren</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                             }
                         </div>
                     </div>
