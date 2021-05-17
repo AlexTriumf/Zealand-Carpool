@@ -4,27 +4,34 @@
 }
 
 <div class="container">
-    <form method="post">
-        <div class="form-group">
-            <input type="text" asp-for="UserInput" placeholder="Søg på et navn.." class="form-group" />
-            <input type="submit" class="btn-primary" value="Søg" />
+    <form method="post" class="row p-4 col-lg-8 offset-lg-3">
+        <div class="col">
+            <input type="text" asp-for="UserInput" placeholder="Søg på et navn.." class="form-control" />
+        </div>
+        <div class="col">
+            <input type="submit" class="btn btn-primary" value="Søg" />
         </div>
     </form>
     @if (Model.ListOfUsers != null)
     {
-        @foreach (var user in Model.ListOfUsers)
+<form class="row">
+    @foreach (var user in Model.ListOfUsers)
         {
-            <div class="card" style="width: 300px">
-                <img class="card-img-top" src="/img/img_avatar1.png" alt="Card image" style="width: 100%"/>
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@user.Id">
-                            @user.Name @user.Surname
-                        </a>
-                    </h4>
-                </div>
+    <div class="col-md">
+        <div class="card mt-4" style="width: 300px">
+            <img class="card-img-top" src="/img/img_avatar1.png" alt="Card image" style="width: 100%" />
+            <div class="card-body">
+                <h4 class="card-title">
+                    <a asp-page="/Userpage/VisitUsersProfile" asp-route-id="@user.Id">
+                        @user.Name @user.Surname
+                    </a>
+                </h4>
             </div>
+        </div>
+    </div>
+
         }
+</form>
 
     }
-</div>
+    </div>

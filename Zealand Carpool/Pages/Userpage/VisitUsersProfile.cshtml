@@ -114,7 +114,26 @@
                 <form asp-page-handler="delete" method="post">
                     <input type="hidden" asp-for="@comment.Id" />
                     <input type="hidden" asp-for="@comment.UserID.Id" />
-                    <button type="submit" class="btn btn-link btn-sm float-right">Slet</button>
+                    <button type="submit" class="btn btn-link btn-sm float-right" data-toggle="modal" data-target="#anotherModal-@comment.Id">Slet</button>
+                    <div id="anotherModal-@comment.Id" class="modal fade" role="dialog">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">Bekræft slet kommentar</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Er du sikker på at du vil slette denne kommentar?</p>
+                                    <p>Når du har bekræftet valget er det ikke muligt at fortryde</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="hidden" asp-for="@Model.UsersProfile.Id" />
+                                    <button type="submit" class="btn btn-danger">Bekræft</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Anuller</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             }
 
