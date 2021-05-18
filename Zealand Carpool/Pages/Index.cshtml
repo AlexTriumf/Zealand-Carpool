@@ -3,38 +3,183 @@
 @{
     ViewData["Title"] = "Home page";
 }
-<head>
-    <link rel="stylesheet" href="~/css/Index.css" />
-</head>
 
-<div id="Image1">
-    <div class="container">
-        @if (!User.Identity.IsAuthenticated)
-        {
-            <h2 class="text-center">Velkommen til <br /> <b id="LogoT">Zealand - Carpool</b> </h2>
-            <h6 class="text-center"><i>Du er ikke logget ind, tryk på knappen nedunder for at logge ind</i></h6>
-            <div class="text-center">
-                <button id="myModalBtn" class="btn" hidden data-toggle="modal" data-target="#myModal"><i class="button alert-info"></i></button>
-                <a class="btn bg-success" id="LogBut" type="button" asp-page="/LoginPage/Login">Login</a>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Zealand Carpool</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/carousel/">
+
+    <!-- Bootstrap core CSS -->
+<link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+
+   
+    <!-- Custom styles for this template -->
+    <link href="~/css/carousel.css" rel="stylesheet">
+  </head>
+  <body>
+  <main role="main">
+
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          </ol>
+          <div class="carousel-inner">
+              <div class="carousel-item active">
+                  <img src="img/Background.jpg">
+                  <div class="container">
+                      <div class="carousel-caption text-left">
+                      @if (!User.Identity.IsAuthenticated)
+                      {
+                          <h1>Velkommen til Zealand Carpool</h1>
+                          <p>Nem samkørsel til og fra Zealands afdelinger for studerende og medarbejdere. Tilbyd samkørsel til dine medstuderende eller bliv passager. </p>
+                          <p>
+                          <button id="myModalBtn" class="btn" hidden data-toggle="modal" data-target="#myModal"><i class="button alert-info"></i></button>
+                              <a class="btn btn-lg btn-primary" id="LogBut" type="button" asp-page="/LoginPage/Login">Login</a>
+                              </p>
+                      }
+                      else
+                      {
+                          <h1>Velkommen til Zealand Carpool</h1>
+                          <p>Du er nu logget ind. </p>
+                      }
+                      </div>
+                  </div>
+              </div>
+ 
+          </div>
+   
+
+
+        
+
+          <div class="container marketing">
+
+              <!-- Three columns of text below the carousel -->
+          @if (User.Identity.IsAuthenticated)
+          {
+              <div class="row">
+                  <div class="col-lg-4">
+                      <img src="img/acp.svg" width="140" height="140" style="border-radius: 50%;">
+
+                      <h2>Se alle samkørsler</h2>
+
+                      <p><a class="btn btn-secondary" id="LogBut" type="button" asp-page="/CarpoolPage/Carpools">Se alle kørsler &raquo;</a></p>
+                  </div><!-- /.col-lg-4 -->
+                  <div class="col-lg-4">
+                      <img src="img/dcp.svg" width="140" height="140" style="border-radius: 50%;">
+
+                      <h2>Se dine samkørsler</h2>
+
+                      <p><a class="btn btn-secondary" id="LogBut" type="button" asp-page="/UserPage/UserCarpools">Se dine kørsler &raquo;</a></p>
+                  </div><!-- /.col-lg-4 -->
+                  <div class="col-lg-4">
+                      <img src="img/ocp.svg" width="140" height="140" style="border-radius: 50%;">
+
+                      <h2>Opret samkørsel</h2>
+
+                      <p><a class="btn btn-secondary" id="LogBut" type="button" asp-page="/CarpoolPage/OfferCarpool">Opret samkørsel &raquo;</a></p>
+                  </div><!-- /.col-lg-4 -->
+              </div>
+              <!-- /.row -->
+          }
+
+              <!-- START THE FEATURETTES -->
+
+              <hr class="featurette-divider">
+
+              <div class="row featurette">
+                  <div class="col-md-7">
+                      <h2 class="featurette-heading">Trin 1. <span class="text-muted"><br>Opret bruger.</span></h2>
+                      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                  </div>
+                  <div class="col-md-5">
+                      <img src="img/1.svg" width="=350" height="350">
+                  </div>
+              </div>
+
+              <hr class="featurette-divider">
+
+              <div class="row featurette">
+                  <div class="col-md-7 order-md-2">
+                      <h2 class="featurette-heading" style="margin-left: 30%">Trin 2. <span class="text-muted" ><br>Opret samkørsel.</span></h2>
+                      <p class="lead" style="margin-left: 30%">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                  </div>
+                  <div class="col-md-5 order-md-1">
+                      <img src="img/2.svg" width="=350" height="350" style="margin-right: 50%;">
+                  </div>
+              </div>
+
+              <hr class="featurette-divider">
+
+              <div class="row featurette">
+                  <div class="col-md-7">
+                      <h2 class="featurette-heading">Trin 3. <span class="text-muted"><br>Modtag passagerer.</span></h2>
+                      <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+                  </div>
+                  <div class="col-md-5">
+                      <img src="img/4.svg" width="=350" height="350">
+                  </div>
+              </div>
+
+
+
+
+
+
+
+        
+   
+
+              <hr class="featurette-divider">
+
+              <!-- /END THE FEATURETTES -->
+
+          </div>
+      </div>
+  </main>
+  </body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+</html>
+
+    
+
+
+    @*<div id="Image1">
+            <div class="container">
+                @if (!User.Identity.IsAuthenticated)
+                {
+                    <h2 class="text-center">Velkommen til <br /> <b id="LogoT">Zealand - Carpool</b> </h2>
+                    <h6 class="text-center"><i>Du er ikke logget ind, tryk på knappen nedunder for at logge ind</i></h6>
+                    <div class="text-center">
+                        <button id="myModalBtn" class="btn" hidden data-toggle="modal" data-target="#myModal"><i class="button alert-info"></i></button>
+                        <a class="btn bg-success" id="LogBut" type="button" asp-page="/LoginPage/Login">Login</a>
+                    </div>
+                }
+                else
+                {
+
+                    <h2 class="text-center">Velkommen til <br /> <b id="LogoT">Zealand - Carpool</b> </h2>
+                    <div class="row">
+                        <div class="col">
+                            <a class="btn bg-success" id="LogBut" type="button" asp-page="/UserPage/UserCarpools">Se dine Carpool</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn bg-success" id="LogBut" type="button" asp-page="/CarpoolPage/Carpools">Se nuværende Carpools</a>
+                        </div>
+                        <div class="col">
+                            <a class="btn bg-success" id="LogBut" type="button" asp-page="/CarpoolPage/OfferCarpool">Opret en Carpool</a>
+                        </div>
+                    </div>
+                }
+
             </div>
-        } else
-        {
-
-        <h2 class="text-center">Velkommen til <br /> <b id="LogoT">Zealand - Carpool</b> </h2>
-        <div class="row">
-            <div class="col">
-            <a class="btn bg-success" id="LogBut" type="button" asp-page="/UserPage/UserCarpools">Se dine Carpool</a>
-            </div> 
-            <div class="col">
-                <a class="btn bg-success" id="LogBut" type="button" asp-page="/CarpoolPage/Carpools">Se nuværende Carpools</a>
-            </div>
-            <div class="col">
-                <a class="btn bg-success" id="LogBut" type="button" asp-page="/CarpoolPage/OfferCarpool">Opret en Carpool</a>
-            </div>
-        </div>
-        }
-
-    </div>
 
 
-</div>
+        </div>*@
