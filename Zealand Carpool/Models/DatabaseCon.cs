@@ -15,15 +15,16 @@ namespace Zealand_Carpool.Models
         string _connString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         private static DatabaseCon _instance = new DatabaseCon();
         private SqlConnection _conn; 
+       
         private DatabaseCon()
         {
             _conn = new SqlConnection(_connString);
-            _conn.Open(); 
         }
 
         public SqlConnection SqlConnection()
         {
-            return _instance._conn;
+            _conn.Open();
+            return _conn;
         }
 
         public void SqlConnectionClose()
