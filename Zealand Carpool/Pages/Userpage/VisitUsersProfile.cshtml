@@ -66,31 +66,32 @@
 
     @if (Model.LoggedInUser.UserType == UserType.Admin)
     {
-        <form asp-page-handler="DeleteUser" method="post">
-            <div class="form-group">
+        <div class="form-group">
                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Slet bruger</button>
 
                 <div id="myModal" class="modal fade" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 <h4 class="modal-title">Bekræft slet bruger</h4>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
                                 <p>Er du sikker på at du vil slette denne bruger?</p>
                                 <p>Når du har bekræftet valget er det ikke muligt at få brugeren tilbage igen</p>
                             </div>
                             <div class="modal-footer">
-                                <input type="hidden" asp-for="@Model.UsersProfile.Id" />
-                                <button type="submit" class="btn btn-danger">Bekræft</button>
+                                <form asp-page-handler="DeleteUser" method="post">
+                                    <input type="hidden" asp-for="@Model.UsersProfile.Id" />
+                                    <button type="submit" class="btn btn-danger">Bekræft</button>
+                                </form>
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Anuller</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
+        
     }
     <form method="post">
         <div class="comment">
@@ -111,30 +112,30 @@
             <p>@comment.Text</p>
             @if (comment.UserPostID.Id.Equals(Model.LoggedInUser.Id) || Model.LoggedInUser.UserType == UserType.Admin)
             {
-                <form asp-page-handler="delete" method="post">
-                    <input type="hidden" asp-for="@comment.Id" />
-                    <input type="hidden" asp-for="@comment.UserID.Id" />
-                    <button type="submit" class="btn btn-link btn-sm float-right" data-toggle="modal" data-target="#anotherModal-@comment.Id">Slet</button>
+                <button type="submit" class="btn btn-link btn-sm float-right" data-toggle="modal" data-target="#anotherModal-@comment.Id">Slet</button>
                     <div id="anotherModal-@comment.Id" class="modal fade" role="dialog">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                                     <h4 class="modal-title">Bekræft slet kommentar</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                                 </div>
                                 <div class="modal-body">
                                     <p>Er du sikker på at du vil slette denne kommentar?</p>
                                     <p>Når du har bekræftet valget er det ikke muligt at fortryde</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <input type="hidden" asp-for="@Model.UsersProfile.Id" />
-                                    <button type="submit" class="btn btn-danger">Bekræft</button>
+                                    <form asp-page-handler="delete" method="post">
+                                        <input type="hidden" asp-for="@Model.UsersProfile.Id" />
+                                        <input type="hidden" asp-for="@comment.Id" />
+                                        <button type="submit" class="btn btn-danger">Bekræft</button>
+                                    </form>
                                     <button type="button" class="btn btn-danger" data-dismiss="modal">Anuller</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
+                
             }
 
         </div>
