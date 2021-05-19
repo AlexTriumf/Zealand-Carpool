@@ -12,26 +12,24 @@ namespace Zealand_Carpool.Models
     /// </summary>
     public class DatabaseCon
     {
-        string ConnString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        string _connString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         private static DatabaseCon _instance = new DatabaseCon();
+        private SqlConnection _conn; 
         private DatabaseCon()
         {
-                            
+            _conn = new SqlConnection(_connString);
+            _conn.Open(); 
         }
 
         public SqlConnection SqlConnection()
         {
-                SqlConnection conn = new SqlConnection(ConnString);
-            conn.Open();    
-            return conn;
+            return _instance._conn;
         }
 
         public void SqlConnectionClose()
         {
-            SqlConnection conn = new SqlConnection(ConnString);
-            conn.CloseAsync();
-            
-            
+            SqlConnection conn = new SqlConnection(_connString);
+            conn.CloseAsync();     
         }
 
         public static DatabaseCon Instance => _instance;
