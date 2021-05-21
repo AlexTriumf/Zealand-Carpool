@@ -36,6 +36,7 @@ namespace Zealand_Carpool.Pages.LoginPage
         {
             if (user.Email is null || user.Password is null || !user.Email.Contains("@"))
             {
+                WrongCredintials = true;
                 return Page();
             }
             Task<User> taskUser = _userInterface.GetUser(user.Email, user.Password);
