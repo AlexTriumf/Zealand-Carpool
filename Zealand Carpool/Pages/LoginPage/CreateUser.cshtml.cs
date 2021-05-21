@@ -48,7 +48,7 @@ namespace Zealand_Carpool.Pages.LoginPage
 
         public IActionResult OnPost()
         {
-            bool a = _userInterface.CheckUser(CreateUser).Result;
+
             if (!ModelState.IsValid || !_userInterface.CheckUser(CreateUser).Result)
             {
                 List<Branch> postals = _userInterface.GetAllPostalCodes().Result;
