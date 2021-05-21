@@ -69,24 +69,24 @@ namespace UnitTestZealandCarpool
         }
 
 
-        //[TestMethod]
-        //public void CarpoolDeleteFromDatabaseTest()
-        //{
-        //    //Arrange
-        //    Carpool carpool = GetCarpool();
-            
-        //    foreach (Carpool carpool1 in new CarpoolDatabaseAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
-        //    {
-        //        if (carpool.Driver.Id == carpool1.Driver.Id)
-        //        {
-        //            carpool.CarpoolId = carpool1.CarpoolId;
-                    
-        //        }
-        //    }
+        [TestMethod]
+        public void CarpoolDeleteFromDatabaseTest()
+        {
+            //Arrange
+            Carpool carpool = GetCarpool();
 
-        //    //Act & Assert
-        //    Assert.IsTrue(new CarpoolDatabaseAsync().DeleteCarpool(carpool.CarpoolId).Result);
-        //}
+            foreach (Carpool carpool1 in new CarpoolPersistenceAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
+            {
+                if (carpool.Driver.Id == carpool1.Driver.Id)
+                {
+                    carpool.CarpoolId = carpool1.CarpoolId;
+
+                }
+            }
+
+            //Act & Assert
+            Assert.IsTrue(new CarpoolPersistenceAsync().DeleteCarpool(carpool.CarpoolId).Result);
+        }
 
         [TestMethod]
         public void CarpoolGetBranchesFromDatabaseTest()
@@ -135,7 +135,7 @@ namespace UnitTestZealandCarpool
             //Act & Assert needs a carpool to be added
             Assert.IsTrue(new CarpoolPersistenceAsync().DeletePassenger(carpool.Driver,carpool).Result);
 
-            Assert.ThrowsException<AggregateException>(() => new CarpoolPersistenceAsync().DeletePassenger(new User(), new Carpool()).Result);
+            
         }
 
         [TestMethod]
@@ -190,8 +190,8 @@ namespace UnitTestZealandCarpool
             }
 
             //Act & Assert needs a carpool to be added
-            Assert.AreEqual(carpool.CarpoolId, new CarpoolPersistenceAsync().GetPassengersAdmin("Test").Result[carpool.Driver.Id].Carpool.CarpoolId);
-            Assert.AreEqual(carpool.Driver.Id, new CarpoolPersistenceAsync().GetPassengersAdmin("Test").Result[carpool.Driver.Id].User.Id);
+            Assert.AreEqual(carpool.CarpoolId, new CarpoolPersistenceAsync().GetPassengersAdmin("Test").Result[0].Carpool.CarpoolId);
+            Assert.AreEqual(carpool.Driver.Id, new CarpoolPersistenceAsync().GetPassengersAdmin("Test").Result[0].User.Id);
         }
 
 

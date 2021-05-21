@@ -34,7 +34,7 @@ namespace Zealand_Carpool.Pages.LoginPage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (user.Email is null && user.Password is null)
+            if (user.Email is null || user.Password is null || !user.Email.Contains("@"))
             {
                 return Page();
             }
