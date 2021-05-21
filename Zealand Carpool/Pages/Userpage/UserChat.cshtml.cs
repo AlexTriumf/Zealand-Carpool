@@ -27,7 +27,7 @@ namespace Zealand_Carpool.Pages.Userpage
 
             
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
-                LoggedInUser = new Services.UserDatabaseAsync().GetUser(Guid.Parse(listofClaims[0].Value)).Result;
+                LoggedInUser = new Services.UserPersistenceAsync().GetUser(Guid.Parse(listofClaims[0].Value)).Result;
                 
                 if (_ichatter.HasAChat(LoggedInUser.Id, Guid.Parse(userId)).Result)
                 {

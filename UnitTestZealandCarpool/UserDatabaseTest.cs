@@ -22,7 +22,7 @@ namespace UnitTestZealandCarpool
             address.Longtitude = 12.0786884;
             addresses.Add(address);
             user.AddressList = addresses;
-                User user1 = new UserDatabaseAsync().GetUserID(user.Email, "12345678").Result;
+                User user1 = new UserPersistenceAsync().GetUserID(user.Email, "12345678").Result;
             user.Id = user1.Id;
             return user;
         }
@@ -54,7 +54,7 @@ namespace UnitTestZealandCarpool
             //Arrange
             User user = GetUser();
             string password = "12345678";
-            User newUser = new UserDatabaseAsync().GetUser(user.Email, password).Result;
+            User newUser = new UserPersistenceAsync().GetUser(user.Email, password).Result;
 
             //Act & Assert
             Assert.AreEqual(newUser.Id,user.Id);
@@ -77,7 +77,7 @@ namespace UnitTestZealandCarpool
             User user = GetUser();
             string password = "12345678";
             //Act & Assert
-            Assert.AreEqual(new UserDatabaseAsync().GetUserID(user.Email, password).Result.Id, user.Id);
+            Assert.AreEqual(new UserPersistenceAsync().GetUserID(user.Email, password).Result.Id, user.Id);
         }
 
         //[TestMethod]
@@ -120,7 +120,7 @@ namespace UnitTestZealandCarpool
             string search = "Test";
            
             //Act & Assert
-            Assert.AreEqual(new UserDatabaseAsync().SearchUsers(search)[0].Name,search);
+            Assert.AreEqual(new UserPersistenceAsync().SearchUsers(search)[0].Name,search);
         }
 
         [TestMethod]
@@ -130,7 +130,7 @@ namespace UnitTestZealandCarpool
             User user = GetUser();
             user.Password = "12345678";
             //Act & Assert
-            Assert.IsFalse(new UserDatabaseAsync().CheckUser(user).Result) ;
+            Assert.IsFalse(new UserPersistenceAsync().CheckUser(user).Result) ;
         }
 
         [TestMethod]
@@ -140,7 +140,7 @@ namespace UnitTestZealandCarpool
             User user = new User();
             
             //Act & Assert
-            Assert.ThrowsException<AggregateException>(() => new UserDatabaseAsync().AddUser(user).Result);
+            Assert.ThrowsException<AggregateException>(() => new UserPersistenceAsync().AddUser(user).Result);
         }
 
         [TestMethod]
@@ -150,7 +150,7 @@ namespace UnitTestZealandCarpool
             User user = new User();
 
             //Act & Assert
-            Assert.ThrowsException<AggregateException>(() => new UserDatabaseAsync().UpdateUser(user.Id,user).Result);
+            Assert.ThrowsException<AggregateException>(() => new UserPersistenceAsync().UpdateUser(user.Id,user).Result);
         }
 
         [TestMethod]
@@ -159,7 +159,7 @@ namespace UnitTestZealandCarpool
             //Arrange
             User user = new User();
             //Act & Assert
-            Assert.IsFalse(new UserDatabaseAsync().DeleteUser(Guid.NewGuid()).Result);
+            Assert.IsFalse(new UserPersistenceAsync().DeleteUser(Guid.NewGuid()).Result);
         }
 
         [TestMethod]
@@ -168,9 +168,9 @@ namespace UnitTestZealandCarpool
             //Arrange
             User user = GetUser();
             //Act & Assert
-            Assert.IsNotNull(new UserDatabaseAsync().GetAllPostalCodes().Result);
-            Assert.IsNotNull(new UserDatabaseAsync().GetAllUsers().Result);
-            Assert.ThrowsException<AggregateException>(() => new UserDatabaseAsync().SearchUsers(""));
+            Assert.IsNotNull(new UserPersistenceAsync().GetAllPostalCodes().Result);
+            Assert.IsNotNull(new UserPersistenceAsync().GetAllUsers().Result);
+            Assert.ThrowsException<AggregateException>(() => new UserPersistenceAsync().SearchUsers(""));
         }
 
 

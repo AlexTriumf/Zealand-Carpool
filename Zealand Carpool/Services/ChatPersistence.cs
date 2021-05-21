@@ -9,13 +9,11 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Services
 {
-    public class ChatDabase : IChat
+    public class ChatPersistence : IChat
     {
-        //lavet af Andreas ændret af Aleksandar
+        //Lavet af Aleksandar med hjælp fra Andreas
 
-        string _connString =
-            "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
+        
         string _createChat = "insert into Chat (UserOneId,UserTwoId) Values (@userone, @usertwo)";
 
         string _sendChatText =
@@ -23,32 +21,37 @@ namespace Zealand_Carpool.Services
 
         string _getChat = "Select * From Chat Where (UserOneId = @idone and UserTwoId = @idtwo) OR (UserTwoId = @idone and UserOneId = @idtwo)";
         string _getChatText = "Select * From ChatText Where ChatId = @id";
-       
+        string _connString = "Data Source=andreas-zealand-server-dk.database.windows.net;Initial Catalog=Andreas-database;User ID=Andreas;Password=SecretPassword!;Connect Timeout=30;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         public Task<bool> AddChat(Guid userOne, Guid userTwo)
         {
-            Task task = Task.Run(() =>
+            Task<bool> task = Task.Run(() =>
             {
-               
-                    using (SqlCommand cmd = new SqlCommand(_createChat, DatabaseCon.Instance.SqlConnection()))
+                using (SqlConnection conn = new SqlConnection(_connString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(_createChat, conn))
                     {
                         cmd.Parameters.AddWithValue("@userone", userOne);
                         cmd.Parameters.AddWithValue("@usertwo", userTwo);
 
-                        cmd.ExecuteNonQuery();
+                        int rows = cmd.ExecuteNonQuery();
+                        if (rows > 0) { return true; } else { return false; }
                     }
-                
+                }
             });
-            DatabaseCon.Instance.SqlConnectionClose();
-            return Task.FromResult(task.IsCompletedSuccessfully);
+
+            return task;
         }
 
         public Task<bool> HasAChat(Guid userOne, Guid userTwo)
         {
             Task<bool> task = Task.Run(() =>
             {
-                
-                    using (SqlCommand cmd = new SqlCommand(_getChat, DatabaseCon.Instance.SqlConnection()))
+                using (SqlConnection conn = new SqlConnection(_connString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(_getChat, conn))
                     {
                         cmd.Parameters.AddWithValue("@idone", userOne);
                         cmd.Parameters.AddWithValue("@idtwo", userTwo);
@@ -60,10 +63,10 @@ namespace Zealand_Carpool.Services
 
                     }
                     return true;
-                
+                }
 
             });
-            DatabaseCon.Instance.SqlConnectionClose();
+
             return task;
         }
 
@@ -73,9 +76,11 @@ namespace Zealand_Carpool.Services
 
             Task task = Task.Run(() =>
             {
-                
 
-                    using (SqlCommand cmd = new SqlCommand(_sendChatText, DatabaseCon.Instance.SqlConnection()))
+                using (SqlConnection conn = new SqlConnection(_connString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(_sendChatText, conn))
                     {
 
                         cmd.Parameters.AddWithValue("@id", chatId);
@@ -84,9 +89,9 @@ namespace Zealand_Carpool.Services
                         cmd.Parameters.AddWithValue("@Timestamp", DateTime.Now);
                         cmd.ExecuteNonQuery();
                     }
-                
+                } 
             });
-            DatabaseCon.Instance.SqlConnectionClose();
+
             return task;
         }
 
@@ -96,8 +101,10 @@ namespace Zealand_Carpool.Services
             List<ChatText> chatText = new List<ChatText>();
             Task<List<ChatText>> task = Task.Run(async () =>
             {
-               
-                    using (SqlCommand cmd = new SqlCommand(_getChat, DatabaseCon.Instance.SqlConnection()))
+                using (SqlConnection conn = new SqlConnection(_connString))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(_getChat, conn))
                     {
 
                         cmd.Parameters.AddWithValue("@idone", userOne);
@@ -110,9 +117,9 @@ namespace Zealand_Carpool.Services
                         reader.Close();
                     }
 
-                    
 
-                    using (SqlCommand cmd = new SqlCommand(_getChatText, DatabaseCon.Instance.SqlConnection()))
+
+                    using (SqlCommand cmd = new SqlCommand(_getChatText, conn))
                     {
 
                         cmd.Parameters.AddWithValue("@id", chat.ChatId);
@@ -121,14 +128,15 @@ namespace Zealand_Carpool.Services
                         while (reader.Read())
                         {
                             User user1 = new User();
-                            user1 = await new UserDatabaseAsync().GetUser(reader.GetGuid(1));
+                            user1 = await new UserPersistenceAsync().GetUser(reader.GetGuid(1));
                             chatText.Add(new ChatText { user = user1, message = reader.GetString(2), TimeStamp = reader.GetDateTime(3) });
                         }
                     }
-                
-                return chatText;
+
+                    return chatText;
+                }
             });
-            DatabaseCon.Instance.SqlConnectionClose();
+
             return task;
         }
 
@@ -147,25 +155,27 @@ namespace Zealand_Carpool.Services
             Task<Chat> task = Task.Run(() =>
             {
 
-
-                using (SqlCommand cmd = new SqlCommand(_getChat, DatabaseCon.Instance.SqlConnection()))
+                using (SqlConnection conn = new SqlConnection(_connString))
                 {
-
-                    cmd.Parameters.AddWithValue("@idone", UserOneId);
-                    cmd.Parameters.AddWithValue("@idtwo", UserTwoId);
-                    SqlDataReader reader = cmd.ExecuteReader();
-                    Chat chat = new Chat();
-
-                    while (reader.Read())
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(_getChat, conn))
                     {
-                        chat.ChatId = reader.GetInt32(0);
+
+                        cmd.Parameters.AddWithValue("@idone", UserOneId);
+                        cmd.Parameters.AddWithValue("@idtwo", UserTwoId);
+                        SqlDataReader reader = cmd.ExecuteReader();
+                        Chat chat = new Chat();
+
+                        while (reader.Read())
+                        {
+                            chat.ChatId = reader.GetInt32(0);
+                        }
+
+                        return chat;
                     }
-
-                    return chat;
                 }
-
             });
-            DatabaseCon.Instance.SqlConnectionClose();
+
             return task;
         }
     }

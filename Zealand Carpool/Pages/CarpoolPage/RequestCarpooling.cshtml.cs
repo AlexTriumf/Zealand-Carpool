@@ -43,7 +43,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             {
 
                 Carpool = _carpoolInterface.GetCarpool(theID).Result;
-            } catch (InvalidOperationException)
+            } catch (AggregateException)
             {
                 return RedirectToPage("/Error");
             }

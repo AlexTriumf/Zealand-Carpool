@@ -31,7 +31,7 @@
             }
             <p>Til Dato & tidspunkt: @Model.Carpool.Date.ToString()</p>
             <p>Detaljerne for kørslen: @Model.Carpool.Details</p>
-            @if (Model.LoggedInUser.Id != Model.Carpool.Driver.Id && !Model.Carpool.Passengerlist.ContainsKey(Model.LoggedInUser.Id))
+            @if (Model.LoggedInUser.Id != Model.Carpool.Driver.Id && !Model.Carpool.Passengerlist.ContainsKey(Model.LoggedInUser.Id) && Model.Carpool.Passengerlist.Count() < Model.Carpool.PassengerSeats)
             {
                 <form asp-page-handler="RequestCarpool">
                     <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />

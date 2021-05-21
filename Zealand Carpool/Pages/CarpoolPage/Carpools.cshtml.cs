@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Zealand_Carpool.Interfaces;
 using Zealand_Carpool.Models;
+using Zealand_Carpool.Pages.Shared;
 
 namespace Zealand_Carpool.Pages.CarpoolPage
 {
@@ -13,7 +14,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
     /// The PageModel to see all carpools
     /// Made by Andreas
     /// </summary>
-    public class CarpoolsModel : PageModel
+    public class CarpoolsModel : ProtectedPage
     {
         
         public Dictionary<int,Carpool> AllCarpools { get; set; }
@@ -30,7 +31,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             _carpoolInterface = icar;
         }
 
-        public IActionResult OnGet()
+        protected override IActionResult GetRequest()
         {
             Date = DateTime.Today;
             

@@ -35,8 +35,8 @@ namespace UnitTestZealandCarpool
             //Arrange
             Carpool carpool = GetCarpool();
             //Act & Assert
-            Assert.IsTrue(new CarpoolDatabaseAsync().AddCarpool(carpool).Result);
-            Assert.ThrowsException<AggregateException>(() => new CarpoolDatabaseAsync().AddCarpool(new Carpool()).Result);
+            Assert.IsTrue(new CarpoolPersistenceAsync().AddCarpool(carpool).Result);
+            Assert.ThrowsException<AggregateException>(() => new CarpoolPersistenceAsync().AddCarpool(new Carpool()).Result);
         }
 
         [TestMethod]
@@ -45,7 +45,7 @@ namespace UnitTestZealandCarpool
             //Arrange
             Carpool carpool = GetCarpool();
             List<Carpool> carpools = new List<Carpool>();
-            foreach (Carpool carpool1 in new CarpoolDatabaseAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
+            foreach (Carpool carpool1 in new CarpoolPersistenceAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
             {
                 if (carpool.Driver.Id == carpool1.Driver.Id)
                 {
@@ -54,17 +54,17 @@ namespace UnitTestZealandCarpool
                 }
             }
 
-            Carpool carpool2 = new CarpoolDatabaseAsync().GetCarpool(carpools[0].CarpoolId).Result;
+            Carpool carpool2 = new CarpoolPersistenceAsync().GetCarpool(carpools[0].CarpoolId).Result;
             //Act & Assert
-            Assert.AreEqual(carpool.CarpoolId, new CarpoolDatabaseAsync().GetCarpool(carpools[0].CarpoolId).Result.CarpoolId);
+            Assert.AreEqual(carpool.CarpoolId, new CarpoolPersistenceAsync().GetCarpool(carpools[0].CarpoolId).Result.CarpoolId);
             //Assert.AreEqual(carpool.Date,new CarpoolDatabaseAsync().GetCarpool(carpools[0].CarpoolId).Result.Date); is the same value 
-            Assert.AreEqual(carpool.Details, new CarpoolDatabaseAsync().GetCarpool(carpools[0].CarpoolId).Result.Details);
-            Assert.AreEqual(carpool.Driver.Id, new CarpoolDatabaseAsync().GetCarpool(carpools[0].CarpoolId).Result.Driver.Id);
-            Assert.AreEqual(carpool.PassengerSeats, new CarpoolDatabaseAsync().GetCarpool(carpools[0].CarpoolId).Result.PassengerSeats);
-            Assert.AreEqual(carpool.Branch.BranchId, new CarpoolDatabaseAsync().GetCarpool(carpools[0].CarpoolId).Result.Branch.BranchId);
-            Assert.AreEqual(carpool.Branch.BranchName, new CarpoolDatabaseAsync().GetCarpool(carpools[0].CarpoolId).Result.Branch.BranchName);
+            Assert.AreEqual(carpool.Details, new CarpoolPersistenceAsync().GetCarpool(carpools[0].CarpoolId).Result.Details);
+            Assert.AreEqual(carpool.Driver.Id, new CarpoolPersistenceAsync().GetCarpool(carpools[0].CarpoolId).Result.Driver.Id);
+            Assert.AreEqual(carpool.PassengerSeats, new CarpoolPersistenceAsync().GetCarpool(carpools[0].CarpoolId).Result.PassengerSeats);
+            Assert.AreEqual(carpool.Branch.BranchId, new CarpoolPersistenceAsync().GetCarpool(carpools[0].CarpoolId).Result.Branch.BranchId);
+            Assert.AreEqual(carpool.Branch.BranchName, new CarpoolPersistenceAsync().GetCarpool(carpools[0].CarpoolId).Result.Branch.BranchName);
             
-            Assert.IsNotNull(new CarpoolDatabaseAsync().GetCarpool(100000));
+            Assert.IsNotNull(new CarpoolPersistenceAsync().GetCarpool(100000));
 
         }
 
@@ -95,7 +95,7 @@ namespace UnitTestZealandCarpool
             Branch branch = new Branch();
 
             //Act & Assert
-            Assert.IsNotNull(new CarpoolDatabaseAsync().GetBranches().Result);
+            Assert.IsNotNull(new CarpoolPersistenceAsync().GetBranches().Result);
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace UnitTestZealandCarpool
         {
             //Arrange
             Carpool carpool = GetCarpool();
-            foreach (Carpool carpool1 in new CarpoolDatabaseAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
+            foreach (Carpool carpool1 in new CarpoolPersistenceAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
             {
                 if (carpool.Driver.Id == carpool1.Driver.Id)
                 {
@@ -113,9 +113,9 @@ namespace UnitTestZealandCarpool
             }
 
             //Act & Assert needs a carpool to be added
-            Assert.IsTrue(new CarpoolDatabaseAsync().AddPassenger(new UserDatabaseTest().GetUser(),carpool).Result);
+            Assert.IsTrue(new CarpoolPersistenceAsync().AddPassenger(new UserDatabaseTest().GetUser(),carpool).Result);
    
-            Assert.ThrowsException<AggregateException>(() => new CarpoolDatabaseAsync().AddPassenger(new User(),new Carpool()).Result);
+            Assert.ThrowsException<AggregateException>(() => new CarpoolPersistenceAsync().AddPassenger(new User(),new Carpool()).Result);
         }
 
         [TestMethod]
@@ -123,7 +123,7 @@ namespace UnitTestZealandCarpool
         {
             //Arrange
             Carpool carpool = GetCarpool();
-            foreach (Carpool carpool1 in new CarpoolDatabaseAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
+            foreach (Carpool carpool1 in new CarpoolPersistenceAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
             {
                 if (carpool.Driver.Id == carpool1.Driver.Id)
                 {
@@ -133,9 +133,9 @@ namespace UnitTestZealandCarpool
             }
 
             //Act & Assert needs a carpool to be added
-            Assert.IsTrue(new CarpoolDatabaseAsync().DeletePassenger(carpool.Driver,carpool).Result);
+            Assert.IsTrue(new CarpoolPersistenceAsync().DeletePassenger(carpool.Driver,carpool).Result);
 
-            Assert.ThrowsException<AggregateException>(() => new CarpoolDatabaseAsync().DeletePassenger(new User(), new Carpool()).Result);
+            Assert.ThrowsException<AggregateException>(() => new CarpoolPersistenceAsync().DeletePassenger(new User(), new Carpool()).Result);
         }
 
         [TestMethod]
@@ -143,7 +143,7 @@ namespace UnitTestZealandCarpool
         {
             //Arrange
             Carpool carpool = GetCarpool();
-            foreach (Carpool carpool1 in new CarpoolDatabaseAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
+            foreach (Carpool carpool1 in new CarpoolPersistenceAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
             {
                 if (carpool.Driver.Id == carpool1.Driver.Id)
                 {
@@ -153,7 +153,7 @@ namespace UnitTestZealandCarpool
             }
 
             //Act & Assert needs a carpool to be added
-            Assert.AreEqual(carpool.Driver.Id, new CarpoolDatabaseAsync().GetPassengers(carpool).Result[carpool.Driver.Id].User.Id);
+            Assert.AreEqual(carpool.Driver.Id, new CarpoolPersistenceAsync().GetPassengers(carpool).Result[carpool.Driver.Id].User.Id);
             
         }
 
@@ -162,7 +162,7 @@ namespace UnitTestZealandCarpool
         {
             //Arrange
             Carpool carpool = GetCarpool();
-            foreach (Carpool carpool1 in new CarpoolDatabaseAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
+            foreach (Carpool carpool1 in new CarpoolPersistenceAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
             {
                 if (carpool.Driver.Id == carpool1.Driver.Id)
                 {
@@ -173,14 +173,14 @@ namespace UnitTestZealandCarpool
             }
 
             //Act & Assert needs a carpool to be added
-            Assert.IsNotNull(new CarpoolDatabaseAsync().UpdatePassenger(carpool.Driver.Id,carpool.CarpoolId).Result);
+            Assert.IsNotNull(new CarpoolPersistenceAsync().UpdatePassenger(carpool.Driver.Id,carpool.CarpoolId).Result);
         }
         [TestMethod]
         public void CarpoolgetPassengersAdminFromDatabaseTest()
         {
             //Arrange
             Carpool carpool = GetCarpool();
-            foreach (Carpool carpool1 in new CarpoolDatabaseAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
+            foreach (Carpool carpool1 in new CarpoolPersistenceAsync().GetAllCarpools(carpool.Driver.Id).Result.Values)
             {
                 if (carpool.Driver.Id == carpool1.Driver.Id)
                 {
@@ -190,8 +190,8 @@ namespace UnitTestZealandCarpool
             }
 
             //Act & Assert needs a carpool to be added
-            Assert.AreEqual(carpool.CarpoolId, new CarpoolDatabaseAsync().GetPassengersAdmin("Test").Result[carpool.Driver.Id].Carpool.CarpoolId);
-            Assert.AreEqual(carpool.Driver.Id, new CarpoolDatabaseAsync().GetPassengersAdmin("Test").Result[carpool.Driver.Id].User.Id);
+            Assert.AreEqual(carpool.CarpoolId, new CarpoolPersistenceAsync().GetPassengersAdmin("Test").Result[carpool.Driver.Id].Carpool.CarpoolId);
+            Assert.AreEqual(carpool.Driver.Id, new CarpoolPersistenceAsync().GetPassengersAdmin("Test").Result[carpool.Driver.Id].User.Id);
         }
 
 
@@ -202,7 +202,7 @@ namespace UnitTestZealandCarpool
             Carpool carpool = GetCarpool();
             Carpool carpool2 = new Carpool();
             DateTime time = DateTime.Parse("13-01-2021 11:43:32");
-            foreach (Carpool carpool1 in new CarpoolDatabaseAsync().GetAllCarpools(time,"Zealand").Result.Values)
+            foreach (Carpool carpool1 in new CarpoolPersistenceAsync().GetAllCarpools(time,"Zealand").Result.Values)
             {
                 if (carpool.Driver.Id == carpool1.Driver.Id)
                 {

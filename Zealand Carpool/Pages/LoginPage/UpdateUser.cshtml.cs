@@ -52,6 +52,7 @@ namespace Zealand_Carpool.Pages.LoginPage
             }
             UpdateUser.AddressList = new List<Address>();
             UpdateUser.AddressList.Add(Address1);
+            UpdateUser.AddressList[0].Postalcode = PostalCode;
             _userInterface.UpdateUser(UpdateUser.Id,UpdateUser);
 
             return RedirectToPage("/Userpage/UserProfile");
