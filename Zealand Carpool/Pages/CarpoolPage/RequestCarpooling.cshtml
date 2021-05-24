@@ -118,12 +118,12 @@
                                     Er du sikker på at du vil afmelde @Model.Passengers[i].User.Name @Model.Passengers[i].User.Surname ?
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Nej</button>
                                     <form asp-page-handler="DeletePasFromChau" asp-route-pas="@Model.Passengers[i].User.Id">
                                         <input type="hidden" asp-for="@Model.Carpool.CarpoolId" />
                                         <input type="hidden" asp-for="@Model.Passengers[i].User.Id" />
                                         <button type="submit" class="btn btn-danger">Afmeld Passageren</button>
                                     </form>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Nej</button>
                                 </div>
                             </div>
                         </div>
