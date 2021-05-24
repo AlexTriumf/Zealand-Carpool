@@ -41,9 +41,10 @@ namespace Zealand_Carpool.Pages.Userpage
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
            
                 var selectedCarpools = from carpool in _carpoolInterface.GetAllCarpools(LoggedInUser.Id).Result
-                                       select carpool;
-                selectedCarpools = selectedCarpools.Where(carpool => carpool.Value.Passengerlist.ContainsKey(LoggedInUser.Id) ||
-                                                                     carpool.Value.Driver.Id == LoggedInUser.Id);
+                                       where carpool.Value.Passengerlist.ContainsKey(LoggedInUser.Id) ||
+                                             carpool.Value.Driver.Id == LoggedInUser.Id
+                                        select carpool;
+               
                 Carpools = selectedCarpools;
                 return Page();
                            
@@ -53,7 +54,11 @@ namespace Zealand_Carpool.Pages.Userpage
         {
             if (!String.IsNullOrWhiteSpace(Search))
             {
-                Carpools = _carpoolInterface.GetAllCarpools(Date, Search.ToLower()).Result;
+                var selectedCarpools = from carpool in _carpoolInterface.GetAllCarpools(Date, Search.ToLower()).Result
+                                       where carpool.Value.Passengerlist.ContainsKey(LoggedInUser.Id) ||
+                                             carpool.Value.Driver.Id == LoggedInUser.Id
+                                       select carpool;
+                Carpools = selectedCarpools;
             }
             else
             {
