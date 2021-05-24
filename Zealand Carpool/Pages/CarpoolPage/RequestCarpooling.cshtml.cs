@@ -47,7 +47,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             {
                 return RedirectToPage("/Error");
             }
-                Carpool.Passengerlist = _carpoolInterface.GetPassengers(Carpool).Result;
+            Carpool.Passengerlist = _carpoolInterface.GetPassengers(Carpool).Result;
                 
                 Passengers = new List<Passenger>();
                 
