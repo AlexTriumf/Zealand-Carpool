@@ -32,11 +32,14 @@ namespace Zealand_Carpool.Pages.CarpoolPage
 
         protected override IActionResult GetRequest(string id)
         {
-            if(id == "0")
+            int theID;
+            try
             {
-                return RedirectToPage("/CarpoolPage/Carpools");
+            theID = Convert.ToInt32(id);
+            } catch (FormatException)
+            {
+                return RedirectToPage("/Error");
             }
-            int theID = Convert.ToInt32(id);
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
             try
@@ -65,7 +68,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
         {
             try
             {
-            _carpoolInterface.AddPassenger(LoggedInUser,Carpool);
+                _carpoolInterface.AddPassenger(LoggedInUser,Carpool);
             }
             catch (AggregateException ex) { return RedirectToPage("/Error"); }
             return RedirectToPage("/CarpoolPage/RequestCarpooling", Carpool.CarpoolId);
