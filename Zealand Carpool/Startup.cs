@@ -33,7 +33,7 @@ namespace Zealand_Carpool
             
             services.AddSingleton<Interfaces.IUser, Services.UserPersistenceAsync>();
             services.AddSingleton<Interfaces.ICarpool, Services.CarpoolPersistenceAsync>();
-            services.AddSingleton<Interfaces.IChat, Services.ChatPersistence>();
+            services.AddSingleton<Interfaces.IChat, Services.ChatPersistenceAsync>();
             services.AddSingleton<Interfaces.IComment, Services.CommentPersistence>();
 
         }
