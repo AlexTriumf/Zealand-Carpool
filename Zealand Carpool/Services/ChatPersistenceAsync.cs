@@ -9,7 +9,7 @@ using Zealand_Carpool.Models;
 
 namespace Zealand_Carpool.Services
 {
-    public class ChatPersistence : IChat
+    public class ChatPersistenceAsync : IChat
     {
         //Lavet af Aleksandar med hjælp fra Andreas
 
