@@ -5,6 +5,11 @@ using Zealand_Carpool.Models;
 using Zealand_Carpool.Services;
 namespace UnitTestZealandCarpool
 {
+    /// <summary>
+    /// A test for UserPersistenceAsync class
+    /// This test can¨t run all test at ones, the user has to be added first.
+    /// Made by Andreas
+    /// </summary>
     [TestClass]
     public class UserDatabaseTest
     {
