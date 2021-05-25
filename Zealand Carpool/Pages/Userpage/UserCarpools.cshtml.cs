@@ -36,10 +36,10 @@ namespace Zealand_Carpool.Pages.Userpage
             
                 List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
-                var selectedCarpools = from carpool in _carpoolInterface.GetAllCarpools(DateTime.Today).Result                                       
+                var selectedCarpools = from carpool in _carpoolInterface.GetAllCarpools(DateTime.Today).Result
+                                       where carpool.Value.Passengerlist.ContainsKey(LoggedInUser.Id) ||
+                                             carpool.Value.Driver.Id == LoggedInUser.Id
                                        select carpool;
-                selectedCarpools = selectedCarpools.Where(carpool => carpool.Value.Passengerlist.ContainsKey(LoggedInUser.Id) ||
-                                                                     carpool.Value.Driver.Id == LoggedInUser.Id);
                 Carpools = selectedCarpools;
                 return Page();
             
