@@ -17,7 +17,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
     /// </summary>
     public class OfferCarpoolModel : Shared.ProtectedPage
     {
-        [BindProperty(SupportsGet = true)]
+        [BindProperty]
         public Carpool Carpool { get; set; }
         public SelectList Branches { get; set; }
         [BindProperty]
@@ -51,7 +51,7 @@ namespace Zealand_Carpool.Pages.CarpoolPage
         }
         public IActionResult OnPost()
         {
-            if (Carpool.PassengerSeats<=0)
+            if (Carpool.PassengerSeats<=0 || AddressId+BranchId==0)
             {
                 return RedirectToPage("/CarpoolPage/OfferCarpool");
             }
