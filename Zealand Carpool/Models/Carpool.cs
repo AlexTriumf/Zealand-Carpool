@@ -12,9 +12,8 @@ namespace Zealand_Carpool.Models
     public class Carpool
     {
         public int CarpoolId { get; set; }
-        [Required, MinLength(1), MaxLength(255)]
         public Branch Branch { get; set; }
-        [Required, Range(1, 9)]
+        [Required]
         public int PassengerSeats { get; set; }
         public bool HomeAdress { get; set; }
         public User Driver { get; set; }

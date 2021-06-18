@@ -9,7 +9,7 @@
         </div>
         <div class="col-6">
             <form method="post">
-                <div asp-validation-summary="ModelOnly"></div>
+             
                 <div class="form-group">
                     <label class="custom-control-label">Fra Adresse/Afdeling </label><br />
                     <select name="AddressId" class="form-control" asp-for="@Model.AddressId" asp-items="@Model.Branches">
@@ -26,17 +26,17 @@
                 <div class="form-group">
                     <label class="custom-control-label">Dato & Tidpunkt</label>
                     <input asp-for="@Model.Carpool.Date" class="form-control" />
-                    <span asp-validation-for="@Model.Carpool.Date" class="text-danger"></span>
+
                 </div> <br>
                 <div class="form-group">
                     <label class="custom-control-label">Detaljer til turen</label>
                     <textarea asp-for="@Model.Carpool.Details" cols="120" style="height:5rem" class="form-control"></textarea>
-                    <span asp-validation-for="@Model.Carpool.Details" class="text-danger"></span>
+
                 </div> <br />
                 <div class="form-group">
                     <label class="custom-control-label">Antal passager</label>
                     <input asp-for="@Model.Carpool.PassengerSeats" class="form-control" />
-                    <span asp-validation-for="@Model.Carpool.PassengerSeats" class="text-danger"></span>
+
                 </div>
                 <div class="form-group">
                     <input type="hidden" asp-for="@Model.Carpool.Driver.Id" class="form-control" />
