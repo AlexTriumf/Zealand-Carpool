@@ -35,12 +35,12 @@ namespace Zealand_Carpool.Pages.CarpoolPage
             int theID;
             try
             {
-            theID = Convert.ToInt32(id);
+                theID = Convert.ToInt32(id);
             } catch (FormatException)
             {
                 return RedirectToPage("/Error");
             }
-                List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
+            List<System.Security.Claims.Claim> listofClaims = User.Claims.ToList();
                 LoggedInUser = _userInterface.GetUser(Guid.Parse(listofClaims[0].Value)).Result;
             try
             {
